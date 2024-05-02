@@ -11,8 +11,7 @@
 #' @export
 #'
 #' @examples
-#' stop_julia()
-#' jlme_setup()
+#' jlme_setup(restart = TRUE)
 #'
 #' lm(mpg ~ hp, mtcars)
 #' jlm(mpg ~ hp, mtcars)
@@ -36,11 +35,11 @@ jlm <- function(formula, data, family = NULL,
   args_list <- c(
     list(
       "StatsModels.fit",
-      JuliaConnectoR::juliaEval("GLM.GeneralizedLinearModel"),
+      jl_evalf("GLM.GeneralizedLinearModel"),
       jl_formula(formula),
       jl_data(data)
     ),
-    family %||% GLM$Normal(),
+    family %||% jl_family(),
     if (!is.null(contrasts)) list(contrasts = contrasts),
     list(...)
   )
@@ -60,8 +59,7 @@ jlm <- function(formula, data, family = NULL,
 #' @export
 #'
 #' @examples
-#' stop_julia()
-#' jlme_setup()
+#' jlme_setup(restart = TRUE)
 #' library(lme4)
 #'
 #' lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
@@ -75,10 +73,10 @@ jlm <- function(formula, data, family = NULL,
 jlmer <- function(formula, data, family = NULL,
                   contrasts = jl_contrasts(data), ...) {
 
-  model <- JuliaConnectoR::juliaEval(sprintf(
+  model <- jl_evalf(
     "MixedModels.%sLinearMixedModel",
     if (!is.null(family)) "Generalized" else ""
-  ))
+  )
 
   args_list <- c(
     list(

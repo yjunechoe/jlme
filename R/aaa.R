@@ -19,7 +19,7 @@ julia_setup_ok <- function() {
   JuliaConnectoR::juliaSetupOk()
 }
 
-#' Check Julia requirements for jlme
+#' Stop Julia session
 #'
 #' @return Boolean
 #' @export
@@ -34,43 +34,62 @@ stop_julia <- function() {
 #'
 #' @param ... Unused
 #' @param restart Whether to run `stop_julia()` first, before attempting setup
-#' @param threads Number of threads
+#' @param threads Number of threads to start Julia with. Defaults to `1`
+#' @param verbose Whether to alert the setup progress. Defaults to `FALSE`
 #'
 #' @return Boolean
 #' @export
 #' @examples
 #' if (interactive()) jlme_setup()
-jlme_setup <- function(..., restart = FALSE, threads = NULL) {
+jlme_setup <- function(..., restart = FALSE, threads = NULL, verbose = FALSE) {
   stopifnot(julia_setup_ok())
   if (restart) stop_julia()
-  start_julia(..., threads = threads)
-  load_libs()
+  if (verbose) {
+    .jlme_setup(..., threads = threads)
+  } else {
+    suppressMessages(.jlme_setup(..., threads = threads, verbose = verbose))
+  }
+  invisible(TRUE)
 }
 
-start_julia <- function(..., max_threads = 7L, threads = NULL) {
+.jlme_setup <- function(..., threads = threads, verbose = FALSE) {
+  start_julia(..., threads = threads)
+  init_proj(verbose = verbose)
+  load_libs()
+  message("Successfully set up Julia connection.")
+  invisible(TRUE)
+}
+
+start_julia <- function(..., threads = NULL) {
   JULIA_NUM_THREADS <- Sys.getenv("JULIA_NUM_THREADS")
   if (!nzchar(JULIA_NUM_THREADS)) JULIA_NUM_THREADS <- NULL
-  nthreads <- threads %||% JULIA_NUM_THREADS %||%
-    (min(max_threads, julia_detect_cores() - 1L))
+  nthreads <- threads %||% JULIA_NUM_THREADS %||% 1L
   if (is.null(.jlme$is_setup)) stop_julia()
   if (is_setup()) {
     stop("There is already a connection to Julia established. Run `stop_julia()` first.")
   }
-  msg <- sprintf("Starting Julia with %i thread(s).", nthreads)
-  if (isTRUE(list(...)$startup)) packageStartupMessage(msg) else message(msg)
   if (nthreads > 1) {
+    message(sprintf("Starting Julia with %i thread(s).", nthreads))
     Sys.setenv("JULIA_NUM_THREADS" = nthreads)
-    suppressMessages(JuliaConnectoR::startJuliaServer())
-    Sys.setenv("JULIA_NUM_THREADS" = JULIA_NUM_THREADS %||% "")
-  } else {
-    suppressMessages(JuliaConnectoR::startJuliaServer())
   }
+  JuliaConnectoR::startJuliaServer()
+  Sys.setenv("JULIA_NUM_THREADS" = JULIA_NUM_THREADS %||% "")
   .jlme$is_setup <- TRUE
   invisible(TRUE)
 }
 
+init_proj <- function(..., verbose) {
+  io <- if (verbose) "" else "io=devnull"
+  jl_evalf('
+    using Pkg;
+    Pkg.activate(; temp=true, %1$s)
+    Pkg.add(["JuliaFormatter", "StatsModels", "GLM", "MixedModels"]; %1$s)
+  ', io)
+  invisible(TRUE)
+}
+
 load_libs <- function() {
-  JuliaConnectoR::juliaEval("
+  jl_evalf("
     using JuliaFormatter;
     using StatsModels;
     using GLM;
@@ -78,19 +97,3 @@ load_libs <- function() {
   ")
   invisible(TRUE)
 }
-
-#' Binding to the GLM.jl namespace
-#' @export
-GLM <- new.env(parent = emptyenv())
-
-delayedAssign("GLM", local({
-  if (is_setup()) JuliaConnectoR::juliaImport("GLM")
-}))
-
-#' Binding to the MixedModels.jl namespace
-#' @export
-MixedModels <- new.env(parent = emptyenv())
-
-delayedAssign("MixedModels", local({
-  if (is_setup()) JuliaConnectoR::juliaImport("MixedModels")
-}))

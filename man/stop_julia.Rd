@@ -2,7 +2,7 @@
 % Please edit documentation in R/aaa.R
 \name{stop_julia}
 \alias{stop_julia}
-\title{Check Julia requirements for jlme}
+\title{Stop Julia session}
 \usage{
 stop_julia()
 }
@@ -10,8 +10,8 @@ stop_julia()
 Boolean
 }
 \description{
-Check Julia requirements for jlme
+Stop Julia session
 }
 \examples{
-stop_julia()
+if (FALSE) stop_julia()
 }

@@ -24,7 +24,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(jlme)
-#> Starting Julia with 7 thread(s).
+jlme_setup()
 ```
 
 ### Fixed effects models
@@ -126,7 +126,7 @@ jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 #> 
 #> Variance components:
 #>             Column    Variance Std.Dev.   Corr.
-#> Subject  (Intercept)  565.51066 23.78047
+#> Subject  (Intercept)  565.51065 23.78047
 #>          Days          32.68212  5.71683 +0.08
 #> Residual              654.94145 25.59182
 #> ──────────────────────────────────────────────────
@@ -174,12 +174,14 @@ jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #> 
 #> Variance components:
 #>       Column   VarianceStd.Dev.
-#> id (Intercept)  1.12072 1.05864
-#> ───────────────────────────────────────────────────
-#>                  Coef.  Std. Error      z  Pr(>|z|)
-#> ───────────────────────────────────────────────────
-#> (Intercept)  -1.10108    0.280679   -3.92    <1e-04
-#> Anger         0.046271   0.0134905   3.43    0.0006
-#> Gender: M     0.260067   0.153846    1.69    0.0909
-#> ───────────────────────────────────────────────────
+#> id (Intercept)  1.12074 1.05865
+#> ────────────────────────────────────────────────────
+#>                   Coef.  Std. Error      z  Pr(>|z|)
+#> ────────────────────────────────────────────────────
+#> (Intercept)  -1.10115     0.280681   -3.92    <1e-04
+#> Anger         0.0462741   0.0134906   3.43    0.0006
+#> Gender: M     0.260057    0.153847    1.69    0.0910
+#> ────────────────────────────────────────────────────
 ```
+
+### More control with `{JuliaConnectoR}`

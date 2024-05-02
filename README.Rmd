@@ -35,6 +35,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(jlme)
+jlme_setup()
 ```
 
 ### Fixed effects models
@@ -68,6 +69,8 @@ jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
 glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 ```
+
+### More control with `{JuliaConnectoR}`
 
 ```{r, echo = FALSE}
 stop_julia()

@@ -25,8 +25,7 @@ A julia model object of class \code{jlme}
 Fit a fixed-effects regression model using GLM.jl
 }
 \examples{
-stop_julia()
-jlme_setup()
+jlme_setup(restart = TRUE)
 
 lm(mpg ~ hp, mtcars)
 jlm(mpg ~ hp, mtcars)

@@ -2,8 +2,6 @@
 
 S3method(format,jlme)
 S3method(print,jlme)
-export(GLM)
-export(MixedModels)
 export(jlm)
 export(jlme_setup)
 export(jlmer)

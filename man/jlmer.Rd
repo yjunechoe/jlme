@@ -25,8 +25,7 @@ A julia model object of class \code{jlme}
 Fit a mixed-effects regression model using MixedModels.jl
 }
 \examples{
-stop_julia()
-jlme_setup()
+jlme_setup(restart = TRUE)
 library(lme4)
 
 lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
