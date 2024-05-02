@@ -104,6 +104,8 @@ print.jlme <- function(x, ...) {
 }
 
 #' @export
+
+#' @export
 format.jlme <- function(x, ...) {
   header <- paste0("<Julia object of type ", JuliaConnectoR::juliaLet("typeof(x).name.wrapper", x = x), ">")
   if (JuliaConnectoR::juliaLet("x isa MixedModel", x = x)) {

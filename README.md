@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of jlme is to …
+Julia (mixed-effects) regression modelling from R
 
 ## Installation
 
@@ -26,6 +26,8 @@ This is a basic example which shows you how to solve a common problem:
 library(jlme)
 jlme_setup()
 ```
+
+## Use `{jlme}`
 
 ### Fixed effects models
 
@@ -184,4 +186,83 @@ jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #> ────────────────────────────────────────────────────
 ```
 
-### More control with `{JuliaConnectoR}`
+## With `{JuliaConnectoR}`
+
+### Inspect model objects
+
+``` r
+library(JuliaConnectoR)
+jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+juliaCall("propertynames", jmod)
+#> <Julia object of type NTuple{36, Symbol}>
+#> (:formula, :reterms, :Xymat, :feterm, :sqrtwts, :parmap, :dims, :A, :L, :optsum, :θ, :theta, :β, :beta, :βs, :betas, :λ, :lambda, :stderror, :σ, :sigma, :σs, :sigmas, :σρs, :sigmarhos, :b, :u, :lowerbd, :X, :y, :corr, :vcov, :PCA, :rePCA, :objective, :pvalues)
+juliaLet("x.rePCA", x = jmod)
+#> <Julia object of type @NamedTuple{Subject::Vector{Float64}}>
+#> (Subject = [0.5406660352881864, 1.0],)
+```
+
+### Create bindings to Julia libs to access more features
+
+``` r
+MixedModels <- juliaImport("MixedModels")
+
+# Long-form construction of the `jmod` sleepstudy model
+jmod <- MixedModels$fit(
+  MixedModels$LinearMixedModel,
+  juliaEval("@formula(Reaction ~ Days + (Days | Subject))"),
+  juliaPut(sleepstudy)
+)
+MixedModels$issingular(jmod)
+#> [1] FALSE
+
+# Same as above in complete Julia syntax, using the julia `sleepstudy` dataset
+juliaEval("
+  fit(
+    LinearMixedModel,
+    @formula(reaction ~ days + (days | subj)),
+    MixedModels.dataset(:sleepstudy)
+  )
+")
+#> <Julia object of type LinearMixedModel{Float64}>
+#> Linear mixed model fit by maximum likelihood
+#>  reaction ~ 1 + days + (1 + days | subj)
+#>    logLik   -2 logLik     AIC       AICc        BIC    
+#>   -875.9697  1751.9393  1763.9393  1764.4249  1783.0971
+#> 
+#> Variance components:
+#>             Column    Variance Std.Dev.   Corr.
+#> subj     (Intercept)  565.51065 23.78047
+#>          days          32.68212  5.71683 +0.08
+#> Residual              654.94145 25.59182
+#>  Number of obs: 180; levels of grouping factors: 18
+#> 
+#>   Fixed-effects parameters:
+#> ──────────────────────────────────────────────────
+#>                 Coef.  Std. Error      z  Pr(>|z|)
+#> ──────────────────────────────────────────────────
+#> (Intercept)  251.405      6.63226  37.91    <1e-99
+#> days          10.4673     1.50224   6.97    <1e-11
+#> ──────────────────────────────────────────────────
+
+# Use other features from MixedModels.jl
+Random <- juliaImport("Random") # juliaEval('Pkg.add("Random")')
+samp <- MixedModels$parametricbootstrap(
+  Random$MersenneTwister(42L), # RNG
+  1000L, # Number of simulations
+  jmod # Model
+)
+samp
+#> <Julia object of type MixedModelBootstrap{Float64}>
+#> MixedModelBootstrap with 1000 samples
+#>      parameter  min        q25         median     mean       q75        max
+#>    ┌────────────────────────────────────────────────────────────────────────────
+#>  1 │ β1         228.0      246.971     251.622    251.649    256.147    274.999
+#>  2 │ β2         5.15834    9.43217     10.473     10.4527    11.5204    15.0879
+#>  3 │ σ          21.0633    24.5771     25.5805    25.5978    26.5555    30.8172
+#>  4 │ σ1         3.58918    17.9978     22.0802    21.926     25.9619    38.2521
+#>  5 │ σ2         1.22321    4.57415     5.37824    5.38544    6.16644    9.19974
+#>  6 │ ρ1         -0.810069  -0.128084   0.129044   0.153811   0.400835   1.0
+#>  7 │ θ1         0.138296   0.692396    0.862739   0.861444   1.02355    1.62481
+#>  8 │ θ2         -0.247944  -0.0280442  0.0257952  0.0265357  0.0789672  0.316962
+#>  9 │ θ3         0.0        0.158461    0.197059   0.189155   0.230015   0.376857
+```

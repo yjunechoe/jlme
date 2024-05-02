@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of jlme is to ...
+Julia (mixed-effects) regression modelling from R
 
 ## Installation
 
@@ -37,6 +37,8 @@ This is a basic example which shows you how to solve a common problem:
 library(jlme)
 jlme_setup()
 ```
+
+## Use `{jlme}`
 
 ### Fixed effects models
 
@@ -70,7 +72,48 @@ glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 ```
 
-### More control with `{JuliaConnectoR}`
+## With `{JuliaConnectoR}`
+
+### Inspect model objects
+
+```{r}
+library(JuliaConnectoR)
+jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+juliaCall("propertynames", jmod)
+juliaLet("x.rePCA", x = jmod)
+```
+
+### Create bindings to Julia libs to access more features
+
+```{r}
+MixedModels <- juliaImport("MixedModels")
+
+# Long-form construction of the `jmod` sleepstudy model
+jmod <- MixedModels$fit(
+  MixedModels$LinearMixedModel,
+  juliaEval("@formula(Reaction ~ Days + (Days | Subject))"),
+  juliaPut(sleepstudy)
+)
+MixedModels$issingular(jmod)
+
+# Same as above in complete Julia syntax, using the julia `sleepstudy` dataset
+juliaEval("
+  fit(
+    LinearMixedModel,
+    @formula(reaction ~ days + (days | subj)),
+    MixedModels.dataset(:sleepstudy)
+  )
+")
+
+# Use other features from MixedModels.jl
+Random <- juliaImport("Random") # juliaEval('Pkg.add("Random")')
+samp <- MixedModels$parametricbootstrap(
+  Random$MersenneTwister(42L), # RNG
+  1000L, # Number of simulations
+  jmod # Model
+)
+samp
+```
 
 ```{r, echo = FALSE}
 stop_julia()
