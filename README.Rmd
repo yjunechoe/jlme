@@ -1,0 +1,75 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# jlme
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of jlme is to ...
+
+## Installation
+
+You can install the development version of jlme from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("yjunechoe/jlme")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(jlme)
+```
+
+### Fixed effects models
+
+```{r}
+lm(mpg ~ hp, mtcars)
+jlm(mpg ~ hp, mtcars)
+
+x <- mtcars
+x$cyl_sum <- factor(x$cyl)
+contrasts(x$cyl_sum) <- contr.sum(3)
+lm(mpg ~ cyl_sum, x)
+jlm(mpg ~ cyl_sum, x)
+
+x$cyl_helm <- factor(x$cyl)
+contrasts(x$cyl_helm) <- contr.helmert(3)
+colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
+lm(mpg ~ cyl_helm, x)
+jlm(mpg ~ cyl_helm, x)
+```
+
+### Mixed effects models
+
+```{r}
+library(lme4)
+
+lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
+
+glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+```
+
+```{r, echo = FALSE}
+stop_julia()
+```
+
