@@ -7,7 +7,7 @@ julia_cli <- function(x) {
 }
 
 julia_version_compatible <- function() {
-  as.package_version(julia_version()) >= "1.9"
+  as.package_version(julia_version()) >= "1.8"
 }
 julia_version <- function() {
   parse_julia_version(julia_cli("--version"))
