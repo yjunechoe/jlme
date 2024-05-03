@@ -20,16 +20,6 @@ julia_detect_cores <- function() {
   as.integer(julia_cli('-q -e "println(Sys.CPU_THREADS);"'))
 }
 
-#' Check Julia requirements for jlme
-#'
-#' @return Boolean
-#' @export
-#' @examples
-#' julia_setup_ok()
-julia_setup_ok <- function() {
-  JuliaConnectoR::juliaSetupOk() && julia_version_compatible()
-}
-
 #' Stop Julia session
 #'
 #' @return Boolean
@@ -54,7 +44,8 @@ stop_julia <- function() {
 #' if (interactive()) jlme_setup()
 jlme_setup <- function(..., restart = FALSE, threads = NULL,
                        verbose = interactive()) {
-  stopifnot(julia_setup_ok())
+  if (!JuliaConnectoR::juliaSetupOk()) stop("No Julia installation detected.")
+  if (!julia_version_compatible()) stop("Julia version >=1.8 required.")
   if (restart) stop_julia()
   if (verbose) {
     .jlme_setup(..., threads = threads)
