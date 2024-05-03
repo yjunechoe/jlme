@@ -1,8 +1,8 @@
 matrix_to_literal <- function(x, fractions = TRUE) {
   if (fractions) x <- MASS::fractions(x)
   x <- as.character(x)
-  padded <- apply(x, 2, function(col) sprintf(paste0("%", max(nchar(col)), "s"), col))
-  flat <- paste(apply(padded, 1, paste, collapse = " "), collapse = ";\n")
+  x[] <- apply(x, 2, function(col) sprintf(paste0("%", max(nchar(col)), "s"), col))
+  flat <- paste(apply(x, 1, paste, collapse = " "), collapse = ";\n")
   sprintf("[\n%s\n]", flat)
 }
 

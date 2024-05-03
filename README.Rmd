@@ -47,10 +47,10 @@ lm(mpg ~ hp, mtcars)
 jlm(mpg ~ hp, mtcars)
 
 x <- mtcars
-x$cyl_sum <- factor(x$cyl)
-contrasts(x$cyl_sum) <- contr.sum(3)
-lm(mpg ~ cyl_sum, x)
-jlm(mpg ~ cyl_sum, x)
+x$am_sum <- factor(x$am)
+contrasts(x$am_sum) <- contr.sum(2)
+lm(mpg ~ am_sum, x)
+jlm(mpg ~ am_sum, x)
 
 x$cyl_helm <- factor(x$cyl)
 contrasts(x$cyl_helm) <- contr.helmert(3)

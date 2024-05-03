@@ -53,28 +53,27 @@ jlm(mpg ~ hp, mtcars)
 #> ────────────────────────────────────────────────────────────────────────────
 
 x <- mtcars
-x$cyl_sum <- factor(x$cyl)
-contrasts(x$cyl_sum) <- contr.sum(3)
-lm(mpg ~ cyl_sum, x)
+x$am_sum <- factor(x$am)
+contrasts(x$am_sum) <- contr.sum(2)
+lm(mpg ~ am_sum, x)
 #> 
 #> Call:
-#> lm(formula = mpg ~ cyl_sum, data = x)
+#> lm(formula = mpg ~ am_sum, data = x)
 #> 
 #> Coefficients:
-#> (Intercept)     cyl_sum1     cyl_sum2  
-#>     20.5022       6.1615      -0.7593
-jlm(mpg ~ cyl_sum, x)
+#> (Intercept)      am_sum1  
+#>      20.770       -3.622
+jlm(mpg ~ am_sum, x)
 #> <Julia object of type StatsModels.TableRegressionModel>
 #> 
-#> mpg ~ 1 + cyl_sum
+#> mpg ~ 1 + am_sum
 #> 
-#> ─────────────────────────────────────────────────────────────────────────
-#>                  Coef.  Std. Error      z  Pr(>|z|)  Lower 95%  Upper 95%
-#> ─────────────────────────────────────────────────────────────────────────
-#> (Intercept)  20.5022      0.593528  34.54    <1e-99   19.3389    21.6655
-#> cyl_sum: 6    6.16147     0.816746   7.54    <1e-13    4.56068    7.76226
-#> cyl_sum: 8   -0.759307    0.920304  -0.83    0.4093   -2.56307    1.04445
-#> ─────────────────────────────────────────────────────────────────────────
+#> ────────────────────────────────────────────────────────────────────────
+#>                 Coef.  Std. Error      z  Pr(>|z|)  Lower 95%  Upper 95%
+#> ────────────────────────────────────────────────────────────────────────
+#> (Intercept)  20.7698     0.882211  23.54    <1e-99   19.0407    22.4989
+#> am_sum: 1    -3.62247    0.882211  -4.11    <1e-04   -5.35157   -1.89337
+#> ────────────────────────────────────────────────────────────────────────
 
 x$cyl_helm <- factor(x$cyl)
 contrasts(x$cyl_helm) <- contr.helmert(3)
