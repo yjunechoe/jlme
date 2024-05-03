@@ -4,7 +4,7 @@
 \alias{jlme_setup}
 \title{Set up Julia connection for jlme}
 \usage{
-jlme_setup(..., restart = FALSE, threads = NULL, verbose = FALSE)
+jlme_setup(..., restart = FALSE, threads = NULL, verbose = interactive())
 }
 \arguments{
 \item{...}{Unused}
@@ -13,7 +13,7 @@ jlme_setup(..., restart = FALSE, threads = NULL, verbose = FALSE)
 
 \item{threads}{Number of threads to start Julia with. Defaults to \code{1}}
 
-\item{verbose}{Whether to alert the setup progress. Defaults to \code{FALSE}}
+\item{verbose}{Whether to alert setup progress. Defaults to \code{interactive()}}
 }
 \value{
 Boolean

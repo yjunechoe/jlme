@@ -46,13 +46,14 @@ stop_julia <- function() {
 #' @param ... Unused
 #' @param restart Whether to run `stop_julia()` first, before attempting setup
 #' @param threads Number of threads to start Julia with. Defaults to `1`
-#' @param verbose Whether to alert the setup progress. Defaults to `FALSE`
+#' @param verbose Whether to alert setup progress. Defaults to `interactive()`
 #'
 #' @return Boolean
 #' @export
 #' @examples
 #' if (interactive()) jlme_setup()
-jlme_setup <- function(..., restart = FALSE, threads = NULL, verbose = FALSE) {
+jlme_setup <- function(..., restart = FALSE, threads = NULL,
+                       verbose = interactive()) {
   stopifnot(julia_setup_ok())
   if (restart) stop_julia()
   if (verbose) {

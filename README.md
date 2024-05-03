@@ -186,13 +186,37 @@ jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #> ────────────────────────────────────────────────────
 ```
 
-## With `{JuliaConnectoR}`
-
 ### Inspect model objects
 
 ``` r
-library(JuliaConnectoR)
 jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+
+tidy(jmod)
+#>     effect    group                  term     estimate std.error statistic
+#> 1    fixed     <NA>           (Intercept) 251.40510485  6.632258 37.906414
+#> 2    fixed     <NA>                  Days  10.46728596  1.502236  6.967806
+#> 3 ran_pars  Subject       sd__(Intercept)  23.78046792        NA        NA
+#> 4 ran_pars  Subject              sd__Days   5.71682816        NA        NA
+#> 5 ran_pars  Subject cor__(Intercept).Days   0.08133207        NA        NA
+#> 6 ran_pars Residual       sd__Observation  25.59182388        NA        NA
+#>         p.value
+#> 1 2.017794e-314
+#> 2  3.219214e-12
+#> 3            NA
+#> 4            NA
+#> 5            NA
+#> 6            NA
+glance(jmod)
+#>   nobs df    sigma    logLik      AIC      BIC deviance df.residual
+#> 1  180  6 25.59182 -875.9697 1763.939 1783.097 1751.939         174
+```
+
+## With `{JuliaConnectoR}`
+
+### Inspect model objects with Julia code
+
+``` r
+library(JuliaConnectoR)
 juliaCall("propertynames", jmod)
 #> <Julia object of type NTuple{36, Symbol}>
 #> (:formula, :reterms, :Xymat, :feterm, :sqrtwts, :parmap, :dims, :A, :L, :optsum, :θ, :theta, :β, :beta, :βs, :betas, :λ, :lambda, :stderror, :σ, :sigma, :σs, :sigmas, :σρs, :sigmarhos, :b, :u, :lowerbd, :X, :y, :corr, :vcov, :PCA, :rePCA, :objective, :pvalues)

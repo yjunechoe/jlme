@@ -46,3 +46,9 @@ jl_family <- function(family = c("gaussian", "binomial", "poisson")) {
     stop("Invalid input to the `family` argument.")
   }
 }
+
+check_jl_installed <- function(x, add = TRUE) {
+  if (jl_evalf('isnothing(Pkg.status("%s"; io=devnull))', x)) {
+    jl_evalf('Pkg.add("%1$s"; io=devnull); using %1$s', x)
+  }
+}

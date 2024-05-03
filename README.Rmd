@@ -72,13 +72,21 @@ glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 ```
 
-## With `{JuliaConnectoR}`
-
 ### Inspect model objects
 
 ```{r}
-library(JuliaConnectoR)
 jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+
+tidy(jmod)
+glance(jmod)
+```
+
+## With `{JuliaConnectoR}`
+
+### Inspect model objects with Julia code
+
+```{r}
+library(JuliaConnectoR)
 juliaCall("propertynames", jmod)
 juliaLet("x.rePCA", x = jmod)
 ```
