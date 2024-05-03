@@ -6,6 +6,8 @@ Authors@R:
            comment = c(ORCID = "0000-0002-0701-921X"))
 Description: Bindings to 'Julia' packages 'GLM.jl' and 'MixedModels.jl'.
 License: MIT + file LICENSE
+Depends:
+    R (>= 4.0)
 Imports: 
     JuliaConnectoR,
     MASS,

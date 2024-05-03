@@ -69,7 +69,7 @@ start_julia <- function(..., threads = NULL) {
     stop("There is already a connection to Julia established. Run `stop_julia()` first.")
   }
   if (nthreads > 1) {
-    message(sprintf("Starting Julia with %i thread(s).", nthreads))
+    message(sprintf("Starting Julia with %i threads.", nthreads))
     Sys.setenv("JULIA_NUM_THREADS" = nthreads)
   }
   JuliaConnectoR::startJuliaServer()

@@ -10,7 +10,7 @@ jl_evalf <- function(x, ...) {
 
 jl_formula <- function(x) {
   if (inherits(x, "formula")) {
-    x <- deparse(x)
+    x <- deparse1(x)
   }
   jl_evalf("@formula(%s)", x)
 }
