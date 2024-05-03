@@ -4,9 +4,9 @@
 \name{jlme-package}
 \alias{jlme}
 \alias{jlme-package}
-\title{jlme: Regression modelling with 'GLM.jl' and 'MixedModels.jl'}
+\title{jlme: Regression Modelling with 'GLM.jl' and 'MixedModels.jl' in Julia}
 \description{
-Bindings to 'Julia' packages 'GLM.jl' and 'MixedModels.jl'.
+Bindings to 'Julia' packages 'GLM.jl' and 'MixedModels.jl', powered by 'JuliaConnectoR'. Fits (generalized) linear (mixed-effects) regression models in 'Julia' using familiar model fitting syntax from 'R'.
 }
 \author{
 \strong{Maintainer}: June Choe \email{jchoe001@gmail.com} (\href{https://orcid.org/0000-0002-0701-921X}{ORCID})
