@@ -1,11 +1,12 @@
-#' Fit a fixed-effects regression model using GLM.jl
+#' Fit a (mixed-effects) regression model in Julia
 #'
-#' @param formula A formula written in Julia syntax
+#' @param formula A formula written in Julia syntax. Can be a string or a
+#'  language object.
 #' @param data A data frame
 #' @param family A distribution family
 #' @param contrasts A Julia dictionary of contrasts
 #'   Inferred from `data` by default.
-#' @param ... Additional options to `fit()`, called in Julia
+#' @param ... Additional arguments to the `fit()` function called in Julia
 #'
 #' @return A julia model object of class `jlme`
 #' @export
@@ -13,9 +14,11 @@
 #' @examples
 #' jlme_setup(restart = TRUE)
 #'
+#' # Fixed effects models
 #' lm(mpg ~ hp, mtcars)
 #' jlm(mpg ~ hp, mtcars)
 #'
+#' # Auto-handling of contrasts
 #' x <- mtcars
 #' x$cyl_sum <- factor(x$cyl)
 #' contrasts(x$cyl_sum) <- contr.sum(3)
@@ -27,6 +30,16 @@
 #' colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
 #' lm(mpg ~ cyl_helm, x)
 #' jlm(mpg ~ cyl_helm, x)
+#'
+#' # Mixed effects models
+#' library(lme4)
+#'
+#' lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+#' jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+#' jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
+#'
+#' glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+#' jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #'
 #' stop_julia()
 jlm <- function(formula, data, family = NULL,
@@ -51,25 +64,8 @@ jlm <- function(formula, data, family = NULL,
 
 }
 
-#' Fit a mixed-effects regression model using MixedModels.jl
-#'
-#' @inheritParams jlm
-#'
-#' @return A julia model object of class `jlme`
+#' @rdname jlm
 #' @export
-#'
-#' @examples
-#' jlme_setup(restart = TRUE)
-#' library(lme4)
-#'
-#' lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
-#'
-#' glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
-#' jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
-#'
-#' stop_julia()
 jlmer <- function(formula, data, family = NULL,
                   contrasts = jl_contrasts(data), ...) {
 

@@ -2,12 +2,16 @@
 % Please edit documentation in R/model.R
 \name{jlm}
 \alias{jlm}
-\title{Fit a fixed-effects regression model using GLM.jl}
+\alias{jlmer}
+\title{Fit a (mixed-effects) regression model in Julia}
 \usage{
 jlm(formula, data, family = NULL, contrasts = jl_contrasts(data), ...)
+
+jlmer(formula, data, family = NULL, contrasts = jl_contrasts(data), ...)
 }
 \arguments{
-\item{formula}{A formula written in Julia syntax}
+\item{formula}{A formula written in Julia syntax. Can be a string or a
+language object.}
 
 \item{data}{A data frame}
 
@@ -16,20 +20,22 @@ jlm(formula, data, family = NULL, contrasts = jl_contrasts(data), ...)
 \item{contrasts}{A Julia dictionary of contrasts
 Inferred from \code{data} by default.}
 
-\item{...}{Additional options to \code{fit()}, called in Julia}
+\item{...}{Additional arguments to the \code{fit()} function called in Julia}
 }
 \value{
 A julia model object of class \code{jlme}
 }
 \description{
-Fit a fixed-effects regression model using GLM.jl
+Fit a (mixed-effects) regression model in Julia
 }
 \examples{
 jlme_setup(restart = TRUE)
 
+# Fixed effects models
 lm(mpg ~ hp, mtcars)
 jlm(mpg ~ hp, mtcars)
 
+# Auto-handling of contrasts
 x <- mtcars
 x$cyl_sum <- factor(x$cyl)
 contrasts(x$cyl_sum) <- contr.sum(3)
@@ -41,6 +47,16 @@ contrasts(x$cyl_helm) <- contr.helmert(3)
 colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
 lm(mpg ~ cyl_helm, x)
 jlm(mpg ~ cyl_helm, x)
+
+# Mixed effects models
+library(lme4)
+
+lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
+
+glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 
 stop_julia()
 }
