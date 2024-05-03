@@ -1,13 +1,24 @@
 #' @keywords internal
 .jlme <- new.env(parent = emptyenv())
+is_setup <- function() isTRUE(.jlme$is_setup)
 
 julia_cli <- function(x) {
   utils::tail(system2("julia", x, stdout = TRUE), 1L)
 }
+
+julia_version_compatible <- function() {
+  as.package_version(julia_version()) >= "1.9"
+}
+julia_version <- function() {
+  parse_julia_version(julia_cli("--version"))
+}
+parse_julia_version <- function(version) {
+  gsub("^julia.version .*(\\d+\\.\\d+\\.\\d+).*$", "\\1", version)
+}
+
 julia_detect_cores <- function() {
   as.integer(julia_cli('-q -e "println(Sys.CPU_THREADS);"'))
 }
-is_setup <- function() isTRUE(.jlme$is_setup)
 
 #' Check Julia requirements for jlme
 #'
@@ -16,7 +27,7 @@ is_setup <- function() isTRUE(.jlme$is_setup)
 #' @examples
 #' julia_setup_ok()
 julia_setup_ok <- function() {
-  JuliaConnectoR::juliaSetupOk()
+  JuliaConnectoR::juliaSetupOk() && julia_version_compatible()
 }
 
 #' Stop Julia session
