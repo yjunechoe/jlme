@@ -1,4 +1,6 @@
-jlme_setup(restart = TRUE)
+print(system.time({
+  jlme_setup(restart = TRUE)
+}))
 
 test_that("model fitting works", {
 
