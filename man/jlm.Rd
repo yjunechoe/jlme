@@ -7,7 +7,14 @@
 \usage{
 jlm(formula, data, family = NULL, contrasts = jl_contrasts(data), ...)
 
-jlmer(formula, data, family = NULL, contrasts = jl_contrasts(data), ...)
+jlmer(
+  formula,
+  data,
+  family = NULL,
+  contrasts = jl_contrasts(data),
+  ...,
+  progress = TRUE
+)
 }
 \arguments{
 \item{formula}{A formula written in Julia syntax. Can be a string or a
@@ -21,6 +28,8 @@ language object.}
 Inferred from \code{data} by default.}
 
 \item{...}{Additional arguments to the \code{fit()} function called in Julia}
+
+\item{progress}{Whether to print model fitting progress. Defaults to \code{TRUE}}
 }
 \value{
 A julia model object of class \code{jlme}

@@ -65,9 +65,11 @@ jlm <- function(formula, data, family = NULL,
 }
 
 #' @rdname jlm
+#' @param progress Whether to print model fitting progress. Defaults to `TRUE`
 #' @export
 jlmer <- function(formula, data, family = NULL,
-                  contrasts = jl_contrasts(data), ...) {
+                  contrasts = jl_contrasts(data),
+                  ..., progress = TRUE) {
 
   model <- jl_evalf(
     "MixedModels.%sLinearMixedModel",
@@ -93,18 +95,33 @@ jlmer <- function(formula, data, family = NULL,
 
 }
 
-#' @export
-print.jlme <- function(x, ...) {
-  cat(format(x, ...))
-  invisible(x)
+is_jlmer <- function(x) {
+  inherits(x, "JuliaProxy") &&
+    JuliaConnectoR::juliaLet("x isa MixedModel", x = x)
 }
 
 #' @export
+print.jlme <- function(x, type = NULL, ...) {
+  if (is_jlmer(x) && !is.null(type)) {
+    show_jlmer(x, type)
+  } else {
+    cat(format(x, ...))
+  }
+  invisible(x)
+}
+
+show_jlmer <- function(x, type = c("markdown", "latex", "html")) {
+  type <- match.arg(type)
+  JuliaConnectoR::juliaLet(
+    sprintf('show(MIME("text/%s"), x)', type),
+    x = x
+  )
+}
 
 #' @export
 format.jlme <- function(x, ...) {
   header <- paste0("<Julia object of type ", JuliaConnectoR::juliaLet("typeof(x).name.wrapper", x = x), ">")
-  if (JuliaConnectoR::juliaLet("x isa MixedModel", x = x)) {
+  if (is_jlmer(x)) {
     formula <- JuliaConnectoR::juliaLet("repr(x.formula)", x = x)
     re <- gsub("\n\n$", "\n", showobj_reformat(JuliaConnectoR::juliaCall("VarCorr", x)))
     fe <- showobj_reformat(JuliaConnectoR::juliaCall("coeftable", x))
