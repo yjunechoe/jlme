@@ -8,6 +8,13 @@
 \description{
 Bindings to 'Julia' packages 'GLM.jl' and 'MixedModels.jl', powered by 'JuliaConnectoR'. Fits (generalized) linear (mixed-effects) regression models in 'Julia' using familiar model fitting syntax from 'R'.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://yjunechoe.github.io/jlme/}
+}
+
+}
 \author{
 \strong{Maintainer}: June Choe \email{jchoe001@gmail.com} (\href{https://orcid.org/0000-0002-0701-921X}{ORCID})
 
