@@ -72,8 +72,10 @@ start_julia <- function(..., threads = NULL) {
     stop("There is already a connection to Julia established. Run `stop_julia()` first.")
   }
   if (nthreads > 1) {
-    message(sprintf("Starting Julia with %i threads.", nthreads))
+    message(sprintf("Starting Julia with %i threads ...", nthreads))
     Sys.setenv("JULIA_NUM_THREADS" = nthreads)
+  } else {
+    message("Starting Julia ...")
   }
   .jlme$port <- suppressMessages(JuliaConnectoR::startJuliaServer())
   Sys.setenv("JULIA_NUM_THREADS" = JULIA_NUM_THREADS %||% "")
@@ -82,12 +84,11 @@ start_julia <- function(..., threads = NULL) {
 }
 
 init_proj <- function(..., verbose) {
-  io <- if (verbose) "" else "io=devnull"
   jl_evalf('
     using Pkg;
     Pkg.activate(; temp=true, %1$s)
     Pkg.add(["JuliaFormatter", "StatsModels", "GLM", "MixedModels"]; %1$s)
-  ', io)
+  ', jl_io(verbose))
   invisible(TRUE)
 }
 

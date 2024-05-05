@@ -16,8 +16,7 @@ NULL
 #' @method tidy jlme
 #' @export
 tidy.jlme <- function(x, effects = c("var_model", "ran_pars", "fixed"), ...) {
-  check_jl_installed("DataFrames")
-  out <- df_from_DF(JuliaConnectoR::juliaLet("DataFrame(coeftable(x))", x = x))[, 1:5]
+  out <- as.data.frame(JuliaConnectoR::juliaCall("coeftable", x))[, 1:5]
   colnames(out) <- c("term", "estimate", "std.error", "statistic", "p.value")
   out$term <- backtrans_interaction(out$term)
   is_mem <- JuliaConnectoR::juliaLet("typeof(x) <: MixedModel", x = x)
@@ -108,9 +107,4 @@ maybe_as_tibble <- function(x) {
     class(x) <- c("tbl_df", "tbl", class(x))
   }
   x
-}
-
-df_from_DF <- function(DF) {
-  df_str <- JuliaConnectoR::juliaGet(DF)
-  as.data.frame(df_str$columns, col.names = unlist(df_str$colindex$names, use.names = FALSE))
 }

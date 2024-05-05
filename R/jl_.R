@@ -1,13 +1,3 @@
-jl_evalf <- function(x, ...) {
-  if (is.null(x)) return(NULL)
-  dots <- list(...)
-  if (length(dots) == 0) {
-    JuliaConnectoR::juliaEval(x)
-  } else {
-    JuliaConnectoR::juliaEval(sprintf(x, ...))
-  }
-}
-
 jl_formula <- function(x) {
   if (inherits(x, "formula")) {
     x <- deparse1(x)
@@ -44,11 +34,5 @@ jl_family <- function(family = c("gaussian", "binomial", "poisson")) {
     family
   } else {
     stop("Invalid input to the `family` argument.")
-  }
-}
-
-check_jl_installed <- function(x, add = TRUE) {
-  if (jl_evalf('isnothing(Pkg.status("%s"; io=devnull))', x)) {
-    jl_evalf('Pkg.add("%1$s"; io=devnull); using %1$s', x)
   }
 }

@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # jlme
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
@@ -31,50 +32,61 @@ You can install the development version of jlme from [GitHub](https://github.com
 devtools::install_github("yjunechoe/jlme")
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
+## Setup
 
 ```{r example}
 library(jlme)
 jlme_setup()
 ```
 
-## Use `{jlme}`
+`{jlme}` uses `{JuliaConnectoR}` to connect to a Julia session. See [JuliaConnectoR package documentation](https://github.com/stefan-m-lenz/JuliaConnectoR) for troubleshooting related to Julia installation and configuration.
+
+## Using `{jlme}`
+
+Once set up, `(g)lm()` and `(g)lmer` complements in Julia are available via `jlm()` and `jlmer()`, respectively.
 
 ### Fixed effects models
 
-```{r}
-lm(mpg ~ hp, mtcars)
-jlm(mpg ~ hp, mtcars)
+Basic equivalence:
 
+```{r}
+summary(lm(mpg ~ hp, mtcars))
+jlm(mpg ~ hp, mtcars)
+```
+
+Contrasts in factor columns are preserved: 
+
+```{r}
 x <- mtcars
+
 x$am_sum <- factor(x$am)
 contrasts(x$am_sum) <- contr.sum(2)
-lm(mpg ~ am_sum, x)
-jlm(mpg ~ am_sum, x)
 
 x$cyl_helm <- factor(x$cyl)
 contrasts(x$cyl_helm) <- contr.helmert(3)
 colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
-lm(mpg ~ cyl_helm, x)
-jlm(mpg ~ cyl_helm, x)
+
+summary(lm(mpg ~ am_sum + cyl_helm, x))
+jlm(mpg ~ am_sum + cyl_helm, x)
 ```
 
 ### Mixed effects models
 
+Basic equivalence:
+
 ```{r}
 library(lme4)
 
-lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+summary(lmer(Reaction ~ Days + (Days | Subject), sleepstudy))
 jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
 
-glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+summary(glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial"))
 jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 ```
 
 ### Inspect model objects
+
+`{broom}`-style `tidy()` and `glance()` methods:
 
 ```{r}
 jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
@@ -95,6 +107,8 @@ juliaLet("x.rePCA", x = jmod)
 
 ### Create bindings to Julia libs to access more features
 
+Use Julia(-esque) syntax from R:
+
 ```{r}
 MixedModels <- juliaImport("MixedModels")
 
@@ -114,8 +128,11 @@ juliaEval("
     MixedModels.dataset(:sleepstudy)
   )
 ")
+```
 
-# Use other features from MixedModels.jl
+Use other `MixedModels.jl` features, like parametric bootstrapping:
+
+```{r}
 Random <- juliaImport("Random") # juliaEval('Pkg.add("Random")')
 samp <- MixedModels$parametricbootstrap(
   Random$MersenneTwister(42L), # RNG
