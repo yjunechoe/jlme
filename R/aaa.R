@@ -1,6 +1,11 @@
 #' @keywords internal
 .jlme <- new.env(parent = emptyenv())
 is_setup <- function() isTRUE(.jlme$is_setup)
+ensure_setup <- function() {
+  if (!is_setup()) {
+    jlme_setup()
+  }
+}
 
 julia_cli <- function(x) {
   utils::tail(system2("julia", x, stdout = TRUE), 1L)

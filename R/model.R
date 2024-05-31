@@ -45,6 +45,8 @@
 jlm <- function(formula, data, family = NULL,
                 contrasts = jl_contrasts(data), ...) {
 
+  ensure_setup()
+
   args_list <- c(
     list(
       "StatsModels.fit",
@@ -70,6 +72,8 @@ jlm <- function(formula, data, family = NULL,
 jlmer <- function(formula, data, family = NULL,
                   contrasts = jl_contrasts(data),
                   ..., progress = TRUE) {
+
+  ensure_setup()
 
   model <- jl_evalf(
     "MixedModels.%sLinearMixedModel",
