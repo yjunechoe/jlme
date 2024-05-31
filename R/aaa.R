@@ -75,7 +75,7 @@ start_julia <- function(..., threads = NULL) {
     message(sprintf("Starting Julia with %i threads ...", nthreads))
     Sys.setenv("JULIA_NUM_THREADS" = nthreads)
   } else {
-    message("Starting Julia ...")
+    message(sprintf("Starting Julia (v%s) ...", julia_version()))
   }
   .jlme$port <- suppressMessages(JuliaConnectoR::startJuliaServer())
   Sys.setenv("JULIA_NUM_THREADS" = JULIA_NUM_THREADS %||% "")

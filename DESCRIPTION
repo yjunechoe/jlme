@@ -15,6 +15,7 @@ Imports:
     generics,
     JuliaConnectoR,
     MASS,
+    rrapply,
     stats
 Suggests: 
     lme4,

@@ -1,5 +1,5 @@
 print(system.time({
-  jlme_setup(restart = TRUE)
+  jlme_setup(restart = TRUE, verbose = TRUE)
 }))
 
 test_that("model fitting works", {
