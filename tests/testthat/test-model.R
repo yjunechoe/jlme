@@ -2,9 +2,12 @@ print(system.time({
   jlme_setup(restart = TRUE, verbose = TRUE)
 }))
 
+library(broom)
+library(broom.mixed)
+
 expect_similar_models <- function(x, y, digits = 2, ignore_names = FALSE) {
   deframe <- function(df) {
-    df <- generics::tidy(df)
+    df <- tidy(df)
     if (ignore_names) return(df$estimate)
     vec <- signif(stats::setNames(df$estimate, df$term), digits)
     vec[order(names(vec))]
