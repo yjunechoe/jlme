@@ -57,7 +57,11 @@ tidy.jlme <- function(x, effects = c("var_model", "ran_pars", "fixed"), ...) {
       re_df[, setdiff(names(out), names(re_df))] <- NA
       out <- rbind(out, re_df)[, c("effect", "group", "term", "estimate", "std.error", "statistic", "p.value")]
     }
+    zerocorr <- (out$effect == "ran_pars") & (out$estimate == 0) & grepl("cor__", out$term)
+    out <- out[!zerocorr, ]
   }
+  out$term <- gsub(" & ", ":", out$term)
+  out$term <- gsub(": ", "", out$term)
   maybe_as_tibble(out)
 }
 
