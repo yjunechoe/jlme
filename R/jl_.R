@@ -1,8 +1,23 @@
 jl_formula <- function(x) {
-  if (inherits(x, "formula")) {
-    x <- deparse1(x)
+  stopifnot(is.character(x) || inherits(x, "formula"))
+  s <- deparse1(x)
+  res <- tryCatch(
+    jl_evalf("@formula(%s)", s),
+    error = function(e) {
+      if (requireNamespace("JuliaFormulae", quietly = TRUE)) {
+        jl_evalf("@formula(%s)", deparse1(JuliaFormulae::julia_formula(x)))
+      } else {
+        e$message <- gsub("Stacktrace:.*$", "", e$message)
+        e
+      }
+    }
+  )
+  if (inherits(res, "condition")) {
+    res$call <- sys.call()
+    stop(res)
+  } else {
+    res
   }
-  jl_evalf("@formula(%s)", x)
 }
 
 jl_contrasts <- function(df, cols = NULL, ..., show_code = FALSE) {
