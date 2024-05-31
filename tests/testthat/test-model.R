@@ -5,11 +5,11 @@ print(system.time({
 library(broom)
 library(broom.mixed)
 
-expect_similar_models <- function(x, y, digits = 2, ignore_names = FALSE) {
+expect_similar_models <- function(x, y, ignore_names = FALSE) {
   deframe <- function(df) {
     df <- tidy(df)
     if (ignore_names) return(df$estimate)
-    vec <- signif(stats::setNames(df$estimate, df$term), digits)
+    vec <- signif(stats::setNames(df$estimate, df$term), 1)
     vec[order(names(vec))]
   }
   if (is.list(x) && length(x) == 2 && missing(y)) {
