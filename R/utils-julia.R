@@ -29,3 +29,9 @@ check_jl_installed <- function(x, add = TRUE, ..., verbose = interactive()) {
     stopifnot(jl_pkg_installed(x, verbose = verbose))
   }
 }
+
+sanitize_jl_error <- function(e, .call) {
+  e$message <- gsub("Stacktrace:.*$", "", e$message)
+  e$call <- .call
+  e
+}

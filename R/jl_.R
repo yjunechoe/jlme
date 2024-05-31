@@ -1,19 +1,15 @@
 jl_formula <- function(x) {
   stopifnot(is.character(x) || inherits(x, "formula"))
-  s <- deparse1(x)
+  if (requireNamespace("JuliaFormulae", quietly = TRUE)) {
+    x <- JuliaFormulae::julia_formula(x)
+  }
   res <- tryCatch(
-    jl_evalf("@formula(%s)", s),
+    jl_evalf("@formula(%s)", deparse1(x)),
     error = function(e) {
-      if (requireNamespace("JuliaFormulae", quietly = TRUE)) {
-        jl_evalf("@formula(%s)", deparse1(JuliaFormulae::julia_formula(x)))
-      } else {
-        e$message <- gsub("Stacktrace:.*$", "", e$message)
-        e
-      }
+      sanitize_jl_error(e, sys.call(1))
     }
   )
   if (inherits(res, "condition")) {
-    res$call <- sys.call()
     stop(res)
   } else {
     res
