@@ -18,6 +18,8 @@ Imports:
     MASS,
     stats
 Suggests: 
+    broom,
+    broom.mixed,
     JuliaFormulae,
     lme4,
     testthat (>= 3.0.0)
