@@ -2,23 +2,6 @@ print(system.time({
   jlme_setup(restart = TRUE, verbose = TRUE)
 }))
 
-library(broom)
-library(broom.mixed)
-
-expect_similar_models <- function(x, y, ignore_names = FALSE) {
-  deframe <- function(df) {
-    df <- tidy(df)
-    if (ignore_names) return(df$estimate)
-    vec <- signif(stats::setNames(df$estimate, df$term), 1)
-    vec[order(names(vec))]
-  }
-  if (is.list(x) && length(x) == 2 && missing(y)) {
-    y <- x[[2]]
-    x <- x[[1]]
-  }
-  expect_equal(deframe(x), deframe(y))
-}
-
 test_that("reproduces `lm()` and `lmer()` outputs", {
 
   fm1 <- mpg ~ hp
@@ -91,7 +74,7 @@ test_that("formula conversions work", {
     r_interactions <- lm(interactions, mtcars)
     expect_similar_models(j_interactions, r_interactions)
   } else {
-    cat("Skipping formula conversion test - JuliaFormulae not installed.\n")
+    cat("Skipping formula conversion tests - JuliaFormulae not installed.\n")
   }
 
 })
