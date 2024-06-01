@@ -41,7 +41,7 @@ jl_family <- function(family = c("gaussian", "binomial", "poisson")) {
       "poisson"  = "Poisson"
     )
     family <- jl_evalf("GLM.%s()", family)
-  } else if (inherits(family, "JuliaProxy")) {
+  } else if (is_jl(family)) {
     family
   } else {
     stop("Invalid input to the `family` argument.")

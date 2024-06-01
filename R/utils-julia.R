@@ -1,3 +1,7 @@
+is_jl <- function(x) {
+  inherits(x, "JuliaProxy")
+}
+
 jl_evalf <- function(x, ...) {
   if (is.null(x)) return(NULL)
   dots <- list(...)

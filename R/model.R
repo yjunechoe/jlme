@@ -75,7 +75,7 @@ jlmer <- function(formula, data, family = NULL,
     if (!is.null(family)) "Generalized" else ""
   )
 
-  opts <- modifyList(
+  opts <- utils::modifyList(
     list(progress = progress),
     list(...)
   )
@@ -100,8 +100,7 @@ jlmer <- function(formula, data, family = NULL,
 }
 
 is_jlmer <- function(x) {
-  inherits(x, "JuliaProxy") &&
-    JuliaConnectoR::juliaLet("x isa MixedModel", x = x)
+  is_jl(x) && JuliaConnectoR::juliaLet("x isa MixedModel", x = x)
 }
 
 #' @export

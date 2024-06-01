@@ -46,11 +46,6 @@ jlm(mpg ~ hp, mtcars)
 
 # Auto-handling of contrasts
 x <- mtcars
-x$cyl_sum <- factor(x$cyl)
-contrasts(x$cyl_sum) <- contr.sum(3)
-lm(mpg ~ cyl_sum, x)
-jlm(mpg ~ cyl_sum, x)
-
 x$cyl_helm <- factor(x$cyl)
 contrasts(x$cyl_helm) <- contr.helmert(3)
 colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")

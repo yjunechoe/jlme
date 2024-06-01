@@ -16,7 +16,8 @@ Imports:
     generics,
     JuliaConnectoR,
     MASS,
-    stats
+    stats,
+    utils
 Suggests: 
     broom,
     broom.mixed,
