@@ -20,11 +20,6 @@
 #'
 #' # Auto-handling of contrasts
 #' x <- mtcars
-#' x$cyl_sum <- factor(x$cyl)
-#' contrasts(x$cyl_sum) <- contr.sum(3)
-#' lm(mpg ~ cyl_sum, x)
-#' jlm(mpg ~ cyl_sum, x)
-#'
 #' x$cyl_helm <- factor(x$cyl)
 #' contrasts(x$cyl_helm) <- contr.helmert(3)
 #' colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
@@ -80,6 +75,11 @@ jlmer <- function(formula, data, family = NULL,
     if (!is.null(family)) "Generalized" else ""
   )
 
+  opts <- modifyList(
+    list(progress = progress),
+    list(...)
+  )
+
   args_list <- c(
     list(
       "StatsModels.fit",
@@ -89,7 +89,7 @@ jlmer <- function(formula, data, family = NULL,
     ),
     if (!is.null(family)) list(jl_family(family)),
     if (!is.null(contrasts)) list(contrasts = contrasts),
-    list(...)
+    opts
   )
 
   mod <- do.call(JuliaConnectoR::juliaCall, args_list)
