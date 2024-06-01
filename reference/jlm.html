@@ -119,30 +119,6 @@ Inferred from <code>data</code> by default.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Auto-handling of contrasts</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span></span>
-<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">cyl_sum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">contrasts</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">cyl_sum</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/contrast.html" class="external-link">contr.sum</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl_sum</span>, <span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lm(formula = mpg ~ cyl_sum, data = x)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)     cyl_sum1     cyl_sum2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     20.5022       6.1615      -0.7593  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">jlm</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl_sum</span>, <span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type StatsModels.TableRegressionModel&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mpg ~ 1 + cyl_sum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ─────────────────────────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  Coef.  Std. Error      z  Pr(&gt;|z|)  Lower 95%  Upper 95%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ─────────────────────────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  20.5022      0.593528  34.54    &lt;1e-99   19.3389    21.6655</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl_sum: 6    6.16147     0.816746   7.54    &lt;1e-13    4.56068    7.76226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl_sum: 8   -0.759307    0.920304  -0.83    0.4093   -2.56307    1.04445</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ─────────────────────────────────────────────────────────────────────────</span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">cyl_helm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">contrasts</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">cyl_helm</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/contrast.html" class="external-link">contr.helmert</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">contrasts</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">cyl_helm</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"4vs6"</span>, <span class="st">"4&amp;6vs8"</span><span class="op">)</span></span></span>
