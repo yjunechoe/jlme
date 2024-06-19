@@ -1,11 +1,15 @@
 loadNamespace("broom")
 loadNamespace("broom.mixed")
 
-mod_deframe <- function(df, ignore_names) {
+mod_deframe <- function(df, ignore_names = FALSE) {
   df <- tidy(df) # resolves to appropriate method for {base}, {lme4}, {jlme}
-  if (ignore_names) return(df$estimate)
-  vec <- signif(stats::setNames(df$estimate, df$term), 1)
-  vec[order(names(vec))]
+  df$estimate <- signif(df$estimate, 1)
+  if (ignore_names) {
+    df$estimate
+  } else {
+    vec <- stats::setNames(df$estimate, df$term)
+    vec[order(names(vec))]
+  }
 }
 
 expect_similar_models <- function(x, y, ignore_names = FALSE) {

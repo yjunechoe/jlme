@@ -74,7 +74,7 @@ test_that("formula conversions work", {
     r_interactions <- lm(interactions, mtcars)
     expect_similar_models(j_interactions, r_interactions)
   } else {
-    cat("Skipping formula conversion tests - JuliaFormulae not installed.\n")
+    message("Skipping formula conversion tests - JuliaFormulae not installed.")
   }
 
 })
