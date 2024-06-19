@@ -62,11 +62,11 @@ jlm <- function(formula, data, family = NULL,
 }
 
 #' @rdname jlm
-#' @param progress Whether to print model fitting progress. Defaults to `TRUE`
+#' @param progress Whether to print model fitting progress. Defaults to `interactive()`
 #' @export
 jlmer <- function(formula, data, family = NULL,
                   contrasts = jl_contrasts(data),
-                  ..., progress = TRUE) {
+                  ..., progress = interactive()) {
 
   ensure_setup()
 
