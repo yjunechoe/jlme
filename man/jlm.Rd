@@ -13,7 +13,7 @@ jlmer(
   family = NULL,
   contrasts = jl_contrasts(data),
   ...,
-  progress = TRUE
+  progress = interactive()
 )
 }
 \arguments{
@@ -29,7 +29,7 @@ Inferred from \code{data} by default.}
 
 \item{...}{Additional arguments to the \code{fit()} function called in Julia}
 
-\item{progress}{Whether to print model fitting progress. Defaults to \code{TRUE}}
+\item{progress}{Whether to print model fitting progress. Defaults to \code{interactive()}}
 }
 \value{
 A julia model object of class \code{jlme}
