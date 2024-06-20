@@ -88,12 +88,13 @@ start_julia <- function(..., threads = NULL) {
   invisible(TRUE)
 }
 
-init_proj <- function(..., verbose) {
+init_proj <- function(..., verbose = FALSE) {
   jl_evalf('
     using Pkg;
     Pkg.activate(; temp=true, %1$s)
     Pkg.add(["JuliaFormatter", "StatsModels", "GLM", "MixedModels"]; %1$s)
   ', jl_io(verbose))
+  .jlme$projdir <- dirname(jl_evalf("Base.active_project()"))
   invisible(TRUE)
 }
 
