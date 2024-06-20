@@ -25,6 +25,11 @@ test_that("reproduces `lm()` and `lmer()` outputs", {
   rmod3 <- lme4::glmer(fm3, lme4::VerbAgg, family = "binomial")
   expect_similar_models(jmod3, rmod3)
 
+  fm4 <- am ~ mpg
+  jmod4 <- jlm(fm4, mtcars, family = "binomial")
+  rmod4 <- glm(fm4, mtcars, family = "binomial")
+  expect_similar_models(jmod4, rmod4)
+
 })
 
 test_that("preserves contrasts", {

@@ -41,6 +41,7 @@ jl_family <- function(family = c("gaussian", "binomial", "poisson")) {
       "poisson"  = "Poisson"
     )
     family <- jl_evalf("GLM.%s()", family)
+    family
   } else if (is_jl(family)) {
     family
   } else {

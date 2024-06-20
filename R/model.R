@@ -37,7 +37,7 @@
 #' jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #'
 #' stop_julia()
-jlm <- function(formula, data, family = NULL,
+jlm <- function(formula, data, family = "gaussian",
                 contrasts = jl_contrasts(data), ...) {
 
   ensure_setup()
@@ -49,7 +49,7 @@ jlm <- function(formula, data, family = NULL,
       jl_formula(formula),
       jl_data(data)
     ),
-    family %||% jl_family(),
+    if (!is.null(family)) list(jl_family(family)),
     if (!is.null(contrasts)) list(contrasts = contrasts),
     list(...)
   )

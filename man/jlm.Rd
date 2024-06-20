@@ -5,7 +5,7 @@
 \alias{jlmer}
 \title{Fit a (mixed-effects) regression model in Julia}
 \usage{
-jlm(formula, data, family = NULL, contrasts = jl_contrasts(data), ...)
+jlm(formula, data, family = "gaussian", contrasts = jl_contrasts(data), ...)
 
 jlmer(
   formula,
