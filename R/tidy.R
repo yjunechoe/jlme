@@ -19,9 +19,9 @@ tidy.jlme <- function(x, effects = c("var_model", "ran_pars", "fixed"), ...) {
   out <- as.data.frame(JuliaConnectoR::juliaCall("coeftable", x))[, 1:5]
   colnames(out) <- c("term", "estimate", "std.error", "statistic", "p.value")
   out$term <- backtrans_interaction(out$term)
-  is_mem <- JuliaConnectoR::juliaLet("typeof(x) <: MixedModel", x = x)
+  is_mixed <- is_jl(x, "MixedModel")
   effects <- match.arg(effects)
-  if (is_mem && effects != "fixed") {
+  if (is_mixed && effects != "fixed") {
     vc <- JuliaConnectoR::juliaGet(JuliaConnectoR::juliaCall("VarCorr", x))[[1]]
     re_flatten <- lapply(vc, function(g) lapply(g, unlist))
     re_sd <- lapply(re_flatten, function(g) {
@@ -44,7 +44,8 @@ tidy.jlme <- function(x, effects = c("var_model", "ran_pars", "fixed"), ...) {
       data.frame(group = names(re)[i], term = names(re[[i]]), estimate = unname(re[[i]]))
     })
     re_df <- do.call(rbind, re_dfs)
-    sigma <- JuliaConnectoR::juliaLet("x.sigma", x = x) %||% NA
+    re_df <- re_df[order(gsub("(sd|cor)__", "", re_df$term)), ]
+    sigma <- x$sigma %||% NA
     if (!is.na(sigma)) {
       re_df <- rbind(re_df, data.frame(group = "Residual", term = "sd__Observation", estimate = sigma))
     }
@@ -73,11 +74,11 @@ generics::glance
 #' @method glance jlme
 #' @export
 glance.jlme <- function(x, ...) {
-  is_mixed <- JuliaConnectoR::juliaLet("x isa MixedModel", x = x)
-  is_reml <- is_mixed && JuliaConnectoR::juliaLet("x.optsum.REML", x = x)
+  is_mixed <- is_jl(x, "MixedModel")
+  is_reml <- is_mixed && jmod$optsum$REML
   nobs <- JuliaConnectoR::juliaCall("nobs", x)
   sigma <- if (is_mixed) {
-    JuliaConnectoR::juliaLet("x.sigma", x = x) %||% NA
+    x$sigma %||% NA
   } else {
     has_dispersion <- JuliaConnectoR::juliaCall("GLM.dispersion_parameter", x)
     if (has_dispersion) JuliaConnectoR::juliaLet("dispersion(x.model)", x = x) else NA

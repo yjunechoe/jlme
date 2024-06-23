@@ -1,5 +1,6 @@
-is_jl <- function(x) {
-  inherits(x, "JuliaProxy")
+is_jl <- function(x, type) {
+  inherits(x, "JuliaProxy") &&
+    if (!missing(type)) { type %in% jl_supertypes(x) } else { TRUE }
 }
 
 jl_evalf <- function(x, ...) {
@@ -38,4 +39,20 @@ sanitize_jl_error <- function(e, .call) {
   e$message <- gsub("Stacktrace:.*$", "", e$message)
   e$call <- .call
   e
+}
+
+jl_supertypes <- function(x) {
+  supertypes <- JuliaConnectoR::juliaLet("
+    let
+        T = typeof(x)
+        supertypes = []
+        while T != Any
+            T = supertype(T)
+            push!(supertypes, T)
+        end
+        supertypes
+    end
+  ", x = x)
+  vec <- unlist(JuliaConnectoR::juliaGet(supertypes))
+  gsub("\\{.*\\}$", "", vec)
 }
