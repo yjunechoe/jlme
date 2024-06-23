@@ -47,10 +47,10 @@ Once set up, `(g)lm()` and `(g)lmer` complements in Julia are available via `jlm
 
 ### Fixed effects models
 
-Basic equivalence:
+`jlm()` with `lm()`/`glm()` syntax:
 
 ```{r}
-summary(lm(mpg ~ hp, mtcars))
+# lm(mpg ~ hp, mtcars)
 jlm(mpg ~ hp, mtcars)
 ```
 
@@ -66,43 +66,53 @@ x$cyl_helm <- factor(x$cyl)
 contrasts(x$cyl_helm) <- contr.helmert(3)
 colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
 
-summary(lm(mpg ~ am_sum + cyl_helm, x))
 jlm(mpg ~ am_sum + cyl_helm, x)
 ```
 
 ### Mixed effects models
 
-Basic equivalence:
+`jlmer()` with `lmer()`/`glmer()` syntax:
 
 ```{r}
-library(lme4)
-
-summary(lmer(Reaction ~ Days + (Days | Subject), sleepstudy))
+data("sleepstudy", package = "lme4")
+# lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
 
-summary(glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial"))
+data("VerbAgg", package = "lme4")
+# lme4::glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 ```
 
 ### Inspect model objects
 
-`{broom}`-style `tidy()` and `glance()` methods:
+`{broom}`-style `tidy()` and `glance()` methods for Julia regression models:
 
 ```{r}
-jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
 
 tidy(jmod)
+
 glance(jmod)
 ```
 
-## With `{JuliaConnectoR}`
-
-### Inspect model objects with Julia code
+## Advanced features with `{JuliaConnectoR}`
 
 ```{r}
 library(JuliaConnectoR)
+```
+
+### Inspect model objects
+
+```{r}
+# List all properties of a MixedModel object
+# - Properties are accessible via `$`
 juliaCall("propertynames", jmod)
-juliaLet("x.rePCA", x = jmod)
+
+# Example 1: PCA of random effects
+jmod$rePCA
+
+# Collect as an R object (NamedTuple -> named list)
+juliaGet(jmod$rePCA)
 ```
 
 ### Create bindings to Julia libs to access more features
@@ -112,16 +122,18 @@ Use Julia(-esque) syntax from R:
 ```{r}
 MixedModels <- juliaImport("MixedModels")
 
-# Long-form construction of the `jmod` sleepstudy model
-jmod <- MixedModels$fit(
+# Check singular fit
+MixedModels$issingular(jmod)
+
+# Long-form construction of `jmod`
+jmod2 <- MixedModels$fit(
   MixedModels$LinearMixedModel,
   juliaEval("@formula(Reaction ~ Days + (Days | Subject))"),
   juliaPut(sleepstudy)
 )
-MixedModels$issingular(jmod)
 
-# Same as above in complete Julia syntax, using the julia `sleepstudy` dataset
-juliaEval("
+# This time in complete Julia syntax
+jmod3 <- juliaEval("
   fit(
     LinearMixedModel,
     @formula(reaction ~ days + (days | subj)),
@@ -130,7 +142,7 @@ juliaEval("
 ")
 ```
 
-Use other `MixedModels.jl` features, like parametric bootstrapping:
+Use other `MixedModels.jl` features, like [parametric bootstrapping](https://juliastats.org/MixedModels.jl/v4/bootstrap/) for robust confidence intervals:
 
 ```{r}
 Random <- juliaImport("Random") # juliaEval('Pkg.add("Random")')
@@ -142,7 +154,8 @@ samp <- MixedModels$parametricbootstrap(
 samp
 ```
 
+See the [MixedModels.jl](https://juliastats.org/MixedModels.jl/v4/constructors/) documentation for more features.
+
 ```{r, echo = FALSE}
 stop_julia()
 ```
-
