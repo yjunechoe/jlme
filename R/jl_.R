@@ -34,10 +34,7 @@ NULL
 #' @export
 jl_formula <- function(x) {
   if (is_jl(x)) return(x)
-  stopifnot(is.character(x) || inherits(x, "formula"))
-  if (requireNamespace("JuliaFormulae", quietly = TRUE)) {
-    x <- JuliaFormulae::julia_formula(x)
-  }
+  x <- JuliaFormulae::julia_formula(x)
   res <- tryCatch(
     jl_evalf("@formula(%s)", deparse1(x)),
     error = function(e) {

@@ -15,17 +15,15 @@ Depends:
 Imports: 
     generics,
     JuliaConnectoR,
+    JuliaFormulae,
     MASS,
     stats,
     utils
 Suggests: 
     broom,
     broom.mixed,
-    JuliaFormulae,
     lme4,
     testthat (>= 3.0.0)
-Remotes: 
-    yjunechoe/JuliaFormulae
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
