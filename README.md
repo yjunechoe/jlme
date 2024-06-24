@@ -201,6 +201,17 @@ juliaGet(jmod$rePCA)
 
 ### Create bindings to Julia libs to access more features
 
+The following lists the Julia packages loaded via `jlme_setup()`
+
+``` r
+juliaCall("Pkg.status")
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_nOy1Jx\Project.toml`
+#>   [38e38edf] GLM v1.9.0
+#>   [98e50ef6] JuliaFormatter v1.0.56
+#>   [ff71e718] MixedModels v4.24.1
+#>   [3eaba693] StatsModels v0.7.3
+```
+
 Use Julia(-esque) syntax from R:
 
 ``` r
@@ -235,7 +246,7 @@ bootstrapping](https://juliastats.org/MixedModels.jl/v4/bootstrap/) for
 robust confidence intervals:
 
 ``` r
-Random <- juliaImport("Random") # juliaEval('Pkg.add("Random")')
+Random <- juliaImport("Random")
 samp <- MixedModels$parametricbootstrap(
   Random$MersenneTwister(42L), # RNG
   1000L, # Number of simulations
@@ -256,8 +267,6 @@ samp
 #>  8 │ θ2         -0.258896  -0.03553   0.0185695  0.0198342  0.0741567  0.333454
 #>  9 │ θ3         0.0        0.17498    0.213472   0.207328   0.247253   0.402298
 ```
-
-The following is the full list of
 
 See the
 [MixedModels.jl](https://juliastats.org/MixedModels.jl/v4/constructors/)
