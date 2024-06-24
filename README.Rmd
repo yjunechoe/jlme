@@ -154,7 +154,34 @@ samp <- MixedModels$parametricbootstrap(
 samp
 ```
 
+The following is the full list of 
+
 See the [MixedModels.jl](https://juliastats.org/MixedModels.jl/v4/constructors/) documentation for more features.
+
+## Tips
+
+In practice, most of the overhead comes from transferring the data from R to Julia. If you are looking to fit many models to the same data, you can use `jl_data()` send the data to Julia first and use that to fit models.
+
+```{r}
+data_r <- mtcars
+
+# Extra tip: keep only columns you need
+data_julia <- jl_data(data_r[, c("mpg", "am")])
+
+jlm(mpg ~ am, data_julia)
+```
+
+If your data has custom contrasts, you can use `jl_contrasts()` to also convert that to Julia first before passing it to the model.
+
+```{r}
+data_r$am <- as.factor(data_r$am)
+contrasts(data_r$am) <- contr.sum(2)
+
+data_julia <- jl_data(data_r[, c("mpg", "am")])
+contrasts_julia <- jl_contrasts(data_r)
+
+jlm(mpg ~ am, data_julia, contrasts = contrasts_julia)
+```
 
 ```{r, echo = FALSE}
 stop_julia()

@@ -57,6 +57,7 @@ jl_formula <- function(x) {
 #' @param show_code Whether to print corresponding Julia code as a side-effect
 #' @export
 jl_contrasts <- function(df, cols = NULL, show_code = FALSE) {
+  if (is_jl(df)) return(NULL)
   dict <- construct_contrasts(df, cols = cols)
   if (show_code) {
     cat(dict)

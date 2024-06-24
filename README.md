@@ -257,6 +257,57 @@ samp
 #>  9 │ θ3         0.0        0.17498    0.213472   0.207328   0.247253   0.402298
 ```
 
+The following is the full list of
+
 See the
 [MixedModels.jl](https://juliastats.org/MixedModels.jl/v4/constructors/)
 documentation for more features.
+
+## Tips
+
+In practice, most of the overhead comes from transferring the data from
+R to Julia. If you are looking to fit many models to the same data, you
+can use `jl_data()` send the data to Julia first and use that to fit
+models.
+
+``` r
+data_r <- mtcars
+
+# Extra tip: keep only columns you need
+data_julia <- jl_data(data_r[, c("mpg", "am")])
+
+jlm(mpg ~ am, data_julia)
+#> <Julia object of type StatsModels.TableRegressionModel>
+#> 
+#> mpg ~ 1 + am
+#> 
+#> ────────────────────────────────────────────────────────────────────────
+#>                 Coef.  Std. Error      z  Pr(>|z|)  Lower 95%  Upper 95%
+#> ────────────────────────────────────────────────────────────────────────
+#> (Intercept)  17.1474      1.1246   15.25    <1e-51   14.9432     19.3515
+#> am            7.24494     1.76442   4.11    <1e-04    3.78674    10.7031
+#> ────────────────────────────────────────────────────────────────────────
+```
+
+If your data has custom contrasts, you can use `jl_contrasts()` to also
+convert that to Julia first before passing it to the model.
+
+``` r
+data_r$am <- as.factor(data_r$am)
+contrasts(data_r$am) <- contr.sum(2)
+
+data_julia <- jl_data(data_r[, c("mpg", "am")])
+contrasts_julia <- jl_contrasts(data_r)
+
+jlm(mpg ~ am, data_julia, contrasts = contrasts_julia)
+#> <Julia object of type StatsModels.TableRegressionModel>
+#> 
+#> mpg ~ 1 + am
+#> 
+#> ────────────────────────────────────────────────────────────────────────
+#>                 Coef.  Std. Error      z  Pr(>|z|)  Lower 95%  Upper 95%
+#> ────────────────────────────────────────────────────────────────────────
+#> (Intercept)  20.7698     0.882211  23.54    <1e-99   19.0407    22.4989
+#> am: 1        -3.62247    0.882211  -4.11    <1e-04   -5.35157   -1.89337
+#> ────────────────────────────────────────────────────────────────────────
+```
