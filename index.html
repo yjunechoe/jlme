@@ -170,20 +170,20 @@
 <code class="sourceCode R"><span><span class="va">jmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="va">sleepstudy</span>, REML <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     effect    group                  term     estimate std.error statistic</span></span>
-<span><span class="co">#&gt; 1    fixed     &lt;NA&gt;           (Intercept) 251.40510485  6.824597 36.838090</span></span>
-<span><span class="co">#&gt; 2    fixed     &lt;NA&gt;                  Days  10.46728596  1.545790  6.771481</span></span>
-<span><span class="co">#&gt; 3 ran_pars  Subject       sd__(Intercept)  24.74065797        NA        NA</span></span>
-<span><span class="co">#&gt; 4 ran_pars  Subject              sd__Days   5.92213766        NA        NA</span></span>
-<span><span class="co">#&gt; 5 ran_pars  Subject cor__(Intercept).Days   0.06555124        NA        NA</span></span>
-<span><span class="co">#&gt; 6 ran_pars Residual       sd__Observation  25.59179572        NA        NA</span></span>
-<span><span class="co">#&gt;         p.value</span></span>
-<span><span class="co">#&gt; 1 4.537101e-297</span></span>
-<span><span class="co">#&gt; 2  1.274703e-11</span></span>
-<span><span class="co">#&gt; 3            NA</span></span>
-<span><span class="co">#&gt; 4            NA</span></span>
-<span><span class="co">#&gt; 5            NA</span></span>
-<span><span class="co">#&gt; 6            NA</span></span></code></pre></div>
+<span><span class="co">#&gt;      effect    group                  term     estimate std.error statistic</span></span>
+<span><span class="co">#&gt; 1     fixed     &lt;NA&gt;           (Intercept) 251.40510485  6.824597 36.838090</span></span>
+<span><span class="co">#&gt; 2     fixed     &lt;NA&gt;                  Days  10.46728596  1.545790  6.771481</span></span>
+<span><span class="co">#&gt; 12 ran_pars  Subject       sd__(Intercept)  24.74065797        NA        NA</span></span>
+<span><span class="co">#&gt; 3  ran_pars  Subject cor__(Intercept).Days   0.06555124        NA        NA</span></span>
+<span><span class="co">#&gt; 21 ran_pars  Subject              sd__Days   5.92213766        NA        NA</span></span>
+<span><span class="co">#&gt; 11 ran_pars Residual       sd__Observation  25.59179572        NA        NA</span></span>
+<span><span class="co">#&gt;          p.value</span></span>
+<span><span class="co">#&gt; 1  4.537101e-297</span></span>
+<span><span class="co">#&gt; 2   1.274703e-11</span></span>
+<span><span class="co">#&gt; 12            NA</span></span>
+<span><span class="co">#&gt; 3             NA</span></span>
+<span><span class="co">#&gt; 21            NA</span></span>
+<span><span class="co">#&gt; 11            NA</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">)</span></span>
