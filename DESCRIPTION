@@ -1,13 +1,14 @@
 Package: jlme
-Title: Regression Modelling with 'GLM.jl' and 'MixedModels.jl' in Julia
-Version: 0.0.0.9000
+Title: Regression Modelling with 'GLM.jl' and 'MixedModels.jl' in 'Julia'
+Version: 0.1.0
 Authors@R: 
     person("June", "Choe", , "jchoe001@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0701-921X"))
 Description: Bindings to 'Julia' packages 'GLM.jl' and 'MixedModels.jl',
     powered by 'JuliaConnectoR'. Fits (generalized) linear (mixed-effects)
     regression models in 'Julia' using familiar model fitting syntax from
-    'R'.
+    R. Offers 'broom'-style data frame summary functionalities for 'Julia'
+    regression models.
 License: MIT + file LICENSE
 URL: https://yjunechoe.github.io/jlme/
 Depends:
