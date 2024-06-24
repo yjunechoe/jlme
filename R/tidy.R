@@ -75,7 +75,7 @@ generics::glance
 #' @export
 glance.jlme <- function(x, ...) {
   is_mixed <- is_jl(x, "MixedModel")
-  is_reml <- is_mixed && jmod$optsum$REML
+  is_reml <- is_mixed && x$optsum$REML
   nobs <- JuliaConnectoR::juliaCall("nobs", x)
   sigma <- if (is_mixed) {
     x$sigma %||% NA

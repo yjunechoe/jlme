@@ -141,20 +141,20 @@ models:
 jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
 
 tidy(jmod)
-#>     effect    group                  term     estimate std.error statistic
-#> 1    fixed     <NA>           (Intercept) 251.40510485  6.824597 36.838090
-#> 2    fixed     <NA>                  Days  10.46728596  1.545790  6.771481
-#> 3 ran_pars  Subject       sd__(Intercept)  24.74065797        NA        NA
-#> 4 ran_pars  Subject              sd__Days   5.92213766        NA        NA
-#> 5 ran_pars  Subject cor__(Intercept).Days   0.06555124        NA        NA
-#> 6 ran_pars Residual       sd__Observation  25.59179572        NA        NA
-#>         p.value
-#> 1 4.537101e-297
-#> 2  1.274703e-11
-#> 3            NA
-#> 4            NA
-#> 5            NA
-#> 6            NA
+#>      effect    group                  term     estimate std.error statistic
+#> 1     fixed     <NA>           (Intercept) 251.40510485  6.824597 36.838090
+#> 2     fixed     <NA>                  Days  10.46728596  1.545790  6.771481
+#> 12 ran_pars  Subject       sd__(Intercept)  24.74065797        NA        NA
+#> 3  ran_pars  Subject cor__(Intercept).Days   0.06555124        NA        NA
+#> 21 ran_pars  Subject              sd__Days   5.92213766        NA        NA
+#> 11 ran_pars Residual       sd__Observation  25.59179572        NA        NA
+#>          p.value
+#> 1  4.537101e-297
+#> 2   1.274703e-11
+#> 12            NA
+#> 3             NA
+#> 21            NA
+#> 11            NA
 ```
 
 ``` r
