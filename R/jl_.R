@@ -2,7 +2,10 @@
 #' @name jl-helpers
 #' @keywords internal
 #' @examples
+#' \donttest{
+#' \dontshow{
 #' jlme_setup(restart = TRUE)
+#' }
 #'
 #' # (Setup) Model data in R
 #' x <- mtcars
@@ -26,7 +29,10 @@
 #' julia_family <- jl_family("binomial")
 #' julia_family
 #'
+#' \dontshow{
 #' stop_julia()
+#' }
+#' }
 NULL
 
 #' @rdname jl-helpers
