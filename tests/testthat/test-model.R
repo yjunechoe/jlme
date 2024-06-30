@@ -1,3 +1,5 @@
+print(Sys.which("julia"))
+
 print(system.time({
   jlme_setup(restart = TRUE, verbose = TRUE)
 }))
