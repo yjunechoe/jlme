@@ -1,3 +1,5 @@
+skip_conditionally()
+
 print(Sys.which("julia"))
 
 print(system.time({

@@ -12,7 +12,10 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' \dontshow{
 #' jlme_setup(restart = TRUE)
+#' }
 #'
 #' # Fixed effects models
 #' lm(mpg ~ hp, mtcars)
@@ -36,7 +39,10 @@
 #' glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #' jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #'
+#' \dontshow{
 #' stop_julia()
+#' }
+#' }
 jlm <- function(formula, data, family = "gaussian",
                 contrasts = jl_contrasts(data), ...) {
 
