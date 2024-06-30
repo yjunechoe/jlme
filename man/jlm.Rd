@@ -38,7 +38,10 @@ A julia model object of class \code{jlme}
 Fit a (mixed-effects) regression model in Julia
 }
 \examples{
+\donttest{
+\dontshow{
 jlme_setup(restart = TRUE)
+}
 
 # Fixed effects models
 lm(mpg ~ hp, mtcars)
@@ -62,5 +65,8 @@ jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
 glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 
+\dontshow{
 stop_julia()
+}
+}
 }
