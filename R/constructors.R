@@ -28,7 +28,7 @@ as_julia_contrasts <- function(fct, nm = "COLUMN") {
   ", nm, .hypotheses, .levels, .labels)
 }
 
-construct_contrasts <- function(df, cols = NULL) {
+construct_contrasts <- function(df, cols = NULL, format = TRUE) {
   if (is.null(cols)) {
     cols <- colnames(Filter(is_fct_custom_contrast, df))
   }
@@ -37,5 +37,9 @@ construct_contrasts <- function(df, cols = NULL) {
     as_julia_contrasts(df[[col]], col)
   }, character(1))
   dict <- sprintf("Dict(\n%s\n)", paste(all_contrasts, collapse = ", "))
-  jl_format(dict)
+  if (format) {
+    jl_format(dict)
+  } else {
+    dict
+  }
 }
