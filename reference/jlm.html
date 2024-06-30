@@ -93,7 +93,10 @@ Inferred from <code>data</code> by default.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="jlme_setup.html">jlme_setup</a></span><span class="op">(</span>restart <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># \dontshow{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="jlme_setup.html">jlme_setup</a></span><span class="op">(</span>restart <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fixed effects models</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
@@ -165,7 +168,7 @@ Inferred from <code>data</code> by default.</p></dd>
 <span class="r-in"><span><span class="fu">jlmer</span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="va">sleepstudy</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error : Evaluation in Julia failed.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Original Julia error message:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> KeyError: key 0x00007fd243010260 not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KeyError: key 0x00007f7470fef080 not found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Stacktrace:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] getindex</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    @ ./dict.jl:498 [inlined]</span>
@@ -248,7 +251,10 @@ Inferred from <code>data</code> by default.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Gender: M     0.260065    0.153847    1.69    0.0909</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \dontshow{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="stop_julia.html">stop_julia</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
