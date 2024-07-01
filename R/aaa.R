@@ -3,7 +3,7 @@
 is_setup <- function() isTRUE(.jlme$is_setup)
 ensure_setup <- function() {
   if (!is_setup()) {
-    jlme_setup()
+    jlme_setup(restart = FALSE)
   }
 }
 
@@ -25,15 +25,12 @@ julia_detect_cores <- function() {
   as.integer(julia_cli('-q -e "println(Sys.CPU_THREADS);"'))
 }
 
-#' Stop Julia session
-#'
-#' @return Boolean
+#' @rdname jlme_setup
 #' @export
-#' @examples
-#' if (FALSE) stop_julia()
 stop_julia <- function() {
   JuliaConnectoR::stopJulia()
   .jlme$is_setup <- FALSE
+  invisible(TRUE)
 }
 
 #' Set up Julia connection for jlme
@@ -43,17 +40,20 @@ stop_julia <- function() {
 #' @param threads Number of threads to start Julia with. Defaults to `1`
 #' @param verbose Whether to alert setup progress. Defaults to `interactive()`
 #'
-#' @return Boolean
+#' @return Invisibly returns `TRUE` on success
 #' @export
-#' @examples
-#' if (interactive()) jlme_setup()
+#' @examplesIf interactive()
+#' jlme_setup()
+#' stop_julia()
 jlme_setup <- function(..., restart = FALSE, threads = NULL,
                        verbose = interactive()) {
-  if (!JuliaConnectoR::juliaSetupOk()) stop("No Julia installation detected.")
-  if (!julia_version_compatible()) stop("Julia version >=1.8 required.")
+  stopifnot(
+    "Failed to discover Julia installation" = JuliaConnectoR::juliaSetupOk(),
+    "Julia version >=1.8 required." = julia_version_compatible()
+  )
   if (restart) stop_julia()
   if (verbose) {
-    .jlme_setup(..., threads = threads)
+    .jlme_setup(..., threads = threads, verbose = verbose)
   } else {
     suppressMessages(.jlme_setup(..., threads = threads, verbose = verbose))
   }
