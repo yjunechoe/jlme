@@ -33,6 +33,17 @@ stop_julia <- function() {
   invisible(TRUE)
 }
 
+#' @rdname jlme_setup
+#' @export
+jlme_status <- function() {
+  if (is_setup()) {
+    cat(JuliaConnectoR::juliaCall("versioninfo"))
+    cat("\n")
+    cat(JuliaConnectoR::juliaCall("Pkg.status"))
+  }
+  invisible(is_setup())
+}
+
 #' Set up Julia connection for jlme
 #'
 #' @param ... Unused
@@ -43,7 +54,11 @@ stop_julia <- function() {
 #' @return Invisibly returns `TRUE` on success
 #' @export
 #' @examplesIf interactive()
+#' # Connect to a Julia runtime for use with `{jlme}`
 #' jlme_setup()
+#' # Show information about the Julia runtime
+#' jlme_status()
+#' # Stop Julia runtime
 #' stop_julia()
 jlme_setup <- function(..., restart = FALSE, threads = NULL,
                        verbose = interactive()) {

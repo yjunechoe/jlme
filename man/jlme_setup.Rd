@@ -2,10 +2,13 @@
 % Please edit documentation in R/aaa.R
 \name{stop_julia}
 \alias{stop_julia}
+\alias{jlme_status}
 \alias{jlme_setup}
 \title{Set up Julia connection for jlme}
 \usage{
 stop_julia()
+
+jlme_status()
 
 jlme_setup(..., restart = FALSE, threads = NULL, verbose = interactive())
 }
@@ -26,7 +29,11 @@ Set up Julia connection for jlme
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Connect to a Julia runtime for use with `{jlme}`
 jlme_setup()
+# Show information about the Julia runtime
+jlme_status()
+# Stop Julia runtime
 stop_julia()
 \dontshow{\}) # examplesIf}
 }
