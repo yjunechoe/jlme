@@ -38,35 +38,31 @@ A julia model object of class \code{jlme}
 Fit a (mixed-effects) regression model in Julia
 }
 \examples{
-\donttest{
-\dontshow{
-jlme_setup(restart = TRUE)
-}
+if (nzchar(Sys.which("julia"))) {
+  jlme_setup(restart = TRUE)
 
-# Fixed effects models
-lm(mpg ~ hp, mtcars)
-jlm(mpg ~ hp, mtcars)
+  # Fixed effects models
+  lm(mpg ~ hp, mtcars)
+  jlm(mpg ~ hp, mtcars)
 
-# Auto-handling of contrasts
-x <- mtcars
-x$cyl_helm <- factor(x$cyl)
-contrasts(x$cyl_helm) <- contr.helmert(3)
-colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
-lm(mpg ~ cyl_helm, x)
-jlm(mpg ~ cyl_helm, x)
+  # Auto-handling of contrasts
+  x <- mtcars
+  x$cyl_helm <- factor(x$cyl)
+  contrasts(x$cyl_helm) <- contr.helmert(3)
+  colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
+  lm(mpg ~ cyl_helm, x)
+  jlm(mpg ~ cyl_helm, x)
 
-# Mixed effects models
-library(lme4)
+  # Mixed effects models
+  library(lme4)
 
-lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
+  lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+  jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+  jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
 
-glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
-jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+  glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+  jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 
-\dontshow{
-stop_julia()
-}
+  stop_julia()
 }
 }
