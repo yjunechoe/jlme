@@ -56,8 +56,9 @@ jlm(mpg ~ cyl_helm, x)
 # Mixed effects models
 library(lme4)
 
+# Julia LMEMs have `REML = FALSE` by default
+# - Must set to `TRUE` for {lme4} equivalence
 lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-jlmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
 
 glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
