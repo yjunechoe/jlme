@@ -201,17 +201,6 @@ juliaGet(jmod$rePCA)
 
 ### Create bindings to Julia libs to access more features
 
-The following lists the Julia packages loaded via `jlme_setup()`
-
-``` r
-juliaCall("Pkg.status")
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_nOy1Jx\Project.toml`
-#>   [38e38edf] GLM v1.9.0
-#>   [98e50ef6] JuliaFormatter v1.0.56
-#>   [ff71e718] MixedModels v4.24.1
-#>   [3eaba693] StatsModels v0.7.3
-```
-
 Use Julia(-esque) syntax from R:
 
 ``` r
@@ -268,11 +257,33 @@ samp
 #>  9 │ θ3         0.0        0.17498    0.213472   0.207328   0.247253   0.402298
 ```
 
-See the
-[MixedModels.jl](https://juliastats.org/MixedModels.jl/v4/constructors/)
-documentation for more features.
+See information about the running Julia environment (e.g., the list of
+loaded Julia libraries) with `jlme_status()`:
+
+``` r
+jlme_status()
+#> Julia Version 1.10.3
+#> Commit 0b4590a550 (2024-04-30 10:59 UTC)
+#> Build Info:
+#>   Official https://julialang.org/ release
+#> Platform Info:
+#>   OS: Windows (x86_64-w64-mingw32)
+#>   CPU: 8 × 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+#>   WORD_SIZE: 64
+#>   LIBM: libopenlibm
+#>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
+#> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
+#> 
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_9C54ar\Project.toml`
+#>   [38e38edf] GLM v1.9.0
+#>   [98e50ef6] JuliaFormatter v1.0.56
+#>   [ff71e718] MixedModels v4.25.1
+#>   [3eaba693] StatsModels v0.7.3
+```
 
 ## Tips
+
+### Performance
 
 In practice, most of the overhead comes from transferring the data from
 R to Julia. If you are looking to fit many models to the same data, you

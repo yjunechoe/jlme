@@ -117,12 +117,6 @@ juliaGet(jmod$rePCA)
 
 ### Create bindings to Julia libs to access more features
 
-The following lists the Julia packages loaded via `jlme_setup()`
-
-```{r}
-juliaCall("Pkg.status")
-```
-
 Use Julia(-esque) syntax from R:
 
 ```{r}
@@ -160,9 +154,16 @@ samp <- MixedModels$parametricbootstrap(
 samp
 ```
 
-See the [MixedModels.jl](https://juliastats.org/MixedModels.jl/v4/constructors/) documentation for more features.
+See information about the running Julia environment (e.g., the list of loaded Julia libraries) with `jlme_status()`:
+
+```{r}
+jlme_status()
+```
+
 
 ## Tips
+
+### Performance
 
 In practice, most of the overhead comes from transferring the data from R to Julia. If you are looking to fit many models to the same data, you can use `jl_data()` send the data to Julia first and use that to fit models.
 
