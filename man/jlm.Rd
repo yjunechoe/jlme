@@ -39,6 +39,7 @@ Fit a (mixed-effects) regression model in Julia
 }
 \examples{
 \dontshow{if (nzchar(Sys.which("julia"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 jlme_setup(restart = TRUE)
 
 # Fixed effects models
@@ -65,5 +66,6 @@ glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 
 stop_julia()
+}
 \dontshow{\}) # examplesIf}
 }

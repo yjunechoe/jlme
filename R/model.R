@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examplesIf nzchar(Sys.which("julia"))
+#' \donttest{
 #' jlme_setup(restart = TRUE)
 #'
 #' # Fixed effects models
@@ -38,6 +39,7 @@
 #' jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #'
 #' stop_julia()
+#' }
 jlm <- function(formula, data, family = "gaussian",
                 contrasts = jl_contrasts(data), ...) {
 

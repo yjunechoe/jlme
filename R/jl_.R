@@ -2,6 +2,7 @@
 #' @name jl-helpers
 #' @keywords internal
 #' @examplesIf nzchar(Sys.which("julia"))
+#' \donttest{
 #' jlme_setup(restart = TRUE)
 #'
 #' # (Setup) Model data in R
@@ -27,6 +28,7 @@
 #' julia_family
 #'
 #' stop_julia()
+#' }
 NULL
 
 #' @rdname jl-helpers

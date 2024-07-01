@@ -32,6 +32,7 @@ Helpers for converting model specifications in R to Julia equivalents
 }
 \examples{
 \dontshow{if (nzchar(Sys.which("julia"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 jlme_setup(restart = TRUE)
 
 # (Setup) Model data in R
@@ -57,6 +58,7 @@ julia_family <- jl_family("binomial")
 julia_family
 
 stop_julia()
+}
 \dontshow{\}) # examplesIf}
 }
 \keyword{internal}
