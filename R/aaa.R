@@ -27,6 +27,14 @@ julia_detect_cores <- function() {
 
 #' @rdname jlme_setup
 #' @export
+check_julia_ok <- function() {
+  nzchar(Sys.which("julia")) &&
+    JuliaConnectoR::juliaSetupOk() &&
+    julia_version_compatible()
+}
+
+#' @rdname jlme_setup
+#' @export
 stop_julia <- function() {
   JuliaConnectoR::stopJulia()
   .jlme$is_setup <- FALSE
@@ -54,10 +62,15 @@ jlme_status <- function() {
 #' @return Invisibly returns `TRUE` on success
 #' @export
 #' @examplesIf interactive()
+#' # Check whether Julia installation meets requirements
+#' check_julia_ok()
+#'
 #' # Connect to a Julia runtime for use with `{jlme}`
 #' jlme_setup()
+#'
 #' # Show information about the Julia runtime
 #' jlme_status()
+#'
 #' # Stop Julia runtime
 #' stop_julia()
 jlme_setup <- function(..., restart = FALSE, threads = NULL,

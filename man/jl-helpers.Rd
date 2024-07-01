@@ -31,7 +31,7 @@ jl_family(family = c("gaussian", "binomial", "poisson"))
 Helpers for converting model specifications in R to Julia equivalents
 }
 \examples{
-\dontshow{if (nzchar(Sys.which("julia"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (check_julia_ok()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 jlme_setup(restart = TRUE)
 

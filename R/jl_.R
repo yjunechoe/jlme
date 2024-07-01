@@ -1,7 +1,7 @@
 #' Helpers for converting model specifications in R to Julia equivalents
 #' @name jl-helpers
 #' @keywords internal
-#' @examplesIf nzchar(Sys.which("julia"))
+#' @examplesIf check_julia_ok()
 #' \donttest{
 #' jlme_setup(restart = TRUE)
 #'

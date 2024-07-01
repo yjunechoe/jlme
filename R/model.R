@@ -11,7 +11,7 @@
 #' @return A julia model object of class `jlme`
 #' @export
 #'
-#' @examplesIf nzchar(Sys.which("julia"))
+#' @examplesIf check_julia_ok()
 #' \donttest{
 #' jlme_setup(restart = TRUE)
 #'

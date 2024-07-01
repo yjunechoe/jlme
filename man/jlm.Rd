@@ -38,7 +38,7 @@ A julia model object of class \code{jlme}
 Fit a (mixed-effects) regression model in Julia
 }
 \examples{
-\dontshow{if (nzchar(Sys.which("julia"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (check_julia_ok()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 jlme_setup(restart = TRUE)
 
