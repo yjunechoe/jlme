@@ -1,34 +1,32 @@
 #' Helpers for converting model specifications in R to Julia equivalents
 #' @name jl-helpers
 #' @keywords internal
-#' @examples
-#' if (nzchar(Sys.which("julia"))) {
-#'   jlme_setup(restart = TRUE)
+#' @examplesIf nzchar(Sys.which("julia"))
+#' jlme_setup(restart = TRUE)
 #'
-#'   # (Setup) Model data in R
-#'   x <- mtcars
-#'   x$cyl_helm <- factor(x$cyl)
-#'   contrasts(x$cyl_helm) <- contr.helmert(3)
-#'   colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
+#' # (Setup) Model data in R
+#' x <- mtcars
+#' x$cyl_helm <- factor(x$cyl)
+#' contrasts(x$cyl_helm) <- contr.helmert(3)
+#' colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
 #'
-#'   # Formula conversion with
-#'   julia_formula <- jl_formula(mpg ~ am * cyl_helm)
-#'   julia_formula
+#' # Formula conversion with
+#' julia_formula <- jl_formula(mpg ~ am * cyl_helm)
+#' julia_formula
 #'
-#'   # Data frame conversion
-#'   julia_data <- jl_data(x)
-#'   julia_data
+#' # Data frame conversion
+#' julia_data <- jl_data(x)
+#' julia_data
 #'
-#'   # Contrasts construction (`show_code = TRUE` pretty prints the Julia code)
-#'   julia_contrasts <- jl_contrasts(x, show_code = TRUE)
-#'   julia_contrasts
+#' # Contrasts construction (`show_code = TRUE` pretty prints the Julia code)
+#' julia_contrasts <- jl_contrasts(x, show_code = TRUE)
+#' julia_contrasts
 #'
-#'   # Family conversion
-#'   julia_family <- jl_family("binomial")
-#'   julia_family
+#' # Family conversion
+#' julia_family <- jl_family("binomial")
+#' julia_family
 #'
-#'   stop_julia()
-#' }
+#' stop_julia()
 NULL
 
 #' @rdname jl-helpers
