@@ -27,6 +27,9 @@ jl_family(family = c("gaussian", "binomial", "poisson"))
 
 \item{family}{The distributional family as string or \verb{<family>} object}
 }
+\value{
+A Julia object of type \verb{<JuliaProxy>}
+}
 \description{
 Helpers for converting model specifications in R to Julia equivalents
 }

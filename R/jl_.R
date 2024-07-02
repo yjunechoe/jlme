@@ -1,6 +1,9 @@
 #' Helpers for converting model specifications in R to Julia equivalents
+#'
 #' @name jl-helpers
 #' @keywords internal
+#' @return A Julia object of type `<JuliaProxy>`
+#'
 #' @examplesIf check_julia_ok()
 #' \donttest{
 #' jlme_setup(restart = TRUE)
