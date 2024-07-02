@@ -4,11 +4,12 @@ Version: 0.1.0
 Authors@R: 
     person("June", "Choe", , "jchoe001@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0701-921X"))
-Description: Bindings to 'Julia' packages 'GLM.jl' and 'MixedModels.jl',
-    powered by 'JuliaConnectoR'. Fits (generalized) linear (mixed-effects)
-    regression models in 'Julia' using familiar model fitting syntax from
-    R. Offers 'broom'-style data frame summary functionalities for 'Julia'
-    regression models.
+Description: Bindings to 'Julia' packages 'GLM.jl'
+    <doi:10.5281/zenodo.3376013> and 'MixedModels.jl'
+    <doi:10.5281/zenodo.12575371>, powered by 'JuliaConnectoR'. Fits
+    (generalized) linear (mixed-effects) regression models in 'Julia'
+    using familiar model fitting syntax from R. Offers 'broom'-style data
+    frame summary functionalities for 'Julia' regression models.
 License: MIT + file LICENSE
 URL: https://yjunechoe.github.io/jlme/
 Depends:

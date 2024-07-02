@@ -6,7 +6,7 @@
 \alias{jlme-package}
 \title{jlme: Regression Modelling with 'GLM.jl' and 'MixedModels.jl' in 'Julia'}
 \description{
-Bindings to 'Julia' packages 'GLM.jl' and 'MixedModels.jl', powered by 'JuliaConnectoR'. Fits (generalized) linear (mixed-effects) regression models in 'Julia' using familiar model fitting syntax from R. Offers 'broom'-style data frame summary functionalities for 'Julia' regression models.
+Bindings to 'Julia' packages 'GLM.jl' \doi{10.5281/zenodo.3376013} and 'MixedModels.jl' \doi{10.5281/zenodo.12575371}, powered by 'JuliaConnectoR'. Fits (generalized) linear (mixed-effects) regression models in 'Julia' using familiar model fitting syntax from R. Offers 'broom'-style data frame summary functionalities for 'Julia' regression models.
 }
 \seealso{
 Useful links:
