@@ -48,6 +48,8 @@ jlme_status <- function() {
     cat(JuliaConnectoR::juliaCall("versioninfo"))
     cat("\n")
     cat(JuliaConnectoR::juliaCall("Pkg.status"))
+  } else {
+    cat("No active Julia connection. Please call `jlme_setup()` first.")
   }
   invisible(is_setup())
 }
