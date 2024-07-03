@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # jlme
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/jlme)](https://CRAN.R-project.org/package=jlme)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml)
@@ -163,6 +164,16 @@ jlme_status()
 
 ## Tips
 
+### Data type conversion
+
+Be sure to pass integers to functions that expect Integer type, (e.g., the `MixedModels.parametricbootstrap()` example above):
+
+```{r}
+# library(JuliaConnectoR)
+juliaPut(1)
+juliaPut(1L)
+```
+
 ### Performance
 
 In practice, most of the overhead comes from transferring the data from R to Julia. If you are looking to fit many models to the same data, you can use `jl_data()` send the data to Julia first and use that to fit models.
@@ -187,6 +198,13 @@ contrasts_julia <- jl_contrasts(data_r)
 
 jlm(mpg ~ am, data_julia, contrasts = contrasts_julia)
 ```
+
+
+## Acknowledgments
+
+- The [JuliaConnectoR](https://github.com/stefan-m-lenz/JuliaConnectoR) package for powering the R interface to Julia.
+
+- The [Julia](https://julialang.org/) packages [GLM.jl](https://github.com/JuliaStats/GLM.jl) and [MixedModels.jl](https://github.com/JuliaStats/MixedModels.jl) for fast implementations of (mixed effects) regression models.
 
 ```{r, echo = FALSE}
 stop_julia()

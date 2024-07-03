@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/jlme)](https://CRAN.R-project.org/package=jlme)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml)
@@ -274,7 +276,7 @@ jlme_status()
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
 #> 
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_9C54ar\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_Q7iN8R\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.56
 #>   [ff71e718] MixedModels v4.25.1
@@ -282,6 +284,24 @@ jlme_status()
 ```
 
 ## Tips
+
+### Data type conversion
+
+Be sure to pass integers to functions that expect Integer type, (e.g.,
+the `MixedModels.parametricbootstrap()` example above):
+
+``` r
+# library(JuliaConnectoR)
+juliaPut(1)
+#> <Julia object of type Float64>
+#> 1.0
+```
+
+``` r
+juliaPut(1L)
+#> <Julia object of type Int64>
+#> 1
+```
 
 ### Performance
 
@@ -331,3 +351,13 @@ jlm(mpg ~ am, data_julia, contrasts = contrasts_julia)
 #> am: 1        -3.62247    0.882211  -4.11    <1e-04   -5.35157   -1.89337
 #> ────────────────────────────────────────────────────────────────────────
 ```
+
+## Acknowledgments
+
+- The [JuliaConnectoR](https://github.com/stefan-m-lenz/JuliaConnectoR)
+  package for powering the R interface to Julia.
+
+- The [Julia](https://julialang.org/) packages
+  [GLM.jl](https://github.com/JuliaStats/GLM.jl) and
+  [MixedModels.jl](https://github.com/JuliaStats/MixedModels.jl) for
+  fast implementations of (mixed effects) regression models.
