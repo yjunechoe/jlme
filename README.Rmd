@@ -199,6 +199,10 @@ contrasts_julia <- jl_contrasts(data_r)
 jlm(mpg ~ am, data_julia, contrasts = contrasts_julia)
 ```
 
+### Just learn Julia
+
+If you spend non-negligible time fitting regression models for your work, please just [learn Julia](https://julialang.org/learning/)! It's a great high-level language that feels close to R in syntax and its REPL-based workflow.
+
 
 ## Acknowledgments
 

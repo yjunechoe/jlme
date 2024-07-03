@@ -276,7 +276,7 @@ jlme_status()
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
 #> 
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_Q7iN8R\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_VwXCSR\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.56
 #>   [ff71e718] MixedModels v4.25.1
@@ -351,6 +351,13 @@ jlm(mpg ~ am, data_julia, contrasts = contrasts_julia)
 #> am: 1        -3.62247    0.882211  -4.11    <1e-04   -5.35157   -1.89337
 #> ────────────────────────────────────────────────────────────────────────
 ```
+
+### Just learn Julia
+
+If you spend non-negligible time fitting regression models for your
+work, please just [learn Julia](https://julialang.org/learning/)! It’s a
+great high-level language that feels close to R in syntax and its
+REPL-based workflow.
 
 ## Acknowledgments
 
