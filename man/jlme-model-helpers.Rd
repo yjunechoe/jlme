@@ -4,7 +4,7 @@
 \alias{jlme-model-helpers}
 \alias{propertynames}
 \alias{issingular}
-\title{Helpers for interacting with Julia model objects}
+\title{Helpers for interacting with Julia model objects and functions}
 \usage{
 propertynames(x)
 
@@ -17,9 +17,13 @@ issingular(x)
 An appropriate R object
 }
 \description{
-Helpers for interacting with Julia model objects
+Helpers for interacting with Julia model objects and functions
 }
 \examples{
+\dontshow{if (check_julia_ok()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
+jlme_setup(restart = TRUE)
+
 x <- jlmer(r2 ~ Anger + (1 | id), lme4::VerbAgg, family = "binomial")
 
 # `propertynames()` lists properties accessible via `$`
@@ -27,4 +31,8 @@ propertynames(x)
 
 # `issingular()` reports whether model has singular fit
 issingular(x)
+
+stop_julia()
+}
+\dontshow{\}) # examplesIf}
 }

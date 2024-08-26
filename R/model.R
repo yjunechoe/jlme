@@ -92,6 +92,9 @@ jlmer <- function(formula, data, family = NULL,
 
   mod <- do.call(JuliaConnectoR::juliaCall, args_list)
 
+  # Singular fit message
+
+
   class(mod) <- c("jlme", class(mod))
   mod
 
