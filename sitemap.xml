@@ -1,39 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/404.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/index.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/reference/jl-helpers.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/reference/jlm.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/reference/jlme-package.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/reference/jlme_setup.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/reference/jlme_tidiers.html</loc>
-  </url>
-  <url>
-    <loc>https://yjunechoe.github.io/jlme/reference/reexports.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://yjunechoe.github.io/jlme/404.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/LICENSE-text.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/LICENSE.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/authors.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/index.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/reference/index.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/reference/jl-helpers.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/reference/jlm.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/reference/jlme-model-helpers.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/reference/jlme-package.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/reference/jlme_setup.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/reference/jlme_tidiers.html</loc></url>
+<url><loc>https://yjunechoe.github.io/jlme/reference/reexports.html</loc></url>
 </urlset>
+
