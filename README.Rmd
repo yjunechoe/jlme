@@ -107,7 +107,7 @@ library(JuliaConnectoR)
 ```{r}
 # List all properties of a MixedModel object
 # - Properties are accessible via `$`
-juliaCall("propertynames", jmod)
+propertynames(jmod) # Or, `juliaCall("propertynames", jmod)`
 
 # Example 1: PCA of random effects
 jmod$rePCA
@@ -124,7 +124,7 @@ Use Julia(-esque) syntax from R:
 MixedModels <- juliaImport("MixedModels")
 
 # Check singular fit
-MixedModels$issingular(jmod)
+MixedModels$issingular(jmod) # Or, `jlme::issingular(jmod)`
 
 # Long-form construction of `jmod`
 jmod2 <- MixedModels$fit(
@@ -174,7 +174,17 @@ juliaPut(1)
 juliaPut(1L)
 ```
 
-### Performance
+### Performance (linear algebra backend)
+
+Using [`MKL.jl`](https://github.com/JuliaLinearAlgebra/MKL.jl) or [`AppleAccelerate.jl`](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl) may improve model fitting performance (but see the system requirements first).
+
+```{r, eval = FALSE}
+# Not run
+jlme_setup(add = "MKL", restart = TRUE)
+jlme_status() # Should see MKL loaded here
+```
+
+### Performance (data transfer)
 
 In practice, most of the overhead comes from transferring the data from R to Julia. If you are looking to fit many models to the same data, you can use `jl_data()` send the data to Julia first and use that to fit models.
 

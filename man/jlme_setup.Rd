@@ -13,10 +13,18 @@ stop_julia()
 
 jlme_status()
 
-jlme_setup(..., restart = FALSE, threads = NULL, verbose = interactive())
+jlme_setup(
+  ...,
+  add = NULL,
+  restart = FALSE,
+  threads = NULL,
+  verbose = interactive()
+)
 }
 \arguments{
 \item{...}{Unused}
+
+\item{add}{A character vector of additional Julia packages to add and load.}
 
 \item{restart}{Whether to run \code{stop_julia()} first, before attempting setup}
 

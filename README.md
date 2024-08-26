@@ -177,9 +177,13 @@ library(JuliaConnectoR)
 ``` r
 # List all properties of a MixedModel object
 # - Properties are accessible via `$`
-juliaCall("propertynames", jmod)
-#> <Julia object of type NTuple{36, Symbol}>
-#> (:formula, :reterms, :Xymat, :feterm, :sqrtwts, :parmap, :dims, :A, :L, :optsum, :θ, :theta, :β, :beta, :βs, :betas, :λ, :lambda, :stderror, :σ, :sigma, :σs, :sigmas, :σρs, :sigmarhos, :b, :u, :lowerbd, :X, :y, :corr, :vcov, :PCA, :rePCA, :objective, :pvalues)
+propertynames(jmod) # Or, `juliaCall("propertynames", jmod)`
+#>  [1] "A"         "b"         "beta"      "betas"     "corr"      "dims"     
+#>  [7] "feterm"    "formula"   "L"         "lambda"    "lowerbd"   "objective"
+#> [13] "optsum"    "parmap"    "PCA"       "pvalues"   "rePCA"     "reterms"  
+#> [19] "sigma"     "sigmarhos" "sigmas"    "sqrtwts"   "stderror"  "theta"    
+#> [25] "u"         "vcov"      "X"         "Xymat"     "y"         "β"        
+#> [31] "βs"        "θ"         "λ"         "σ"         "σs"        "σρs"
 ```
 
 ``` r
@@ -209,7 +213,7 @@ Use Julia(-esque) syntax from R:
 MixedModels <- juliaImport("MixedModels")
 
 # Check singular fit
-MixedModels$issingular(jmod)
+MixedModels$issingular(jmod) # Or, `jlme::issingular(jmod)`
 #> [1] FALSE
 ```
 
@@ -252,11 +256,11 @@ samp
 #>  2 │ β2         4.99683    9.40303    10.4795    10.4522    11.5543    15.2264
 #>  3 │ σ          21.0632    24.5771    25.5826    25.6026    26.5582    30.8172
 #>  4 │ σ1         3.88389    19.8497    23.9491    23.8174    27.9866    40.7803
-#>  5 │ σ2         1.64965    4.94085    5.77341    5.78678    6.61699    9.78917
+#>  5 │ σ2         1.64966    4.94085    5.77341    5.78679    6.61699    9.78927
 #>  6 │ ρ1         -0.792183  -0.150541  0.0909067  0.111872   0.345471   1.0
 #>  7 │ θ1         0.158103   0.762458   0.939804   0.935417   1.10267    1.72974
-#>  8 │ θ2         -0.258896  -0.03553   0.0185695  0.0198342  0.0741567  0.333454
-#>  9 │ θ3         0.0        0.17498    0.213472   0.207328   0.247253   0.402298
+#>  8 │ θ2         -0.258906  -0.03553   0.0185695  0.0198342  0.0741569  0.333454
+#>  9 │ θ3         0.0        0.17498    0.213472   0.207333   0.247253   0.402298
 ```
 
 See information about the running Julia environment (e.g., the list of
@@ -276,11 +280,11 @@ jlme_status()
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
 #> 
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_VwXCSR\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_XmWilq\Project.toml`
 #>   [38e38edf] GLM v1.9.0
-#>   [98e50ef6] JuliaFormatter v1.0.56
-#>   [ff71e718] MixedModels v4.25.1
-#>   [3eaba693] StatsModels v0.7.3
+#>   [98e50ef6] JuliaFormatter v1.0.60
+#>   [ff71e718] MixedModels v4.25.3
+#>   [3eaba693] StatsModels v0.7.4
 ```
 
 ## Tips
@@ -303,7 +307,20 @@ juliaPut(1L)
 #> 1
 ```
 
-### Performance
+### Performance (linear algebra backend)
+
+Using [`MKL.jl`](https://github.com/JuliaLinearAlgebra/MKL.jl) or
+[`AppleAccelerate.jl`](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl)
+may improve model fitting performance (but see the system requirements
+first).
+
+``` r
+# Not run
+jlme_setup(add = "MKL", restart = TRUE)
+jlme_status() # Should see MKL loaded here
+```
+
+### Performance (data transfer)
 
 In practice, most of the overhead comes from transferring the data from
 R to Julia. If you are looking to fit many models to the same data, you

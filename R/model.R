@@ -93,7 +93,9 @@ jlmer <- function(formula, data, family = NULL,
   mod <- do.call(JuliaConnectoR::juliaCall, args_list)
 
   # Singular fit message
-
+  if (issingular(mod)) {
+    message("! Singular fit")
+  }
 
   class(mod) <- c("jlme", class(mod))
   mod

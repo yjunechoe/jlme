@@ -57,6 +57,7 @@ jlme_status <- function() {
 #' Set up Julia connection for jlme
 #'
 #' @param ... Unused
+#' @param add A character vector of additional Julia packages to add and load.
 #' @param restart Whether to run `stop_julia()` first, before attempting setup
 #' @param threads Number of threads to start Julia with. Defaults to `1`
 #' @param verbose Whether to alert setup progress. Defaults to `interactive()`
@@ -75,25 +76,30 @@ jlme_status <- function() {
 #'
 #' # Stop Julia runtime
 #' stop_julia()
-jlme_setup <- function(..., restart = FALSE, threads = NULL,
+jlme_setup <- function(...,
+                       add = NULL,
+                       restart = FALSE,
+                       threads = NULL,
                        verbose = interactive()) {
   stopifnot(
     "Failed to discover Julia installation" = JuliaConnectoR::juliaSetupOk(),
     "Julia version >=1.8 required." = julia_version_compatible()
   )
   if (restart) stop_julia()
+
+  params <- list(..., add = add, threads = threads, verbose = verbose)
   if (verbose) {
-    .jlme_setup(..., threads = threads, verbose = verbose)
+    do.call(.jlme_setup, params)
   } else {
-    suppressMessages(.jlme_setup(..., threads = threads, verbose = verbose))
+    suppressMessages(do.call(.jlme_setup, params))
   }
   invisible(TRUE)
 }
 
-.jlme_setup <- function(..., threads = threads, verbose = FALSE) {
+.jlme_setup <- function(..., add, threads, verbose = FALSE) {
   start_julia(..., threads = threads)
-  init_proj(verbose = verbose)
-  load_libs()
+  init_proj(add = add, verbose = verbose)
+  load_libs(add = add)
   message("Successfully set up Julia connection.")
   invisible(TRUE)
 }
@@ -118,22 +124,29 @@ start_julia <- function(..., threads = NULL) {
   invisible(TRUE)
 }
 
-init_proj <- function(..., verbose = FALSE) {
+init_proj <- function(..., add = add, verbose = FALSE) {
+  stopifnot(is.null(add) || is.character(add))
+  jlme_deps <- c("JuliaFormatter", "StatsModels", "GLM", "MixedModels")
+  deps <- unique(c(add, jlme_deps))
   jl_evalf('
     using Pkg;
     Pkg.activate(; temp=true, %1$s)
-    Pkg.add(["JuliaFormatter", "StatsModels", "GLM", "MixedModels"]; %1$s)
-  ', jl_io(verbose))
+    Pkg.add(%2$s; %1$s)
+  ', jl_io(verbose), vec_to_literal(deps))
   .jlme$projdir <- dirname(jl_evalf("Base.active_project()"))
   invisible(TRUE)
 }
 
-load_libs <- function() {
+load_libs <- function(..., add) {
+  add_before <- add[add %in% c("MKL", "AppleAccelerate")]
+  for (pkg in add_before) jl_evalf("using %s;", pkg)
   jl_evalf("
     using JuliaFormatter;
     using StatsModels;
     using GLM;
     using MixedModels;
   ")
+  add_after <- add[!add %in% add_before]
+  for (pkg in add_after) jl_evalf("using %s;", pkg)
   invisible(TRUE)
 }
