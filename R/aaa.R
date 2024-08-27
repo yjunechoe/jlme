@@ -25,6 +25,10 @@ julia_detect_cores <- function() {
   as.integer(julia_cli('-q -e "println(Sys.CPU_THREADS);"'))
 }
 
+loaded_libs <- function() {
+  jl_evalf("sort(string.(keys(Pkg.project().dependencies)))")
+}
+
 #' @rdname jlme_setup
 #' @export
 check_julia_ok <- function() {
@@ -49,7 +53,7 @@ jlme_status <- function() {
     cat("\n")
     cat(JuliaConnectoR::juliaCall("Pkg.status"))
   } else {
-    cat("No active Julia connection. Please call `jlme_setup()` first.")
+    message("No active Julia connection. Please call `jlme_setup()` first.")
   }
   invisible(is_setup())
 }
