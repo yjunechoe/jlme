@@ -7,7 +7,12 @@ ensure_setup <- function() {
   }
 }
 
-julia_cli <- function(x) {
+julia_cli <- function(..., code = NULL) {
+  x <- do.call(paste, list(...))
+  if (!is.null(code)) {
+    code <- do.call(paste, c(sep = "; ", as.list(code)))
+    x <- paste0(flags, " '", code, "'")
+  }
   utils::tail(system2("julia", x, stdout = TRUE), 1L)
 }
 
@@ -128,8 +133,21 @@ start_julia <- function(..., threads = NULL) {
   invisible(TRUE)
 }
 
+# guess_BLAS <- function() {
+#   out <- tail(system(paste(
+#     'julia --project=temp -q -E',
+#     '"',
+#     "using Pkg; Pkg.add(string(:LinearAlgebra));",
+#     "using LinearAlgebra: BLAS; config = BLAS.get_config();",
+#     "join(map(x -> basename(x.libname), BLAS.get_config().loaded_libs),',');",
+#     '"'
+#   ), intern = TRUE), 1)
+#   out
+# }
+
 init_proj <- function(..., add = add, verbose = FALSE) {
   stopifnot(is.null(add) || is.character(add))
+
   jlme_deps <- c("JuliaFormatter", "StatsModels", "GLM", "MixedModels")
   deps <- unique(c(add, jlme_deps))
   jl_evalf('
@@ -142,7 +160,7 @@ init_proj <- function(..., add = add, verbose = FALSE) {
 }
 
 load_libs <- function(..., add) {
-  add_before <- add[add %in% c("MKL", "AppleAccelerate")]
+  add_before <- intersect(add, c("MKL", "AppleAccelerate"))
   for (pkg in add_before) jl_evalf("using %s;", pkg)
   jl_evalf("
     using JuliaFormatter;
@@ -150,7 +168,7 @@ load_libs <- function(..., add) {
     using GLM;
     using MixedModels;
   ")
-  add_after <- add[!add %in% add_before]
+  add_after <- setdiff(add, loaded_libs())
   for (pkg in add_after) jl_evalf("using %s;", pkg)
   invisible(TRUE)
 }
