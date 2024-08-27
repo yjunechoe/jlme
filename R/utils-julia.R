@@ -3,6 +3,15 @@ is_jl <- function(x, type) {
     if (!missing(type)) { type %in% jl_supertypes(x) } else { TRUE }
 }
 
+jl_get <- function(x) {
+  if (is_jl(x)) {
+    x <- JuliaConnectoR::juliaGet(x)
+    JL_attr <- grep(x = names(attributes(x)), "^JL[A-Z]+$", value = TRUE)
+    attributes(x)[JL_attr] <- NULL
+  }
+  x
+}
+
 jl_evalf <- function(x, ...) {
   if (is.null(x)) return(NULL)
   dots <- list(...)
