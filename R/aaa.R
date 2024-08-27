@@ -11,7 +11,7 @@ julia_cli <- function(..., code = NULL) {
   x <- do.call(paste, list(...))
   if (!is.null(code)) {
     code <- do.call(paste, c(sep = "; ", as.list(code)))
-    x <- paste0(flags, " '", code, "'")
+    x <- paste0(x, " '", code, "'")
   }
   utils::tail(system2("julia", x, stdout = TRUE), 1L)
 }
