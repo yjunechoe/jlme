@@ -91,6 +91,7 @@ jlme_setup <- function(...,
                        threads = NULL,
                        verbose = interactive()) {
   stopifnot(
+    "Already running. Did you want `restart = TRUE`?" = !restart && is_setup(),
     "Failed to discover Julia installation" = JuliaConnectoR::juliaSetupOk(),
     "Julia version >=1.8 required." = julia_version_compatible()
   )
