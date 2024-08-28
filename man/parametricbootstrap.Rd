@@ -25,6 +25,9 @@ MixedModels.parametricboostrap() output as object of class \code{jlmeboot}
 Parametric bootstrap for Julia mixed effects models
 }
 \examples{
+\donttest{
+jlme_setup(restart = TRUE)
+
 jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 tidy(jmod)
 
@@ -32,4 +35,7 @@ samp <- parametricbootstrap(jmod, nsim = 100L, seed = 42L)
 samp
 
 tidy(samp)
+
+stop_julia()
+}
 }
