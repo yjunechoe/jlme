@@ -101,7 +101,7 @@ glance(jmod)
 
 ### Parametric bootstrap
 
-Experimental support for [`MixedModels.parametricbootstrap`](https://juliastats.org/MixedModels.jl/stable/bootstrap) via `parametricbootstrap()`:
+Experimental support for [`MixedModels.parametricbootstrap`](https://juliastats.org/MixedModels.jl/stable/bootstrap/) via `parametricbootstrap()`:
 
 ```{r}
 samp <- parametricbootstrap(jmod, nsim = 100L, seed = 42L)

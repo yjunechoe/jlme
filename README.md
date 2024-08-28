@@ -165,7 +165,7 @@ glance(jmod)
 ### Parametric bootstrap
 
 Experimental support for
-[`MixedModels.parametricbootstrap`](https://juliastats.org/MixedModels.jl/stable/bootstrap)
+[`MixedModels.parametricbootstrap`](https://juliastats.org/MixedModels.jl/stable/bootstrap/)
 via `parametricbootstrap()`:
 
 ``` r
