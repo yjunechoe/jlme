@@ -103,7 +103,7 @@ jlmer <- function(formula, data, family = NULL,
 }
 
 is_jlmer <- function(x) {
-  is_jl(x) && JuliaConnectoR::juliaLet("x isa MixedModel", x = x)
+  is_jl(x, "MixedModel")
 }
 
 #' @export

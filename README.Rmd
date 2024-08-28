@@ -60,9 +60,10 @@ Contrasts in factor columns are preserved:
 ```{r}
 x <- mtcars
 
+# Sum code `am`
 x$am_sum <- factor(x$am)
 contrasts(x$am_sum) <- contr.sum(2)
-
+# Helmert code `cyl`
 x$cyl_helm <- factor(x$cyl)
 contrasts(x$cyl_helm) <- contr.helmert(3)
 colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
@@ -75,13 +76,13 @@ jlm(mpg ~ am_sum + cyl_helm, x)
 `jlmer()` with `lmer()`/`glmer()` syntax:
 
 ```{r}
-data("sleepstudy", package = "lme4")
 # lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
+jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
+```
 
-data("VerbAgg", package = "lme4")
+```{r}
 # lme4::glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
-jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 ```
 
 ### Inspect model objects
@@ -89,14 +90,29 @@ jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 `{broom}`-style `tidy()` and `glance()` methods for Julia regression models:
 
 ```{r}
-jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
-
+jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 tidy(jmod)
+```
 
+
+```{r}
 glance(jmod)
 ```
 
-## Advanced features with `{JuliaConnectoR}`
+### Parametric bootstrap
+
+Experimental support for [`MixedModels.parametricbootstrap`](https://juliastats.org/MixedModels.jl/stable/bootstrap) via `parametricbootstrap()`:
+
+```{r}
+samp <- parametricbootstrap(jmod, nsim = 100L, seed = 42L)
+samp
+```
+
+```{r}
+tidy(samp)
+```
+
+## Full interop control with `{JuliaConnectoR}`
 
 ```{r}
 library(JuliaConnectoR)
@@ -130,10 +146,10 @@ MixedModels$issingular(jmod) # Or, `jlme::issingular(jmod)`
 jmod2 <- MixedModels$fit(
   MixedModels$LinearMixedModel,
   juliaEval("@formula(Reaction ~ Days + (Days | Subject))"),
-  juliaPut(sleepstudy)
+  juliaPut(lme4::sleepstudy)
 )
 
-# This time in complete Julia syntax
+# In complete Julia syntax, using the sleepstudy dataset from MixedModels.jl
 jmod3 <- juliaEval("
   fit(
     LinearMixedModel,
@@ -141,18 +157,6 @@ jmod3 <- juliaEval("
     MixedModels.dataset(:sleepstudy)
   )
 ")
-```
-
-Use other `MixedModels.jl` features, like [parametric bootstrapping](https://juliastats.org/MixedModels.jl/v4/bootstrap/) for robust confidence intervals:
-
-```{r}
-Random <- juliaImport("Random")
-samp <- MixedModels$parametricbootstrap(
-  Random$MersenneTwister(42L), # RNG
-  1000L, # Number of simulations
-  jmod # Model
-)
-samp
 ```
 
 See information about the running Julia environment (e.g., the list of loaded Julia libraries) with `jlme_status()`:
@@ -186,12 +190,12 @@ jlme_status() # Should see MKL loaded here
 
 ### Performance (data transfer)
 
-In practice, most of the overhead comes from transferring the data from R to Julia. If you are looking to fit many models to the same data, you can use `jl_data()` send the data to Julia first and use that to fit models.
+In practice, most of the overhead will come from transferring the data from R to Julia. If you are looking to fit many models to the same data, you should first filter to keep only used columns and then use `jl_data()` to send the data to Julia. The Julia data frame object can then be used to fit Julia models.
 
 ```{r}
 data_r <- mtcars
 
-# Extra tip: keep only columns you need
+# Keep only columns you need + convert with `jl_data()`
 data_julia <- jl_data(data_r[, c("mpg", "am")])
 
 jlm(mpg ~ am, data_julia)

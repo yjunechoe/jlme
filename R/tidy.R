@@ -4,7 +4,7 @@ generics::tidy
 
 #' Tidier methods for Julia regression models
 #'
-#' @param x An object of class `jlmer_mod`
+#' @param x An object of class `jlme`
 #' @param effects One of "var_model", "ran_pars", or "fixed"
 #' @param ... Unused
 #'

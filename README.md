@@ -66,9 +66,10 @@ Contrasts in factor columns are preserved:
 ``` r
 x <- mtcars
 
+# Sum code `am`
 x$am_sum <- factor(x$am)
 contrasts(x$am_sum) <- contr.sum(2)
-
+# Helmert code `cyl`
 x$cyl_helm <- factor(x$cyl)
 contrasts(x$cyl_helm) <- contr.helmert(3)
 colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
@@ -93,9 +94,8 @@ jlm(mpg ~ am_sum + cyl_helm, x)
 `jlmer()` with `lmer()`/`glmer()` syntax:
 
 ``` r
-data("sleepstudy", package = "lme4")
 # lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
+jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 #> <Julia object of type LinearMixedModel>
 #> 
 #> Reaction ~ 1 + Days + (1 + Days | Subject)
@@ -114,10 +114,8 @@ jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
 ```
 
 ``` r
-
-data("VerbAgg", package = "lme4")
 # lme4::glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
-jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 #> <Julia object of type GeneralizedLinearMixedModel>
 #> 
 #> r2 ~ 1 + Anger + Gender + (1 | id)
@@ -140,8 +138,7 @@ jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 models:
 
 ``` r
-jmod <- jlmer(Reaction ~ Days + (Days | Subject), sleepstudy, REML = TRUE)
-
+jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 tidy(jmod)
 #>      effect    group                  term     estimate std.error statistic
 #> 1     fixed     <NA>           (Intercept) 251.40510485  6.824597 36.838090
@@ -160,13 +157,47 @@ tidy(jmod)
 ```
 
 ``` r
-
 glance(jmod)
 #>   nobs df   sigma logLik AIC BIC deviance df.residual
 #> 1  180  6 25.5918     NA  NA  NA 1743.628         174
 ```
 
-## Advanced features with `{JuliaConnectoR}`
+### Parametric bootstrap
+
+Experimental support for
+[`MixedModels.parametricbootstrap`](https://juliastats.org/MixedModels.jl/stable/bootstrap)
+via `parametricbootstrap()`:
+
+``` r
+samp <- parametricbootstrap(jmod, nsim = 100L, seed = 42L)
+samp
+#> <Julia object of type MixedModelBootstrap{Float64}>
+#> MixedModelBootstrap with 100 samples
+#>      parameter  min        q25         median     mean        q75        ⋯
+#>    ┌──────────────────────────────────────────────────────────────────────
+#>  1 │ β1         227.464    246.465     250.903    250.985     256.233    ⋯
+#>  2 │ β2         6.58801    9.89368     10.8208    10.6993     11.6945    ⋯
+#>  3 │ σ          21.6863    24.654      25.6209    25.8437     26.7414    ⋯
+#>  4 │ σ1         3.88389    19.505      24.0727    23.4107     27.6445    ⋯
+#>  5 │ σ2         1.94609    4.90984     5.7615     5.87748     6.78987    ⋯
+#>  6 │ ρ1         -0.731457  -0.244892   0.0860377  0.0721117   0.345471   ⋯
+#>  7 │ θ1         0.158103   0.742165    0.916954   0.910481    1.10115    ⋯
+#>  8 │ θ2         -0.192962  -0.0589699  0.0187681  0.00944012  0.0653042  ⋯
+#>  9 │ θ3         0.0        0.170524    0.21086    0.205921    0.255305   ⋯
+```
+
+``` r
+tidy(samp)
+#>     effect    group                  term     estimate    conf.low   conf.high
+#> 1    fixed     <NA>           (Intercept) 251.40510485 240.6380312 263.5578907
+#> 2    fixed     <NA>                  Days  10.46728596   7.6356537  13.6199271
+#> 5 ran_pars  Subject       sd__(Intercept)  24.74065797  14.0417274  34.0473785
+#> 4 ran_pars  Subject cor__(Intercept).Days   0.06555124  -0.6985657   0.8871578
+#> 6 ran_pars  Subject              sd__Days   5.92213766   3.6415708   8.2434993
+#> 3 ran_pars Residual       sd__Observation  25.59179572  22.4973967  29.1232267
+```
+
+## Full interop control with `{JuliaConnectoR}`
 
 ``` r
 library(JuliaConnectoR)
@@ -223,10 +254,10 @@ MixedModels$issingular(jmod) # Or, `jlme::issingular(jmod)`
 jmod2 <- MixedModels$fit(
   MixedModels$LinearMixedModel,
   juliaEval("@formula(Reaction ~ Days + (Days | Subject))"),
-  juliaPut(sleepstudy)
+  juliaPut(lme4::sleepstudy)
 )
 
-# This time in complete Julia syntax
+# In complete Julia syntax, using the sleepstudy dataset from MixedModels.jl
 jmod3 <- juliaEval("
   fit(
     LinearMixedModel,
@@ -234,33 +265,6 @@ jmod3 <- juliaEval("
     MixedModels.dataset(:sleepstudy)
   )
 ")
-```
-
-Use other `MixedModels.jl` features, like [parametric
-bootstrapping](https://juliastats.org/MixedModels.jl/v4/bootstrap/) for
-robust confidence intervals:
-
-``` r
-Random <- juliaImport("Random")
-samp <- MixedModels$parametricbootstrap(
-  Random$MersenneTwister(42L), # RNG
-  1000L, # Number of simulations
-  jmod # Model
-)
-samp
-#> <Julia object of type MixedModelBootstrap{Float64}>
-#> MixedModelBootstrap with 1000 samples
-#>      parameter  min        q25        median     mean       q75        max
-#>    ┌───────────────────────────────────────────────────────────────────────────
-#>  1 │ β1         227.464    246.884    251.608    251.655    256.229    275.687
-#>  2 │ β2         4.99683    9.40303    10.4795    10.4522    11.5543    15.2264
-#>  3 │ σ          21.0632    24.5771    25.5826    25.6026    26.5582    30.8172
-#>  4 │ σ1         3.88389    19.8497    23.9491    23.8174    27.9866    40.7803
-#>  5 │ σ2         1.64966    4.94085    5.77341    5.78679    6.61699    9.78927
-#>  6 │ ρ1         -0.792183  -0.150541  0.0909067  0.111872   0.345471   1.0
-#>  7 │ θ1         0.158103   0.762458   0.939804   0.935417   1.10267    1.72974
-#>  8 │ θ2         -0.258906  -0.03553   0.0185695  0.0198342  0.0741569  0.333454
-#>  9 │ θ3         0.0        0.17498    0.213472   0.207333   0.247253   0.402298
 ```
 
 See information about the running Julia environment (e.g., the list of
@@ -280,11 +284,12 @@ jlme_status()
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
 #> 
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_XmWilq\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_eocScL\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.60
 #>   [ff71e718] MixedModels v4.25.3
 #>   [3eaba693] StatsModels v0.7.4
+#>   [9a3f8284] Random
 ```
 
 ## Tips
@@ -322,15 +327,16 @@ jlme_status() # Should see MKL loaded here
 
 ### Performance (data transfer)
 
-In practice, most of the overhead comes from transferring the data from
-R to Julia. If you are looking to fit many models to the same data, you
-can use `jl_data()` send the data to Julia first and use that to fit
-models.
+In practice, most of the overhead will come from transferring the data
+from R to Julia. If you are looking to fit many models to the same data,
+you should first filter to keep only used columns and then use
+`jl_data()` to send the data to Julia. The Julia data frame object can
+then be used to fit Julia models.
 
 ``` r
 data_r <- mtcars
 
-# Extra tip: keep only columns you need
+# Keep only columns you need + convert with `jl_data()`
 data_julia <- jl_data(data_r[, c("mpg", "am")])
 
 jlm(mpg ~ am, data_julia)
