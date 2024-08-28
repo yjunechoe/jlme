@@ -12,6 +12,7 @@ Bindings to 'Julia' packages 'GLM.jl' \doi{10.5281/zenodo.3376013} and 'MixedMod
 Useful links:
 \itemize{
   \item \url{https://yjunechoe.github.io/jlme/}
+  \item \url{https://github.com/yjunechoe/jlme/}
 }
 
 }

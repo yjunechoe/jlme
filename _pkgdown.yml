@@ -1,4 +1,63 @@
 url: https://yjunechoe.github.io/jlme/
+
+home:
+  title: jlme
+  description: Julia (mixed-effects) regression modelling from R
+
+authors:
+  June Choe:
+    href: https://yjunechoe.github.io
+
 template:
   bootstrap: 5
+  bootswatch: flatly
+  bslib:
+    base_font: {google: "Atkinson Hyperlegible"}
 
+reference:
+
+- title: Julia setup
+  desc: >
+    Start a Julia session set up for jlme
+  contents:
+  - jlme_setup
+
+- title: Interface to Julia regression modelling
+  desc: >
+    Fit (mixed-effects) models in Julia using R (lme4) syntax
+  contents:
+  - jlm
+
+- title: Tidiers
+  desc: >
+    Methods for collecting jlme objects as tidy data
+  contents:
+  - jlme_tidiers
+
+- title: Parameteric bootstrap
+  desc: >
+    Parametric bootstrapping for robust confidence intervals
+  contents:
+  - parametricbootstrap
+
+- title: Helpers
+  desc: >
+    Common utilities for working with Julia (model) objects
+  contents:
+  - jlme-model-helpers
+
+news:
+  - add_cran_date: TRUE
+
+figures:
+  dev: ragg::agg_png
+  dpi: 96
+  dev.args: []
+  out.width: "100%"
+  fig.ext: png
+  fig.height: ~
+  fig.retina: 2
+  bg: "white"
+
+development:
+  mode: auto

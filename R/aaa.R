@@ -73,7 +73,7 @@ jlme_status <- function() {
 #'
 #' @return Invisibly returns `TRUE` on success
 #' @export
-#' @examplesIf interactive()
+#' @examplesIf check_julia_ok()
 #' # Check whether Julia installation meets requirements
 #' check_julia_ok()
 #'

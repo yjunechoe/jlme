@@ -39,7 +39,7 @@ Invisibly returns \code{TRUE} on success
 Set up Julia connection for jlme
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (check_julia_ok()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Check whether Julia installation meets requirements
 check_julia_ok()
 
