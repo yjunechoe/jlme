@@ -40,6 +40,7 @@ Set up Julia connection for jlme
 }
 \examples{
 \dontshow{if (check_julia_ok()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 # Check whether Julia installation meets requirements
 check_julia_ok()
 
@@ -51,5 +52,6 @@ jlme_status()
 
 # Stop Julia runtime
 stop_julia()
+}
 \dontshow{\}) # examplesIf}
 }

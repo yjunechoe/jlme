@@ -74,6 +74,7 @@ jlme_status <- function() {
 #' @return Invisibly returns `TRUE` on success
 #' @export
 #' @examplesIf check_julia_ok()
+#' \donttest{
 #' # Check whether Julia installation meets requirements
 #' check_julia_ok()
 #'
@@ -85,6 +86,7 @@ jlme_status <- function() {
 #'
 #' # Stop Julia runtime
 #' stop_julia()
+#' }
 jlme_setup <- function(...,
                        add = NULL,
                        restart = FALSE,
