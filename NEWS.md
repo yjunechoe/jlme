@@ -1,5 +1,7 @@
 # jlme (development version)
 
+# jlme 0.2.0
+
 * Experimental support for `MixedModels.parametricbootstrap()` via `parametricbootstrap()` with a `tidy()` method.
 
 * `jlme_setup()` gains an `add` argument which accepts a character vector of additional Julia libraries to install and load on initializing the session.
