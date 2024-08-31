@@ -12,6 +12,7 @@ Description: Bindings to 'Julia' packages 'GLM.jl'
     frame summary functionalities for 'Julia' regression models.
 License: MIT + file LICENSE
 URL: https://yjunechoe.github.io/jlme/, https://github.com/yjunechoe/jlme/
+BugReports: https://github.com/yjunechoe/jlme/issues/
 Depends:
     R (>= 4.1)
 Imports: 

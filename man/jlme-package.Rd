@@ -13,6 +13,7 @@ Useful links:
 \itemize{
   \item \url{https://yjunechoe.github.io/jlme/}
   \item \url{https://github.com/yjunechoe/jlme/}
+  \item Report bugs at \url{https://github.com/yjunechoe/jlme/issues/}
 }
 
 }
