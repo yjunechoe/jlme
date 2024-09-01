@@ -112,35 +112,47 @@ samp
 tidy(samp)
 ```
 
+### Inspect model objects
+
+```{r}
+# Check singular fit
+issingular(jmod)
+
+# List all properties of a MixedModel object
+# - Properties are accessible via `$`
+propertynames(jmod)
+
+# Example: PCA of random effects
+jmod$rePCA
+```
+
+### Misc.
+
+See information about the running Julia environment (e.g., the list of loaded Julia libraries) with `jlme_status()`:
+
+```{r}
+jlme_status()
+```
+
+
 ## Full interop control with `{JuliaConnectoR}`
 
 ```{r}
 library(JuliaConnectoR)
 ```
 
-### Inspect model objects
+### Bring Julia objects into R
 
 ```{r}
-# List all properties of a MixedModel object
-# - Properties are accessible via `$`
-propertynames(jmod) # Or, `juliaCall("propertynames", jmod)`
-
-# Example 1: PCA of random effects
-jmod$rePCA
-
-# Collect as an R object (NamedTuple -> named list)
 juliaGet(jmod$rePCA)
 ```
 
-### Create bindings to Julia libs to access more features
+### Access functions straight from MixedModels.jl
 
-Use Julia(-esque) syntax from R:
+Use Julia(-esque) model-fitting syntax from R:
 
 ```{r}
 MixedModels <- juliaImport("MixedModels")
-
-# Check singular fit
-MixedModels$issingular(jmod) # Or, `jlme::issingular(jmod)`
 
 # Long-form construction of `jmod`
 jmod2 <- MixedModels$fit(
@@ -157,12 +169,6 @@ jmod3 <- juliaEval("
     MixedModels.dataset(:sleepstudy)
   )
 ")
-```
-
-See information about the running Julia environment (e.g., the list of loaded Julia libraries) with `jlme_status()`:
-
-```{r}
-jlme_status()
 ```
 
 
@@ -220,7 +226,7 @@ If you spend non-negligible time fitting regression models for your work, please
 
 ## Acknowledgments
 
-- The [JuliaConnectoR](https://github.com/stefan-m-lenz/JuliaConnectoR) package for powering the R interface to Julia.
+- The [JuliaConnectoR](https://github.com/stefan-m-lenz/JuliaConnectoR) R package for powering the R interface to Julia.
 
 - The [Julia](https://julialang.org/) packages [GLM.jl](https://github.com/JuliaStats/GLM.jl) and [MixedModels.jl](https://github.com/JuliaStats/MixedModels.jl) for fast implementations of (mixed effects) regression models.
 

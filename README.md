@@ -197,18 +197,19 @@ tidy(samp)
 #> 3 ran_pars Residual       sd__Observation  25.59179572  22.4973967  29.1232267
 ```
 
-## Full interop control with `{JuliaConnectoR}`
-
-``` r
-library(JuliaConnectoR)
-```
-
 ### Inspect model objects
 
 ``` r
+# Check singular fit
+issingular(jmod)
+#> [1] FALSE
+```
+
+``` r
+
 # List all properties of a MixedModel object
 # - Properties are accessible via `$`
-propertynames(jmod) # Or, `juliaCall("propertynames", jmod)`
+propertynames(jmod)
 #>  [1] "A"         "b"         "beta"      "betas"     "corr"      "dims"     
 #>  [7] "feterm"    "formula"   "L"         "lambda"    "lowerbd"   "objective"
 #> [13] "optsum"    "parmap"    "PCA"       "pvalues"   "rePCA"     "reterms"  
@@ -219,53 +220,13 @@ propertynames(jmod) # Or, `juliaCall("propertynames", jmod)`
 
 ``` r
 
-# Example 1: PCA of random effects
+# Example: PCA of random effects
 jmod$rePCA
 #> <Julia object of type @NamedTuple{Subject::Vector{Float64}}>
 #> (Subject = [0.5327756193675971, 1.0],)
 ```
 
-``` r
-
-# Collect as an R object (NamedTuple -> named list)
-juliaGet(jmod$rePCA)
-#> $Subject
-#> [1] 0.5327756 1.0000000
-#> 
-#> attr(,"JLTYPE")
-#> [1] "@NamedTuple{Subject::Vector{Float64}}"
-```
-
-### Create bindings to Julia libs to access more features
-
-Use Julia(-esque) syntax from R:
-
-``` r
-MixedModels <- juliaImport("MixedModels")
-
-# Check singular fit
-MixedModels$issingular(jmod) # Or, `jlme::issingular(jmod)`
-#> [1] FALSE
-```
-
-``` r
-
-# Long-form construction of `jmod`
-jmod2 <- MixedModels$fit(
-  MixedModels$LinearMixedModel,
-  juliaEval("@formula(Reaction ~ Days + (Days | Subject))"),
-  juliaPut(lme4::sleepstudy)
-)
-
-# In complete Julia syntax, using the sleepstudy dataset from MixedModels.jl
-jmod3 <- juliaEval("
-  fit(
-    LinearMixedModel,
-    @formula(reaction ~ days + (days | subj)),
-    MixedModels.dataset(:sleepstudy)
-  )
-")
-```
+### Misc.
 
 See information about the running Julia environment (e.g., the list of
 loaded Julia libraries) with `jlme_status()`:
@@ -284,12 +245,53 @@ jlme_status()
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
 #> 
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_eocScL\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_rMS37J\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.60
 #>   [ff71e718] MixedModels v4.25.3
 #>   [3eaba693] StatsModels v0.7.4
 #>   [9a3f8284] Random
+```
+
+## Full interop control with `{JuliaConnectoR}`
+
+``` r
+library(JuliaConnectoR)
+```
+
+### Bring Julia objects into R
+
+``` r
+juliaGet(jmod$rePCA)
+#> $Subject
+#> [1] 0.5327756 1.0000000
+#> 
+#> attr(,"JLTYPE")
+#> [1] "@NamedTuple{Subject::Vector{Float64}}"
+```
+
+### Access functions straight from MixedModels.jl
+
+Use Julia(-esque) model-fitting syntax from R:
+
+``` r
+MixedModels <- juliaImport("MixedModels")
+
+# Long-form construction of `jmod`
+jmod2 <- MixedModels$fit(
+  MixedModels$LinearMixedModel,
+  juliaEval("@formula(Reaction ~ Days + (Days | Subject))"),
+  juliaPut(lme4::sleepstudy)
+)
+
+# In complete Julia syntax, using the sleepstudy dataset from MixedModels.jl
+jmod3 <- juliaEval("
+  fit(
+    LinearMixedModel,
+    @formula(reaction ~ days + (days | subj)),
+    MixedModels.dataset(:sleepstudy)
+  )
+")
 ```
 
 ## Tips
@@ -385,7 +387,7 @@ REPL-based workflow.
 ## Acknowledgments
 
 - The [JuliaConnectoR](https://github.com/stefan-m-lenz/JuliaConnectoR)
-  package for powering the R interface to Julia.
+  R package for powering the R interface to Julia.
 
 - The [Julia](https://julialang.org/) packages
   [GLM.jl](https://github.com/JuliaStats/GLM.jl) and
