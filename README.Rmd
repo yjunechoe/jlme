@@ -121,9 +121,6 @@ issingular(jmod)
 # List all properties of a MixedModel object
 # - Properties are accessible via `$`
 propertynames(jmod)
-
-# Example: PCA of random effects
-jmod$rePCA
 ```
 
 ### Misc.
@@ -142,6 +139,8 @@ library(JuliaConnectoR)
 ```
 
 ### Bring Julia objects into R
+
+Extract PCA of random effects as an R list:
 
 ```{r}
 juliaGet(jmod$rePCA)

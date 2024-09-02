@@ -218,14 +218,6 @@ propertynames(jmod)
 #> [31] "βs"        "θ"         "λ"         "σ"         "σs"        "σρs"
 ```
 
-``` r
-
-# Example: PCA of random effects
-jmod$rePCA
-#> <Julia object of type @NamedTuple{Subject::Vector{Float64}}>
-#> (Subject = [0.5327756193675971, 1.0],)
-```
-
 ### Misc.
 
 See information about the running Julia environment (e.g., the list of
@@ -245,7 +237,7 @@ jlme_status()
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
 #> 
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_rMS37J\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_XRahvB\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.60
 #>   [ff71e718] MixedModels v4.25.3
@@ -260,6 +252,8 @@ library(JuliaConnectoR)
 ```
 
 ### Bring Julia objects into R
+
+Extract PCA of random effects as an R list:
 
 ``` r
 juliaGet(jmod$rePCA)
