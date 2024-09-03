@@ -26,7 +26,7 @@ NULL
 #' @export
 propertynames <- function(x) {
   stopifnot(is_jl(x))
-  nm <- JuliaConnectoR::juliaGet(JuliaConnectoR::juliaCall("propertynames", x))
+  nm <- jl_get(JuliaConnectoR::juliaCall("propertynames", x))
   sort(as.character(nm))
 }
 

@@ -22,7 +22,7 @@ tidy.jlme <- function(x, effects = c("var_model", "ran_pars", "fixed"), ...) {
   is_mixed <- is_jl(x, "MixedModel")
   effects <- match.arg(effects)
   if (is_mixed && effects != "fixed") {
-    vc <- JuliaConnectoR::juliaGet(JuliaConnectoR::juliaCall("VarCorr", x))[[1]]
+    vc <- jl_get(JuliaConnectoR::juliaCall("VarCorr", x))[[1]]
     re_flatten <- lapply(vc, function(g) lapply(g, unlist))
     re_sd <- lapply(re_flatten, function(g) {
       stats::setNames(g[[1]], paste0("sd__", backtrans_interaction(names(g[[1]]))))

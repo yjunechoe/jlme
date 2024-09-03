@@ -38,7 +38,7 @@ jl_supertypes <- function(x) {
         supertypes
     end
   ", x = x)
-  vec <- unlist(JuliaConnectoR::juliaGet(supertypes))
+  vec <- unlist(jl_get(supertypes))
   gsub("\\{.*\\}$", "", vec)
 }
 

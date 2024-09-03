@@ -104,7 +104,7 @@ glance(jmod)
 Experimental support for [`MixedModels.parametricbootstrap`](https://juliastats.org/MixedModels.jl/stable/bootstrap/) via `parametricbootstrap()`:
 
 ```{r}
-samp <- parametricbootstrap(jmod, nsim = 100L, seed = 42L)
+samp <- parametricbootstrap(jmod, nsim = 1000L, seed = 42L)
 samp
 ```
 
@@ -114,14 +114,42 @@ tidy(samp)
 
 ### Inspect model objects
 
-```{r}
-# Check singular fit
-issingular(jmod)
+Check singular fit
 
-# List all properties of a MixedModel object
-# - Properties are accessible via `$`
+```{r}
+issingular(jmod)
+```
+
+List all properties of a MixedModel object (properties are accessible via `$`)
+
+```{r}
 propertynames(jmod)
 ```
+
+### Bring Julia objects into R
+
+Example 1: extract PCA of random effects and return as an R list:
+
+```{r}
+jmod$rePCA
+```
+
+```{r}
+jl_get(jmod$rePCA)
+```
+
+Example 2: extract fitlog and plot
+
+```{r}
+fitlog <- jl("refit!(x; thin=1)", x = jmod, .R = TRUE)$optsum$fitlog
+thetas <- t(sapply(fitlog, `[[`, 1))
+head(thetas)
+```
+
+```{r}
+matplot(thetas, type = "o", xlab = "iterations")
+```
+
 
 ### Misc.
 
@@ -136,14 +164,6 @@ jlme_status()
 
 ```{r}
 library(JuliaConnectoR)
-```
-
-### Bring Julia objects into R
-
-Extract PCA of random effects as an R list:
-
-```{r}
-juliaGet(jmod$rePCA)
 ```
 
 ### Access functions straight from MixedModels.jl
@@ -178,9 +198,8 @@ jmod3 <- juliaEval("
 Be sure to pass integers to functions that expect Integer type, (e.g., the `MixedModels.parametricbootstrap()` example above):
 
 ```{r}
-# library(JuliaConnectoR)
-juliaPut(1)
-juliaPut(1L)
+jl_put(1)
+jl_put(1L)
 ```
 
 ### Performance (linear algebra backend)

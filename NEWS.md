@@ -2,6 +2,8 @@
 
 * New function `jl()` to evaluate Julia expressions from string, with options for interpolation of R objects via `...`.
 
+* New functions `jl_get()` and `jl_put()`, wrappers around `JuliaConnectoR::juliaGet()` and `JuliaConnectoR::juliaPut()`.
+
 * `parametricbootstrap()` gains a `optsum_overrides` argument which accepts a list of values to override in the model [OptSummary](https://juliastats.org/MixedModels.jl/stable/api/#MixedModels.OptSummary).
 
 * `parametricbootstrap()` now prints progress to the console.

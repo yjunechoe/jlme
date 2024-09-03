@@ -3,6 +3,8 @@
 \name{jl-helpers}
 \alias{jl-helpers}
 \alias{is_jl}
+\alias{jl_put}
+\alias{jl_get}
 \alias{jl}
 \alias{jl_formula}
 \alias{jl_contrasts}
@@ -11,6 +13,10 @@
 \title{Helpers for converting model specifications in R to Julia equivalents}
 \usage{
 is_jl(x, type)
+
+jl_put(x)
+
+jl_get(x)
 
 jl(expr, ..., .R = FALSE, .passthrough = FALSE)
 
@@ -70,6 +76,10 @@ jl("1 .+ \%s", "[1,2]") # Unnamed arguments are interpolated via `sprintf()`
 
 # Use `is_jl()` to test if object is a Julia (`<JuliaProxy>`) object
 is_jl(jl("1"))
+
+# Use `jl_put()` and `jl_get()` to transfer data between R and Julia
+jl_put(1L)
+identical(jl_get(jl_put(1L)), 1L)
 
 
 # (modelling) set up model data in R

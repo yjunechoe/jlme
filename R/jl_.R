@@ -18,6 +18,10 @@
 #' # Use `is_jl()` to test if object is a Julia (`<JuliaProxy>`) object
 #' is_jl(jl("1"))
 #'
+#' # Use `jl_put()` and `jl_get()` to transfer data between R and Julia
+#' jl_put(1L)
+#' identical(jl_get(jl_put(1L)), 1L)
+#'
 #'
 #' # (modelling) set up model data in R
 #' x <- mtcars
@@ -54,6 +58,23 @@ is_jl <- function(x, type) {
     if (!missing(type)) { type %in% jl_supertypes(x) } else { TRUE }
 }
 
+#' @rdname jl-helpers
+#' @export
+jl_put <- function(x) {
+  stopifnot(!is_jl(x))
+  JuliaConnectoR::juliaPut(x)
+}
+
+#' @rdname jl-helpers
+#' @export
+jl_get <- function(x) {
+  stopifnot(is_jl(x))
+  x <- JuliaConnectoR::juliaGet(x)
+  JL_attr <- grep(x = names(attributes(x)), "^JL[A-Z]+$", value = TRUE)
+  attributes(x)[JL_attr] <- NULL
+  x
+}
+
 
 #' @rdname jl-helpers
 #' @param expr A string of Julia code
@@ -85,7 +106,7 @@ jl <- function(expr, ..., .R = FALSE, .passthrough = FALSE) {
   }
   # resolve `.R` and return as R or Julia
   if (!.R && !is_jl(out)) {
-    out <- JuliaConnectoR::juliaPut(out)
+    out <- jl_put(out)
   }
   if (.R && is_jl(out)) {
     out <- jl_get(out)
@@ -137,7 +158,7 @@ jl_data <- function(df) {
   if (is_jl(df)) return(df)
   fct_cols <- Filter(is.factor, df)
   df[, colnames(fct_cols)] <- lapply(fct_cols, as.character)
-  JuliaConnectoR::juliaPut(df)
+  jl_put(df)
 }
 
 #' @rdname jl-helpers

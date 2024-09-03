@@ -169,46 +169,47 @@ Experimental support for
 via `parametricbootstrap()`:
 
 ``` r
-samp <- parametricbootstrap(jmod, nsim = 100L, seed = 42L)
+samp <- parametricbootstrap(jmod, nsim = 1000L, seed = 42L)
 samp
 #> <Julia object of type MixedModelBootstrap{Float64}>
-#> MixedModelBootstrap with 100 samples
-#>      parameter  min        q25         median     mean        q75        ⋯
-#>    ┌──────────────────────────────────────────────────────────────────────
-#>  1 │ β1         227.464    246.465     250.903    250.985     256.233    ⋯
-#>  2 │ β2         6.58801    9.89368     10.8208    10.6993     11.6945    ⋯
-#>  3 │ σ          21.6863    24.654      25.6209    25.8437     26.7414    ⋯
-#>  4 │ σ1         3.88389    19.505      24.0727    23.4107     27.6445    ⋯
-#>  5 │ σ2         1.94609    4.90984     5.7615     5.87748     6.78987    ⋯
-#>  6 │ ρ1         -0.731457  -0.244892   0.0860377  0.0721117   0.345471   ⋯
-#>  7 │ θ1         0.158103   0.742165    0.916954   0.910481    1.10115    ⋯
-#>  8 │ θ2         -0.192962  -0.0589699  0.0187681  0.00944012  0.0653042  ⋯
-#>  9 │ θ3         0.0        0.170524    0.21086    0.205921    0.255305   ⋯
+#> MixedModelBootstrap with 1000 samples
+#>      parameter  min        q25         median     mean       q75       max
+#>    ┌───────────────────────────────────────────────────────────────────────────
+#>  1 │ β1         227.464    246.884     251.608    251.655    256.229   275.687
+#>  2 │ β2         4.99683    9.40303     10.4795    10.4522    11.5543   15.2264
+#>  3 │ σ          21.0629    24.5779     25.5858    25.6024    26.5579   30.8176
+#>  4 │ σ1         3.8862     19.8341     23.9517    23.8161    27.9909   40.7842
+#>  5 │ σ2         1.65066    4.94152     5.77701    5.78757    6.61858   9.80011
+#>  6 │ ρ1         -0.79257   -0.147053   0.0914976  0.111537   0.346284  1.0
+#>  7 │ θ1         0.158198   0.762462    0.939845   0.935398   1.10182   1.72955
+#>  8 │ θ2         -0.259593  -0.0358002  0.0185442  0.0197924  0.07347   0.333435
+#>  9 │ θ3         0.0        0.175387    0.213763   0.207584   0.24721   0.402354
 ```
 
 ``` r
 tidy(samp)
-#>     effect    group                  term     estimate    conf.low   conf.high
-#> 1    fixed     <NA>           (Intercept) 251.40510485 240.6380312 263.5578907
-#> 2    fixed     <NA>                  Days  10.46728596   7.6356537  13.6199271
-#> 5 ran_pars  Subject       sd__(Intercept)  24.74065797  14.0417274  34.0473785
-#> 4 ran_pars  Subject cor__(Intercept).Days   0.06555124  -0.6985657   0.8871578
-#> 6 ran_pars  Subject              sd__Days   5.92213766   3.6415708   8.2434993
-#> 3 ran_pars Residual       sd__Observation  25.59179572  22.4973967  29.1232267
+#>     effect    group                  term     estimate    conf.low  conf.high
+#> 1    fixed     <NA>           (Intercept) 251.40510485 238.6573824 265.430084
+#> 2    fixed     <NA>                  Days  10.46728596   7.3121974  13.523381
+#> 5 ran_pars  Subject       sd__(Intercept)  24.74065797  12.8464132  35.011690
+#> 4 ran_pars  Subject cor__(Intercept).Days   0.06555124  -0.4501055   1.000000
+#> 6 ran_pars  Subject              sd__Days   5.92213766   3.3869360   8.310897
+#> 3 ran_pars Residual       sd__Observation  25.59179572  22.6637109  28.465550
 ```
 
 ### Inspect model objects
 
+Check singular fit
+
 ``` r
-# Check singular fit
 issingular(jmod)
 #> [1] FALSE
 ```
 
-``` r
+List all properties of a MixedModel object (properties are accessible
+via `$`)
 
-# List all properties of a MixedModel object
-# - Properties are accessible via `$`
+``` r
 propertynames(jmod)
 #>  [1] "A"         "b"         "beta"      "betas"     "corr"      "dims"     
 #>  [7] "feterm"    "formula"   "L"         "lambda"    "lowerbd"   "objective"
@@ -217,6 +218,43 @@ propertynames(jmod)
 #> [25] "u"         "vcov"      "X"         "Xymat"     "y"         "β"        
 #> [31] "βs"        "θ"         "λ"         "σ"         "σs"        "σρs"
 ```
+
+### Bring Julia objects into R
+
+Example 1: extract PCA of random effects and return as an R list:
+
+``` r
+jmod$rePCA
+#> <Julia object of type @NamedTuple{Subject::Vector{Float64}}>
+#> (Subject = [0.5327756193675971, 1.0],)
+```
+
+``` r
+jl_get(jmod$rePCA)
+#> $Subject
+#> [1] 0.5327756 1.0000000
+```
+
+Example 2: extract fitlog and plot
+
+``` r
+fitlog <- jl("refit!(x; thin=1)", x = jmod, .R = TRUE)$optsum$fitlog
+thetas <- t(sapply(fitlog, `[[`, 1))
+head(thetas)
+#>      [,1] [,2] [,3]
+#> [1,] 1.00    0 1.00
+#> [2,] 1.75    0 1.00
+#> [3,] 1.00    1 1.00
+#> [4,] 1.00    0 1.75
+#> [5,] 0.25    0 1.00
+#> [6,] 1.00   -1 1.00
+```
+
+``` r
+matplot(thetas, type = "o", xlab = "iterations")
+```
+
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
 
 ### Misc.
 
@@ -237,10 +275,10 @@ jlme_status()
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
 #> 
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_XRahvB\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_UtfBLB\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.60
-#>   [ff71e718] MixedModels v4.25.3
+#>   [ff71e718] MixedModels v4.25.4
 #>   [3eaba693] StatsModels v0.7.4
 #>   [9a3f8284] Random
 ```
@@ -249,19 +287,6 @@ jlme_status()
 
 ``` r
 library(JuliaConnectoR)
-```
-
-### Bring Julia objects into R
-
-Extract PCA of random effects as an R list:
-
-``` r
-juliaGet(jmod$rePCA)
-#> $Subject
-#> [1] 0.5327756 1.0000000
-#> 
-#> attr(,"JLTYPE")
-#> [1] "@NamedTuple{Subject::Vector{Float64}}"
 ```
 
 ### Access functions straight from MixedModels.jl
@@ -296,14 +321,13 @@ Be sure to pass integers to functions that expect Integer type, (e.g.,
 the `MixedModels.parametricbootstrap()` example above):
 
 ``` r
-# library(JuliaConnectoR)
-juliaPut(1)
+jl_put(1)
 #> <Julia object of type Float64>
 #> 1.0
 ```
 
 ``` r
-juliaPut(1L)
+jl_put(1L)
 #> <Julia object of type Int64>
 #> 1
 ```
