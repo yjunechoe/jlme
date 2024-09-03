@@ -42,7 +42,7 @@ parametricbootstrap <- function(x, nsim, seed, ...,
   fn <- JuliaConnectoR::juliaFun("MixedModels.parametricbootstrap")
   samp <- fn(
     rng, nsim, x,
-    optsum_overrides = list2tuple(optsum_overrides)
+    optsum_overrides = list2ntuple(optsum_overrides)
   )
 
   class(samp) <- c("jlmeboot", class(samp))

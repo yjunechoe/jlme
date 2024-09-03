@@ -43,3 +43,8 @@ construct_contrasts <- function(df, cols = NULL, format = TRUE) {
     dict
   }
 }
+
+list2ntuple <- function(x) {
+  stopifnot(is.list(x), all(nzchar(names(x))))
+  JuliaConnectoR::juliaLet("NamedTuple(x.namedelements)", x = x)
+}

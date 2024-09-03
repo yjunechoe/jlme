@@ -1,8 +1,3 @@
-is_jl <- function(x, type) {
-  inherits(x, "JuliaProxy") &&
-    if (!missing(type)) { type %in% jl_supertypes(x) } else { TRUE }
-}
-
 jl_get <- function(x) {
   if (is_jl(x)) {
     x <- JuliaConnectoR::juliaGet(x)
@@ -66,7 +61,6 @@ jl_supertypes <- function(x) {
   gsub("\\{.*\\}$", "", vec)
 }
 
-list2tuple <- function(x) {
-  stopifnot(is.list(x), all(nzchar(names(x))))
-  JuliaConnectoR::juliaLet("NamedTuple(x.namedelements)", x = x)
+jl_format <- function(x, ...) {
+  JuliaConnectoR::juliaCall("JuliaFormatter.format_text", x, align_matrix = TRUE, ...)
 }

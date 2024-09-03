@@ -8,7 +8,18 @@
 #' \donttest{
 #' jlme_setup(restart = TRUE)
 #'
-#' # (Setup) Model data in R
+#' # (general) Use `jl()` to evaluate arbitrary Julia expressions from string
+#' jl("1 .+ [1,3]")
+#'
+#' # `jl()` takes elements in `...` that you can reference in the expression
+#' jl("1 .+ a", a = c(1L, 3L)) # Named arguments are introduced as variables
+#' jl("1 .+ %s", "[1,2]") # Unnamed arguments are interpolated via `sprintf()`
+#'
+#' # Use `is_jl()` to test if object is a Julia (`<JuliaProxy>`) object
+#' is_jl(jl("1"))
+#'
+#'
+#' # (modelling) set up model data in R
 #' x <- mtcars
 #' x$cyl_helm <- factor(x$cyl)
 #' contrasts(x$cyl_helm) <- contr.helmert(3)
@@ -35,9 +46,53 @@
 NULL
 
 #' @rdname jl-helpers
-#' @param x A string or formula object
+#' @param x An object
+#' @param type Type of Julia object to additional test for
 #' @export
-jl_formula <- function(x) {
+is_jl <- function(x, type) {
+  inherits(x, "JuliaProxy") &&
+    if (!missing(type)) { type %in% jl_supertypes(x) } else { TRUE }
+}
+
+#' @rdname jl-helpers
+#' @param expr A string of Julia code
+#' @param ... Elements interpolated into `expr`.
+#'    - If all named, elements are introduced as Julia variables in the `expr`
+#'    - If all unnamed, elements are interpolated into `expr` via [sprintf()]
+#' @param .passthrough Whether to return `expr` as-is if it's already a Julia
+#'   object. For internal use.
+#' @export
+jl <- function(expr, ..., .passthrough = FALSE) {
+  if (is_jl(expr) && .passthrough) return(expr)
+  dots <- list(...)
+  stopifnot(is.character(expr) && length(expr) == 1L)
+  if (is.null(dots)) {
+    # eval if no dots
+    out <- JuliaConnectoR::juliaEval(expr)
+  } else {
+    dots_names <- names(dots)
+    stopifnot(all(nzchar(dots_names)))
+    if (is.null(dots_names)) {
+      # sprintf for unnamed dots
+      s_interpolated <- do.call(sprintf, c(fmt = expr, dots))
+      out <- JuliaConnectoR::juliaEval(s_interpolated)
+    } else {
+      # let block for named dots
+      out <- do.call(JuliaConnectoR::juliaLet, c(expr = expr, dots))
+    }
+  }
+  # ensure Julia object is returned
+  if (!is_jl(out)) {
+    out <- JuliaConnectoR::juliaPut(out)
+  }
+  out
+}
+
+#' @rdname jl-helpers
+#' @param formula A string or formula object
+#' @export
+jl_formula <- function(formula) {
+  x <- formula
   if (is_jl(x)) return(x)
   x <- JuliaFormulae::julia_formula(x)
   res <- tryCatch(

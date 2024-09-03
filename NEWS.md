@@ -1,6 +1,9 @@
 # jlme (development version)
 
+* New function `jl()` to evaluate Julia expressions from string, with options for interpolation of R objects via `...`.
+
 * `parametricbootstrap()` gains a `optsum_overrides` argument which accepts a list of values to override in the model [OptSummary](https://juliastats.org/MixedModels.jl/stable/api/#MixedModels.OptSummary).
+
 * `parametricbootstrap()` now prints progress to the console.
 
 # jlme 0.2.0
