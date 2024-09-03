@@ -32,7 +32,7 @@ parametricbootstrap <- function(x, nsim, seed, ...,
   }
   rng <- jl_evalf("Random.MersenneTwister(%i)", as.integer(seed))
   nsim <- jl_evalf("%i", as.integer(nsim))
-  opts <- jl_evalf("(;ftol_rel=%f)", as.double(ftol_rel))
+  opts <- JuliaConnectoR::juliaLet("(;ftol_rel=x)", x = ftol_rel)
 
   args_list <- list(
     "MixedModels.parametricbootstrap",

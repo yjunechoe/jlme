@@ -1,5 +1,7 @@
 # jlme (development version)
 
+* Bugfix passing `ftol_rel` to Julia in `parametricbootstrap()`
+
 # jlme 0.2.0
 
 * Experimental support for `MixedModels.parametricbootstrap()` via `parametricbootstrap()` with a `tidy()` method.
