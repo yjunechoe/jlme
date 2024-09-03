@@ -31,7 +31,7 @@ julia_detect_cores <- function() {
 }
 
 loaded_libs <- function() {
-  jl_evalf("sort(string.(keys(Pkg.project().dependencies)))")
+  jl("sort(string.(keys(Pkg.project().dependencies)))", .R = TRUE)
 }
 
 #' @rdname jlme_setup
@@ -152,25 +152,25 @@ init_proj <- function(..., add = add, verbose = FALSE) {
 
   jlme_deps <- c("JuliaFormatter", "StatsModels", "GLM", "MixedModels")
   deps <- unique(c(add, jlme_deps))
-  jl_evalf('
+  jl('
     using Pkg;
     Pkg.activate(; temp=true, %1$s)
     Pkg.add(%2$s; %1$s)
   ', jl_io(verbose), vec_to_literal(deps))
-  .jlme$projdir <- dirname(jl_evalf("Base.active_project()"))
+  .jlme$projdir <- dirname(jl("Base.active_project()", .R = TRUE))
   invisible(TRUE)
 }
 
 load_libs <- function(..., add) {
   add_before <- intersect(add, c("MKL", "AppleAccelerate"))
-  for (pkg in add_before) jl_evalf("using %s;", pkg)
-  jl_evalf("
+  for (pkg in add_before) jl("using %s;", pkg)
+  jl("
     using JuliaFormatter;
     using StatsModels;
     using GLM;
     using MixedModels;
   ")
   add_after <- setdiff(add, loaded_libs())
-  for (pkg in add_after) jl_evalf("using %s;", pkg)
+  for (pkg in add_after) jl("using %s;", pkg)
   invisible(TRUE)
 }

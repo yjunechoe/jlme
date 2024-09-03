@@ -54,15 +54,17 @@ is_jl <- function(x, type) {
     if (!missing(type)) { type %in% jl_supertypes(x) } else { TRUE }
 }
 
+
 #' @rdname jl-helpers
 #' @param expr A string of Julia code
 #' @param ... Elements interpolated into `expr`.
 #'    - If all named, elements are introduced as Julia variables in the `expr`
 #'    - If all unnamed, elements are interpolated into `expr` via [sprintf()]
+#' @param .R Whether to simplify and return as R object, if possible.
 #' @param .passthrough Whether to return `expr` as-is if it's already a Julia
-#'   object. For internal use.
+#'   object. Mostly for internal use.
 #' @export
-jl <- function(expr, ..., .passthrough = FALSE) {
+jl <- function(expr, ..., .R = FALSE, .passthrough = FALSE) {
   if (is_jl(expr) && .passthrough) return(expr)
   dots <- list(...)
   stopifnot(is.character(expr) && length(expr) == 1L)
@@ -81,9 +83,12 @@ jl <- function(expr, ..., .passthrough = FALSE) {
       out <- do.call(JuliaConnectoR::juliaLet, c(expr = expr, dots))
     }
   }
-  # ensure Julia object is returned
-  if (!is_jl(out)) {
+  # resolve `.R` and return as R or Julia
+  if (!.R && !is_jl(out)) {
     out <- JuliaConnectoR::juliaPut(out)
+  }
+  if (.R && is_jl(out)) {
+    out <- jl_get(out)
   }
   out
 }
@@ -96,7 +101,7 @@ jl_formula <- function(formula) {
   if (is_jl(x)) return(x)
   x <- JuliaFormulae::julia_formula(x)
   res <- tryCatch(
-    jl_evalf("@formula(%s)", deparse1(x)),
+    jl("@formula(%s)", deparse1(x)),
     error = function(e) {
       sanitize_jl_error(e, sys.call(1))
     }
@@ -119,7 +124,11 @@ jl_contrasts <- function(df, cols = NULL, show_code = FALSE) {
   if (show_code) {
     cat(dict)
   }
-  jl_evalf(dict)
+  if (!is.null(dict)) {
+    jl(dict)
+  } else {
+    NULL
+  }
 }
 
 #' @rdname jl-helpers
@@ -147,7 +156,7 @@ jl_family <- function(family = c("gaussian", "binomial", "poisson")) {
       "binomial" = "Bernoulli",
       "poisson"  = "Poisson"
     )
-    family <- jl_evalf("GLM.%s()", family)
+    family <- jl("GLM.%s()", family)
     family
   } else {
     stop("Invalid input to the `family` argument.")

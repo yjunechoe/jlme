@@ -1,33 +1,14 @@
-jl_get <- function(x) {
-  if (is_jl(x)) {
-    x <- JuliaConnectoR::juliaGet(x)
-    JL_attr <- grep(x = names(attributes(x)), "^JL[A-Z]+$", value = TRUE)
-    attributes(x)[JL_attr] <- NULL
-  }
-  x
-}
-
-jl_evalf <- function(x, ...) {
-  if (is.null(x)) return(NULL)
-  dots <- list(...)
-  if (length(dots) == 0) {
-    JuliaConnectoR::juliaEval(x)
-  } else {
-    JuliaConnectoR::juliaEval(sprintf(x, ...))
-  }
-}
-
 jl_io <- function(verbose) {
   if (verbose) "" else "io=devnull"
 }
 
 jl_pkg_installed <- function(x, ..., verbose = interactive()) {
-  jl_evalf('!isnothing(Pkg.status("%1$s"; %2$s))', x, jl_io(verbose))
+  jl('!isnothing(Pkg.status("%1$s"; %2$s))', x, jl_io(verbose), .R = TRUE)
 }
 
 jl_pkg_add <- function(x, ..., verbose = interactive()) {
   if (!jl_pkg_installed(x, verbose = verbose)) {
-    jl_evalf('Pkg.add("%2$s"; %1$s); using %2$s', jl_io(verbose), x)
+    jl('Pkg.add("%2$s"; %1$s); using %2$s', jl_io(verbose), x)
   }
 }
 

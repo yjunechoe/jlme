@@ -12,7 +12,7 @@
 \usage{
 is_jl(x, type)
 
-jl(expr, ..., .passthrough = FALSE)
+jl(expr, ..., .R = FALSE, .passthrough = FALSE)
 
 jl_formula(formula)
 
@@ -35,8 +35,10 @@ jl_family(family = c("gaussian", "binomial", "poisson"))
 \item If all unnamed, elements are interpolated into \code{expr} via \code{\link[=sprintf]{sprintf()}}
 }}
 
+\item{.R}{Whether to simplify and return as R object, if possible.}
+
 \item{.passthrough}{Whether to return \code{expr} as-is if it's already a Julia
-object. For internal use.}
+object. Mostly for internal use.}
 
 \item{formula}{A string or formula object}
 

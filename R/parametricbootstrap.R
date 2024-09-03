@@ -28,16 +28,16 @@ parametricbootstrap <- function(x, nsim, seed, ...,
 
   stopifnot(is_jlmer(x))
   if (!"Random" %in% loaded_libs()) {
-    jl_evalf('Pkg.add("Random"; io=devnull); using Random;')
+    jl('Pkg.add("Random"; io=devnull); using Random;')
   }
-  if (!jl_evalf("@isdefined _is_logging")) {
+  if (!jl("@isdefined _is_logging", .R = TRUE)) {
     # Hack to show progress when called via R
-    jl_evalf("import MixedModels._is_logging")
-    jl_evalf("_is_logging(io::Base.PipeEndpoint) = false")
+    jl("import MixedModels._is_logging")
+    jl("_is_logging(io::Base.PipeEndpoint) = false")
   }
 
-  rng <- jl_evalf("Random.MersenneTwister(%i)", as.integer(seed))
-  nsim <- jl_evalf("%i", as.integer(nsim))
+  rng <- jl("Random.MersenneTwister(%i)", as.integer(seed))
+  nsim <- jl("%i", as.integer(nsim))
 
   fn <- JuliaConnectoR::juliaFun("MixedModels.parametricbootstrap")
   samp <- fn(

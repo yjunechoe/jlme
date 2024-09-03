@@ -43,7 +43,7 @@ jlm <- function(formula, data, family = "gaussian",
   args_list <- c(
     list(
       "StatsModels.fit",
-      jl_evalf("GLM.GeneralizedLinearModel"),
+      jl("GLM.GeneralizedLinearModel"),
       jl_formula(formula),
       jl_data(data)
     ),
@@ -68,7 +68,7 @@ jlmer <- function(formula, data, family = NULL,
 
   ensure_setup()
 
-  model <- jl_evalf(
+  model <- jl(
     "MixedModels.%sLinearMixedModel",
     if (!is.null(family)) "Generalized" else ""
   )
