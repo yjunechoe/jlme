@@ -65,3 +65,8 @@ jl_supertypes <- function(x) {
   vec <- unlist(JuliaConnectoR::juliaGet(supertypes))
   gsub("\\{.*\\}$", "", vec)
 }
+
+list2tuple <- function(x) {
+  stopifnot(is.list(x), all(nzchar(names(x))))
+  JuliaConnectoR::juliaLet("NamedTuple(x.namedelements)", x = x)
+}

@@ -4,8 +4,7 @@
 #' @param nsim Number of simulations
 #' @param seed Seed for the random number generator (Random.MersenneTwister)
 #' @param ... Not implemented
-#' @param ftol_rel A convergence criterion. Defaults to a reduced-precision
-#'  target of 1e-8.
+#' @param optsum_overrides Values to override in the OptSummary.
 #'
 #' @return MixedModels.parametricboostrap() output as object of class `jlmeboot`
 #' @export
@@ -25,22 +24,26 @@
 #' stop_julia()
 #' }
 parametricbootstrap <- function(x, nsim, seed, ...,
-                                ftol_rel = 1e-8) {
+                                optsum_overrides = list(ftol_rel = 1e-8)) {
+
   stopifnot(is_jlmer(x))
   if (!"Random" %in% loaded_libs()) {
     jl_evalf('Pkg.add("Random"; io=devnull); using Random;')
   }
+  if (!jl_evalf("@isdefined _is_logging")) {
+    # Hack to show progress when called via R
+    jl_evalf("import MixedModels._is_logging")
+    jl_evalf("_is_logging(io::Base.PipeEndpoint) = false")
+  }
+
   rng <- jl_evalf("Random.MersenneTwister(%i)", as.integer(seed))
   nsim <- jl_evalf("%i", as.integer(nsim))
-  opts <- JuliaConnectoR::juliaLet("(;ftol_rel=x)", x = ftol_rel)
 
-  args_list <- list(
-    "MixedModels.parametricbootstrap",
+  fn <- JuliaConnectoR::juliaFun("MixedModels.parametricbootstrap")
+  samp <- fn(
     rng, nsim, x,
-    optsum_overrides = opts
+    optsum_overrides = list2tuple(optsum_overrides)
   )
-
-  samp <- do.call(JuliaConnectoR::juliaCall, args_list)
 
   class(samp) <- c("jlmeboot", class(samp))
   attr(samp, "jmod") <- x

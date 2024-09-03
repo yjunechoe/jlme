@@ -4,7 +4,13 @@
 \alias{parametricbootstrap}
 \title{Parametric bootstrap for Julia mixed effects models}
 \usage{
-parametricbootstrap(x, nsim, seed, ..., ftol_rel = 1e-08)
+parametricbootstrap(
+  x,
+  nsim,
+  seed,
+  ...,
+  optsum_overrides = list(ftol_rel = 1e-08)
+)
 }
 \arguments{
 \item{x}{A Julia MixedModel of class \code{jlme}}
@@ -15,8 +21,7 @@ parametricbootstrap(x, nsim, seed, ..., ftol_rel = 1e-08)
 
 \item{...}{Not implemented}
 
-\item{ftol_rel}{A convergence criterion. Defaults to a reduced-precision
-target of 1e-8.}
+\item{optsum_overrides}{Values to override in the OptSummary.}
 }
 \value{
 MixedModels.parametricboostrap() output as object of class \code{jlmeboot}
