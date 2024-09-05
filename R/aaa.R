@@ -1,6 +1,15 @@
 #' @keywords internal
 .jlme <- new.env(parent = emptyenv())
-is_setup <- function() isTRUE(.jlme$is_setup)
+is_setup <- function() {
+  if (length(.jlme) == 0 && exists(".__DEVTOOLS__", asNamespace("jlme"))) {
+    # If setup already ran, flag it as set up
+    if (!is.null(get("pkgLocal", asNamespace("JuliaConnectoR"))$con)) {
+      message("[dev] Using prior setup: `is_setup()` is TRUE in `load_all()`")
+      return(TRUE)
+    }
+  }
+  isTRUE(.jlme$is_setup)
+}
 ensure_setup <- function() {
   if (!is_setup()) {
     jlme_setup(restart = FALSE)
@@ -59,7 +68,14 @@ jlme_status <- function() {
     cat("\n")
     cat(JuliaConnectoR::juliaCall("Pkg.status"))
   } else {
-    message("No active Julia connection. Please call `jlme_setup()` first.")
+    julia_cmd <- tryCatch(
+      asNamespace("JuliaConnectoR")$getJuliaExecutablePath(),
+      error = function(e) message("! ", e$message)
+    )
+    if (is.character(julia_cmd)) {
+      message("Julia version ", julia_version(), " detected.")
+      message("No active Julia connection. Please call `jlme_setup()`.")
+    }
   }
   invisible(is_setup())
 }
@@ -93,11 +109,20 @@ jlme_setup <- function(...,
                        restart = FALSE,
                        threads = NULL,
                        verbose = interactive()) {
+
   stopifnot(
     "Failed to discover Julia installation" = JuliaConnectoR::juliaSetupOk(),
     "Julia version >=1.8 required." = julia_version_compatible()
   )
-  if (restart) stop_julia()
+
+  if (!is_setup() || (restart && is_setup())) {
+    stop_julia()
+  } else {
+    message("Julia already running - skipping. Did you mean `restart = TRUE`?")
+    return(invisible(TRUE))
+  }
+
+  .jlme$julia_cmd <- asNamespace("JuliaConnectoR")$getJuliaExecutablePath()
 
   params <- list(..., add = add, threads = threads, verbose = verbose)
   if (verbose) {
@@ -105,7 +130,9 @@ jlme_setup <- function(...,
   } else {
     suppressMessages(do.call(.jlme_setup, params))
   }
+
   invisible(TRUE)
+
 }
 
 .jlme_setup <- function(..., add, threads, verbose = FALSE) {
