@@ -13,7 +13,8 @@ julia_cli <- function(..., code = NULL) {
     code <- do.call(paste, c(sep = "; ", as.list(code)))
     x <- paste0(x, " '", code, "'")
   }
-  utils::tail(system2("julia", x, stdout = TRUE), 1L)
+  julia_cmd <- asNamespace("JuliaConnectoR")$getJuliaExecutablePath()
+  utils::tail(system2(julia_cmd, x, stdout = TRUE), 1L)
 }
 
 julia_version_compatible <- function() {
