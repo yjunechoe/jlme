@@ -63,7 +63,8 @@ stop_julia <- function() {
 #' @rdname jlme_setup
 #' @export
 jlme_status <- function() {
-  if (is_setup()) {
+  active <- is_setup()
+  if (active) {
     cat(JuliaConnectoR::juliaCall("versioninfo"))
     cat("\n")
     cat(JuliaConnectoR::juliaCall("Pkg.status"))
@@ -77,7 +78,7 @@ jlme_status <- function() {
       message("No active Julia connection. Please call `jlme_setup()`.")
     }
   }
-  invisible(is_setup())
+  invisible(active)
 }
 
 #' Set up Julia connection for jlme
