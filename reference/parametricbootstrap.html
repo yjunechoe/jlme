@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jlme</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parametricbootstrap</span><span class="op">(</span><span class="va">x</span>, <span class="va">nsim</span>, <span class="va">seed</span>, <span class="va">...</span>, ftol_rel <span class="op">=</span> <span class="fl">1e-08</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parametricbootstrap</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">nsim</span>,</span>
+<span>  <span class="va">seed</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  optsum_overrides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ftol_rel <span class="op">=</span> <span class="fl">1e-08</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -62,9 +68,8 @@
 <dd><p>Not implemented</p></dd>
 
 
-<dt id="arg-ftol-rel">ftol_rel<a class="anchor" aria-label="anchor" href="#arg-ftol-rel"></a></dt>
-<dd><p>A convergence criterion. Defaults to a reduced-precision
-target of 1e-8.</p></dd>
+<dt id="arg-optsum-overrides">optsum_overrides<a class="anchor" aria-label="anchor" href="#arg-optsum-overrides"></a></dt>
+<dd><p>Values to override in the OptSummary.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -76,7 +81,7 @@ target of 1e-8.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="jlme_setup.html">jlme_setup</a></span><span class="op">(</span>restart <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Julia (v1.10.3) ...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Julia (v1.10.5) ...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Successfully set up Julia connection.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">jmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span><span class="op">)</span></span></span>
@@ -99,13 +104,13 @@ target of 1e-8.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ┌────────────────────────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1 │ β1         228.0      246.58      250.863    250.977    256.082    264.406</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2 │ β2         6.72055    9.91274     10.8382    10.696     11.6725    13.7769</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3 │ σ          21.6863    24.6541     25.6209    25.8379    26.7415    30.5993</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4 │ σ1         3.58981    17.8943     22.0998    21.5827    25.6263    31.9265</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5 │ σ2         1.63408    4.528       5.36377    5.47516    6.3829     8.34495</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6 │ ρ1         -0.739906  -0.227009   0.121682   0.108274   0.391367   1.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7 │ θ1         0.146947   0.6758      0.84266    0.839684   1.02355    1.29195</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8 │ θ2         -0.18142   -0.0508002  0.0248508  0.0156839  0.0707922  0.22798</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9 │ θ3         0.0        0.156764    0.192997   0.188327   0.239451   0.333976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3 │ σ          21.6856    24.6536     25.6211    25.838     26.7439    30.5968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4 │ σ1         3.57556    17.8908     22.1421    21.5799    25.6259    31.9446</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5 │ σ2         1.63637    4.53406     5.36349    5.47536    6.38651    8.34052</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6 │ ρ1         -0.739267  -0.226513   0.120712   0.107686   0.389495   1.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7 │ θ1         0.146373   0.675859    0.845334   0.839596   1.02343    1.29287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8 │ θ2         -0.18147   -0.0508505  0.0248657  0.0155747  0.0708033  0.226194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9 │ θ3         0.0        0.156785    0.193042   0.188678   0.238505   0.334108</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span></span></span>
@@ -114,9 +119,9 @@ target of 1e-8.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> fixed    <span style="color: #BB0000;">NA</span>       (Intercept)           251.      241.       263.  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> fixed    <span style="color: #BB0000;">NA</span>       Days                   10.5       7.73      13.5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ran_pars Subject  sd__(Intercept)        23.8      12.5       31.9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ran_pars Subject  sd__(Intercept)        23.8      12.6       31.9 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> ran_pars Subject  cor__(Intercept).Days   0.081<span style="text-decoration: underline;">3</span>   -<span style="color: #BB0000;">0.595</span>      1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> ran_pars Subject  sd__Days                5.72      3.42       7.82</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> ran_pars Subject  sd__Days                5.72      3.67       8.07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> ran_pars Residual sd__Observation        25.6      22.5       29.1 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="jlme_setup.html">stop_julia</a></span><span class="op">(</span><span class="op">)</span></span></span>

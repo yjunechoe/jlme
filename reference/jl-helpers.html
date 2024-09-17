@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jlme</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,15 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">jl_formula</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">is_jl</span><span class="op">(</span><span class="va">x</span>, <span class="va">type</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">jl_put</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">jl_get</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">jl</span><span class="op">(</span><span class="va">expr</span>, <span class="va">...</span>, .R <span class="op">=</span> <span class="cn">FALSE</span>, .passthrough <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">jl_formula</span><span class="op">(</span><span class="va">formula</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">jl_contrasts</span><span class="op">(</span><span class="va">df</span>, cols <span class="op">=</span> <span class="cn">NULL</span>, show_code <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -53,6 +61,33 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
+<dd><p>An object</p></dd>
+
+
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
+<dd><p>Type of Julia object to additional test for</p></dd>
+
+
+<dt id="arg-expr">expr<a class="anchor" aria-label="anchor" href="#arg-expr"></a></dt>
+<dd><p>A string of Julia code</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Elements interpolated into <code>expr</code>.</p><ul><li><p>If all named, elements are introduced as Julia variables in the <code>expr</code></p></li>
+<li><p>If all unnamed, elements are interpolated into <code>expr</code> via <code><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf()</a></code></p></li>
+</ul></dd>
+
+
+<dt id="arg--r">.R<a class="anchor" aria-label="anchor" href="#arg--r"></a></dt>
+<dd><p>Whether to simplify and return as R object, if possible.</p></dd>
+
+
+<dt id="arg--passthrough">.passthrough<a class="anchor" aria-label="anchor" href="#arg--passthrough"></a></dt>
+<dd><p>Whether to return <code>expr</code> as-is if it's already a Julia
+object. Mostly for internal use.</p></dd>
+
+
+<dt id="arg-formula">formula<a class="anchor" aria-label="anchor" href="#arg-formula"></a></dt>
 <dd><p>A string or formula object</p></dd>
 
 
@@ -81,10 +116,41 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="jlme_setup.html">jlme_setup</a></span><span class="op">(</span>restart <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Julia (v1.10.3) ...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Julia (v1.10.5) ...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Successfully set up Julia connection.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># (Setup) Model data in R</span></span></span>
+<span class="r-in"><span><span class="co"># (general) Use `jl()` to evaluate arbitrary Julia expressions from string</span></span></span>
+<span class="r-in"><span><span class="fu">jl</span><span class="op">(</span><span class="st">"1 .+ [1,3]"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type Vector{Int64}&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2-element Vector{Int64}:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># `jl()` takes elements in `...` that you can reference in the expression</span></span></span>
+<span class="r-in"><span><span class="fu">jl</span><span class="op">(</span><span class="st">"1 .+ a"</span>, a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">3L</span><span class="op">)</span><span class="op">)</span> <span class="co"># Named arguments are introduced as variables</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type Vector{Int64}&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2-element Vector{Int64}:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4</span>
+<span class="r-in"><span><span class="fu">jl</span><span class="op">(</span><span class="st">"1 .+ %s"</span>, <span class="st">"[1,2]"</span><span class="op">)</span> <span class="co"># Unnamed arguments are interpolated via `sprintf()`</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type Vector{Int64}&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2-element Vector{Int64}:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Use `is_jl()` to test if object is a Julia (`&lt;JuliaProxy&gt;`) object</span></span></span>
+<span class="r-in"><span><span class="fu">is_jl</span><span class="op">(</span><span class="fu">jl</span><span class="op">(</span><span class="st">"1"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Use `jl_put()` and `jl_get()` to transfer data between R and Julia</span></span></span>
+<span class="r-in"><span><span class="fu">jl_put</span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type Int64&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu">jl_get</span><span class="op">(</span><span class="fu">jl_put</span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span><span class="op">)</span>, <span class="fl">1L</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># (modelling) set up model data in R</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span></span>
 <span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">cyl_helm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">contrasts</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">cyl_helm</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/contrast.html" class="external-link">contr.helmert</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
