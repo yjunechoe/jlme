@@ -1,6 +1,10 @@
 # jlme (development version)
 
-* New function `jl()` to evaluate Julia expressions from string, with options for interpolation of R objects via `...`.
+# jlme 0.3.0
+
+* Better detection of Julia executable
+
+* New function `jl()` to evaluate Julia expressions from string and return Julia objects, with options for interpolation of R objects via `...`.
 
 * New functions `jl_get()` and `jl_put()`, wrappers around `JuliaConnectoR::juliaGet()` and `JuliaConnectoR::juliaPut()`.
 
