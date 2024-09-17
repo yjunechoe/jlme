@@ -65,7 +65,7 @@ stop_julia <- function() {
 jlme_status <- function() {
   active <- is_setup()
   if (active) {
-    cat("jlme", as.character(packageVersion("jlme")), "\n")
+    cat("jlme", as.character(utils::packageVersion("jlme")), "\n")
     cat(R.version.string, "\n")
     cat(JuliaConnectoR::juliaCall("versioninfo"))
     cat(JuliaConnectoR::juliaCall("Pkg.status"))
