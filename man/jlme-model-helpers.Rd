@@ -15,6 +15,8 @@ likelihoodratiotest(x, ...)
 }
 \arguments{
 \item{x}{Julia model object}
+
+\item{...}{Additional arguments passed to the Julia function}
 }
 \value{
 An appropriate R or Julia object

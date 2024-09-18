@@ -48,12 +48,12 @@ tidy.jlmeprof <- function(x, effects = c("var_model", "ran_pars", "fixed"),
   res_list <- lapply(jl_get(res)$data, `[[`, "values")
   res_list$par <- NULL
 
-  tidied <- tidy(jmod)
+  tidied <- tidy(attr(x, "jmod"))
   tidied <- tidied[!grepl(x = tidied$term, "cor__"), ]
   par_keep <- c(
     which(tidied$effect == "fixed"),
     which(tidied$group == "Residual"),
-    head(which(grepl(x = tidied$term, "sd__")), -1)
+    utils::head(which(grepl(x = tidied$term, "sd__")), -1)
   )
   tidied_keep <- tidied[par_keep, c("effect", "group", "term")]
 

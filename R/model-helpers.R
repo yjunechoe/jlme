@@ -3,6 +3,7 @@
 #' @name jlme-model-helpers
 #'
 #' @param x Julia model object
+#' @param ... Additional arguments passed to the Julia function
 #'
 #' @return An appropriate R or Julia object
 #'
@@ -46,6 +47,7 @@ issingular <- function(x) {
 #' @rdname jlme-model-helpers
 #' @export
 likelihoodratiotest <- function(x, ...) {
+  stopifnot(is_jl(x))
   model1 <- x
   models_rest <- list(...)
   all_models <- c(list(model1), models_rest)
