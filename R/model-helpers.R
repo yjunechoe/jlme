@@ -4,7 +4,7 @@
 #'
 #' @param x Julia model object
 #'
-#' @return An appropriate R object
+#' @return An appropriate R or Julia object
 #'
 #' @examplesIf check_julia_ok()
 #' \donttest{
@@ -17,6 +17,12 @@
 #'
 #' # `issingular()` reports whether model has singular fit
 #' issingular(x)
+#'
+#' # `likelihoodratiotest()` conducts a likelihood-ratio test between nested models
+#' likelihoodratiotest(
+#'   x,
+#'   jlmer(r2 ~ 1 + (1 | id), lme4::VerbAgg, family = "binomial")
+#' )
 #'
 #' stop_julia()
 #' }
@@ -35,4 +41,14 @@ propertynames <- function(x) {
 issingular <- function(x) {
   stopifnot(is_jl(x, "MixedModel"))
   JuliaConnectoR::juliaCall("MixedModels.issingular", x)
+}
+
+#' @rdname jlme-model-helpers
+#' @export
+likelihoodratiotest <- function(x, ...) {
+  model1 <- x
+  models_rest <- list(...)
+  all_models <- c(list(model1), models_rest)
+  fn <- JuliaConnectoR::juliaFun("MixedModels.likelihoodratiotest")
+  do.call(fn, all_models)
 }

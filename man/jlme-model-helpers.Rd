@@ -4,17 +4,20 @@
 \alias{jlme-model-helpers}
 \alias{propertynames}
 \alias{issingular}
+\alias{likelihoodratiotest}
 \title{Helpers for interacting with Julia model objects and functions}
 \usage{
 propertynames(x)
 
 issingular(x)
+
+likelihoodratiotest(x, ...)
 }
 \arguments{
 \item{x}{Julia model object}
 }
 \value{
-An appropriate R object
+An appropriate R or Julia object
 }
 \description{
 Helpers for interacting with Julia model objects and functions
@@ -31,6 +34,12 @@ propertynames(x)
 
 # `issingular()` reports whether model has singular fit
 issingular(x)
+
+# `likelihoodratiotest()` conducts a likelihood-ratio test between nested models
+likelihoodratiotest(
+  x,
+  jlmer(r2 ~ 1 + (1 | id), lme4::VerbAgg, family = "binomial")
+)
 
 stop_julia()
 }

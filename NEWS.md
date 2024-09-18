@@ -2,6 +2,8 @@
 
 * Experimental support for `MixedModels.profile()` via `profilelikelihood()` with a `tidy()` method
 
+* New model helper function `likelihoodratiotest()` for conducting likelihood-ratio tests on nested models
+
 # jlme 0.3.0
 
 * Better detection of Julia executable
