@@ -263,8 +263,10 @@ loaded Julia libraries) with `jlme_status()`:
 
 ``` r
 jlme_status()
-#> Julia Version 1.10.3
-#> Commit 0b4590a550 (2024-04-30 10:59 UTC)
+#> jlme 0.3.0 
+#> R version 4.4.1 (2024-06-14 ucrt) 
+#> Julia Version 1.10.5
+#> Commit 6f3fdf7b36 (2024-08-27 14:19 UTC)
 #> Build Info:
 #>   Official https://julialang.org/ release
 #> Platform Info:
@@ -274,11 +276,10 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> 
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_UtfBLB\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_eBFarz\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.60
-#>   [ff71e718] MixedModels v4.25.4
+#>   [ff71e718] MixedModels v4.26.0
 #>   [3eaba693] StatsModels v0.7.4
 #>   [9a3f8284] Random
 ```
