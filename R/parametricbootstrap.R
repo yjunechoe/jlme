@@ -89,9 +89,6 @@ tidy.jlmeboot <- function(x, effects = c("var_model", "ran_pars", "fixed"),
   ))
   combined <- combined[match(tidied$term, combined$term),]
 
-  switch(effects,
-    var_model = combined,
-    combined[combined$effect == effects, ]
-  )
+  resolve_effects(combined, effects)
 
 }

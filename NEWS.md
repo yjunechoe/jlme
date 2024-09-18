@@ -1,5 +1,7 @@
 # jlme (development version)
 
+* Experimental support for `MixedModels.profile()` via `profilelikelihood()` with a `tidy()` method
+
 # jlme 0.3.0
 
 * Better detection of Julia executable

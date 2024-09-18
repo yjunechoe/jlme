@@ -113,3 +113,19 @@ maybe_as_tibble <- function(x) {
   }
   x
 }
+
+resolve_effects <- function(x, effects) {
+  switch(effects,
+    var_model = x,
+    fixed = {
+      res <- x[x$effect == "fixed",]
+      res[c("effect", "group")] <- NULL
+      res
+    },
+    ran_pars = {
+      res <- x[x$effect == "ran_pars",]
+      res$effect <- NULL
+      res
+    }
+  )
+}
