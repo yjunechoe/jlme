@@ -1,6 +1,10 @@
 # jlme (development version)
 
+* New argument `jlmer(fit = TRUE)`. If `FALSE`, returns the unfit model object.
+
 * Experimental support for `MixedModels.profile()` via `profilelikelihood()` with a `tidy()` method
+
+* Experimental implementation of an interface to setting OptSummary values via `jlmer(optsum = list(...))`.
 
 * New model helper function `likelihoodratiotest()` for conducting likelihood-ratio tests on nested models
 

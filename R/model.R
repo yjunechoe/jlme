@@ -33,6 +33,15 @@
 #' glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #' jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 #'
+#' # Set optimizer options via `optsum`
+#' jlmer(
+#'   r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial",
+#'   optsum = list(
+#'     optimizer = jl(":LN_NELDERMEAD"),
+#'     maxfeval = 10L
+#'   )
+#' )
+#'
 #' stop_julia()
 #' }
 jlm <- function(formula, data, family = "gaussian",
@@ -60,45 +69,65 @@ jlm <- function(formula, data, family = "gaussian",
 }
 
 #' @rdname jlm
+#' @param fit Whether to fit the model. If `FALSE`, returns the unfit model object.
+#' @param optsum A list of values to set for the optimizer. Special value
+#'   `"debug"` returns the OptSummary object for inspection.
 #' @param progress Whether to print model fitting progress. Defaults to `interactive()`
 #' @export
 jlmer <- function(formula, data, family = NULL,
                   contrasts = jl_contrasts(data),
-                  ..., progress = interactive()) {
+                  ...,
+                  fit = TRUE,
+                  optsum = list(),
+                  progress = interactive()) {
 
   ensure_setup()
 
-  model <- jl(
+  model_fun <- sprintf(
     "MixedModels.%sLinearMixedModel",
     if (!is.null(family)) "Generalized" else ""
   )
 
-  opts <- utils::modifyList(
-    list(progress = progress),
-    list(...)
-  )
-
   args_list <- c(
     list(
-      "StatsModels.fit",
-      model,
+      model_fun,
       jl_formula(formula),
       jl_data(data)
     ),
     if (!is.null(family)) list(jl_family(family)),
-    if (!is.null(contrasts)) list(contrasts = contrasts),
-    opts
+    if (!is.null(contrasts)) list(contrasts = contrasts)
   )
 
-  mod <- do.call(JuliaConnectoR::juliaCall, args_list)
+  model <- do.call(JuliaConnectoR::juliaCall, args_list)
+
+  stopifnot(
+    "Unused in `optsum`" = all(names(optsum) %in% propertynames(model$optsum))
+  )
+  optsum_keys <- lapply(names(optsum), as.symbol)
+  for (i in seq_along(optsum)) {
+    JuliaConnectoR::juliaCall("setfield!", model$optsum, optsum_keys[[i]], optsum[[i]])
+  }
+
+  if (!fit) {
+    return(model)
+  }
+
+  fit_args <- utils::modifyList(
+    list(
+      model,
+      progress = progress
+    ),
+    list(...)
+  )
+  do.call(JuliaConnectoR::juliaFun("fit!"), fit_args)
 
   # Singular fit message
-  if (issingular(mod)) {
+  if (issingular(model)) {
     message("! Singular fit")
   }
 
-  class(mod) <- c("jlme", class(mod))
-  mod
+  class(model) <- c("jlme", class(model))
+  model
 
 }
 

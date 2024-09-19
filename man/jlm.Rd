@@ -13,6 +13,8 @@ jlmer(
   family = NULL,
   contrasts = jl_contrasts(data),
   ...,
+  fit = TRUE,
+  optsum = list(),
   progress = interactive()
 )
 }
@@ -28,6 +30,11 @@ language object.}
 Inferred from \code{data} by default.}
 
 \item{...}{Additional arguments to the \code{fit()} function called in Julia}
+
+\item{fit}{Whether to fit the model. If \code{FALSE}, returns the unfit model object.}
+
+\item{optsum}{A list of values to set for the optimizer. Special value
+\code{"debug"} returns the OptSummary object for inspection.}
 
 \item{progress}{Whether to print model fitting progress. Defaults to \code{interactive()}}
 }
@@ -59,6 +66,15 @@ library(lme4)
 
 glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
 jlmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+
+# Set optimizer options via `optsum`
+jlmer(
+  r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial",
+  optsum = list(
+    optimizer = jl(":LN_NELDERMEAD"),
+    maxfeval = 10L
+  )
+)
 
 stop_julia()
 }
