@@ -155,7 +155,7 @@ jl_get(jmod$rePCA)
 Example 2: extract fitlog and plot
 
 ```{r}
-fitlog <- jl("refit!(x; thin=1)", x = jmod)$optsum$fitlog
+fitlog <- jl_get(jl("refit!(x; thin=1)", x = jmod)$optsum$fitlog)
 thetas <- t(sapply(fitlog, `[[`, 1))
 head(thetas)
 ```
