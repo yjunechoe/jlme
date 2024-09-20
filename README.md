@@ -37,9 +37,9 @@ jlme_setup()
 documentation](https://github.com/stefan-m-lenz/JuliaConnectoR) for
 troubleshooting related to Julia installation and configuration.
 
-## Usage
+## Usage (table of contents)
 
-- [Fitting models](#fit-models)
+- [Fit models](#fit-models)
 - [Diagnose models](#diagnose-models)
 - [Embrace uncertainty](#embrace-uncertainty)
 - [Julia interoperability](#julia-interoperability)
@@ -48,6 +48,8 @@ troubleshooting related to Julia installation and configuration.
 - [Acknowledgments](#acknowledgments)
 
 ## Fit models
+
+[↑Back to table of contents](#usage-table-of-contents)
 
 Once set up, `(g)lm()` and `(g)lmer` complements in Julia are available
 via `jlm()` and `jlmer()`, respectively.
@@ -144,6 +146,8 @@ jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 
 ## Diagnose models
 
+[↑Back to table of contents](#usage-table-of-contents)
+
 ### Summarize model fit
 
 `{broom}`-style `tidy()` and `glance()` methods for Julia regression
@@ -197,6 +201,8 @@ propertynames(jmod)
 ```
 
 ## Embrace uncertainty
+
+[↑Back to table of contents](#usage-table-of-contents)
 
 ### Parametric bootstrap
 
@@ -278,6 +284,8 @@ tidy(prof)
 
 ## Julia interoperability
 
+[↑Back to table of contents](#usage-table-of-contents)
+
 ### Bring Julia objects into R
 
 Example 1: extract PCA of random effects and return as an R list:
@@ -335,7 +343,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_FQBms2\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_AIvVeE\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.60
 #>   [ff71e718] MixedModels v4.26.0
@@ -344,6 +352,8 @@ jlme_status()
 ```
 
 ## Tips
+
+[↑Back to table of contents](#usage-table-of-contents)
 
 ### Data type conversion
 
@@ -434,6 +444,8 @@ REPL-based workflow.
 
 ## Julia troubleshooting
 
+[↑Back to table of contents](#usage-table-of-contents)
+
 The package requires that [Julia (version ≥ 1.8) is
 installed](https://julialang.org/downloads/) and that the Julia
 executable is in the system search `PATH` or that the `JULIA_BINDIR`
@@ -473,6 +485,8 @@ with `JuliaConnectoR`. Then, follow the same process as above to set the
 executable.
 
 ## Acknowledgments
+
+[↑Back to table of contents](#usage-table-of-contents)
 
 - The [JuliaConnectoR](https://github.com/stefan-m-lenz/JuliaConnectoR)
   R package for powering the R interface to Julia.

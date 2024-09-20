@@ -42,9 +42,9 @@ jlme_setup()
 
 `{jlme}` uses `{JuliaConnectoR}` to connect to a Julia session. See [JuliaConnectoR package documentation](https://github.com/stefan-m-lenz/JuliaConnectoR) for troubleshooting related to Julia installation and configuration.
 
-## Usage
+## Usage (table of contents)
 
--  [Fitting models](#fit-models)
+-  [Fit models](#fit-models)
 -  [Diagnose models](#diagnose-models)
 -  [Embrace uncertainty](#embrace-uncertainty)
 -  [Julia interoperability](#julia-interoperability)
@@ -53,6 +53,8 @@ jlme_setup()
 -  [Acknowledgments](#acknowledgments)
 
 ## Fit models
+
+[↑Back to table of contents](#usage-table-of-contents)
 
 Once set up, `(g)lm()` and `(g)lmer` complements in Julia are available via `jlm()` and `jlmer()`, respectively.
 
@@ -97,6 +99,8 @@ jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 
 ## Diagnose models
 
+[↑Back to table of contents](#usage-table-of-contents)
+
 ### Summarize model fit
 
 `{broom}`-style `tidy()` and `glance()` methods for Julia regression models:
@@ -125,7 +129,10 @@ List all properties of a MixedModel object (properties are accessible via `$`)
 propertynames(jmod)
 ```
 
+
 ## Embrace uncertainty
+
+[↑Back to table of contents](#usage-table-of-contents)
 
 ### Parametric bootstrap
 
@@ -155,6 +162,8 @@ tidy(prof)
 
 
 ## Julia interoperability
+
+[↑Back to table of contents](#usage-table-of-contents)
 
 ### Bring Julia objects into R
 
@@ -190,6 +199,8 @@ jlme_status()
 
 
 ## Tips
+
+[↑Back to table of contents](#usage-table-of-contents)
 
 ### Data type conversion
 
@@ -242,6 +253,8 @@ If you spend non-negligible time fitting regression models for your work, please
 
 ## Julia troubleshooting
 
+[↑Back to table of contents](#usage-table-of-contents)
+
 The package requires that [Julia (version &ge; 1.8) is installed](https://julialang.org/downloads/) and that the Julia executable is in the system search `PATH` or that the `JULIA_BINDIR` environment variable is set to the `/bin` directory of the Julia installation. The Julia version specified via the `JULIA_BINDIR` variable will take precedence over the one on the system `PATH`. 
 
 After you have installed Julia, execute the command `julia` on the command line. Ensure that this launches Julia.
@@ -256,6 +269,8 @@ If you manage Julia installations via [Juliaup](https://github.com/JuliaLang/jul
 
 
 ## Acknowledgments
+
+[↑Back to table of contents](#usage-table-of-contents)
 
 - The [JuliaConnectoR](https://github.com/stefan-m-lenz/JuliaConnectoR) R package for powering the R interface to Julia.
 
