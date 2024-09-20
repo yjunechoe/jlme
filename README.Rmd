@@ -46,11 +46,12 @@ jlme_setup()
 
 -  [Fit models](#fit-models)
 -  [Diagnose models](#diagnose-models)
--  [Embrace uncertainty](#embrace-uncertainty)
+-  [Assess uncertainty](#assess-uncertainty)
 -  [Julia interoperability](#julia-interoperability)
 -  [Tips](#tips)
 -  [Julia troubleshooting](#julia-troubleshooting)
 -  [Acknowledgments](#acknowledgments)
+
 
 ## Fit models
 
@@ -97,19 +98,23 @@ jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 ```
 
+
 ## Diagnose models
 
 [↑Back to table of contents](#usage-table-of-contents)
 
+Supports `{broom}`-style `tidy()` and `glance()` methods for Julia regression models.
+
 ### Summarize model fit
 
-`{broom}`-style `tidy()` and `glance()` methods for Julia regression models:
+Get information about model components with `tidy()`
 
 ```{r}
 jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 tidy(jmod)
 ```
 
+Get goodness-of-fit measures of a model with `glance()`
 
 ```{r}
 glance(jmod)
@@ -129,17 +134,25 @@ List all properties of a MixedModel object (properties are accessible via `$`)
 propertynames(jmod)
 ```
 
+Check optimization summary
 
-## Embrace uncertainty
+```{r}
+jmod$optsum
+```
+
+
+## Assess uncertainty
 
 [↑Back to table of contents](#usage-table-of-contents)
+
+Functions `parametricbootstrap()` and `profilelikelihood()` can be used to assess the variability of parameter estimates.
 
 ### Parametric bootstrap
 
 Experimental support for [`MixedModels.parametricbootstrap`](https://juliastats.org/MixedModels.jl/stable/bootstrap/) via `parametricbootstrap()`:
 
 ```{r}
-samp <- parametricbootstrap(jmod, nsim = 1000L, seed = 42L)
+samp <- parametricbootstrap(jmod, nsim = 100L, seed = 42L)
 samp
 ```
 
@@ -164,6 +177,8 @@ tidy(prof)
 ## Julia interoperability
 
 [↑Back to table of contents](#usage-table-of-contents)
+
+Functions `jl_get()` and `jl_put()` transfers data between R and Julia.
 
 ### Bring Julia objects into R
 
@@ -254,6 +269,10 @@ If you spend non-negligible time fitting regression models for your work, please
 ## Julia troubleshooting
 
 [↑Back to table of contents](#usage-table-of-contents)
+
+`{jlme}` is powered by [`{JuliaConnectoR}`](https://github.com/stefan-m-lenz/JuliaConnectoR). Instructions below are adapted from `{JuliaConnectoR}`.
+
+### Locating the executable
 
 The package requires that [Julia (version &ge; 1.8) is installed](https://julialang.org/downloads/) and that the Julia executable is in the system search `PATH` or that the `JULIA_BINDIR` environment variable is set to the `/bin` directory of the Julia installation. The Julia version specified via the `JULIA_BINDIR` variable will take precedence over the one on the system `PATH`. 
 

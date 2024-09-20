@@ -41,7 +41,7 @@ troubleshooting related to Julia installation and configuration.
 
 - [Fit models](#fit-models)
 - [Diagnose models](#diagnose-models)
-- [Embrace uncertainty](#embrace-uncertainty)
+- [Assess uncertainty](#assess-uncertainty)
 - [Julia interoperability](#julia-interoperability)
 - [Tips](#tips)
 - [Julia troubleshooting](#julia-troubleshooting)
@@ -148,10 +148,12 @@ jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 
 [↑Back to table of contents](#usage-table-of-contents)
 
+Supports `{broom}`-style `tidy()` and `glance()` methods for Julia
+regression models.
+
 ### Summarize model fit
 
-`{broom}`-style `tidy()` and `glance()` methods for Julia regression
-models:
+Get information about model components with `tidy()`
 
 ``` r
 jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
@@ -171,6 +173,8 @@ tidy(jmod)
 #> 21            NA
 #> 11            NA
 ```
+
+Get goodness-of-fit measures of a model with `glance()`
 
 ``` r
 glance(jmod)
@@ -200,9 +204,36 @@ propertynames(jmod)
 #> [31] "βs"        "θ"         "λ"         "σ"         "σs"        "σρs"
 ```
 
-## Embrace uncertainty
+Check optimization summary
+
+``` r
+jmod$optsum
+#> <Julia object of type OptSummary{Float64}>
+#> Initial parameter vector: [1.0, 0.0, 1.0]
+#> Initial objective value:  1773.6803306160236
+#> 
+#> Optimizer (from NLopt):   LN_BOBYQA
+#> Lower bounds:             [0.0, -Inf, 0.0]
+#> ftol_rel:                 1.0e-12
+#> ftol_abs:                 1.0e-8
+#> xtol_rel:                 0.0
+#> xtol_abs:                 [1.0e-10, 1.0e-10, 1.0e-10]
+#> initial_step:             [0.75, 1.0, 0.75]
+#> maxfeval:                 -1
+#> maxtime:                  -1.0
+#> 
+#> Function evaluations:     43
+#> Final parameter vector:   [0.9667417730750263, 0.015169059007472414, 0.23090995314561083]
+#> Final objective value:    1743.6282719599653
+#> Return code:              FTOL_REACHED
+```
+
+## Assess uncertainty
 
 [↑Back to table of contents](#usage-table-of-contents)
+
+Functions `parametricbootstrap()` and `profilelikelihood()` can be used
+to assess the variability of parameter estimates.
 
 ### Parametric bootstrap
 
@@ -211,32 +242,32 @@ Experimental support for
 via `parametricbootstrap()`:
 
 ``` r
-samp <- parametricbootstrap(jmod, nsim = 1000L, seed = 42L)
+samp <- parametricbootstrap(jmod, nsim = 100L, seed = 42L)
 samp
 #> <Julia object of type MixedModelBootstrap{Float64}>
-#> MixedModelBootstrap with 1000 samples
-#>      parameter  min        q25         median     mean       q75       max
-#>    ┌───────────────────────────────────────────────────────────────────────────
-#>  1 │ β1         227.464    246.884     251.608    251.655    256.229   275.687
-#>  2 │ β2         4.99683    9.40303     10.4795    10.4522    11.5543   15.2264
-#>  3 │ σ          21.0629    24.5779     25.5858    25.6024    26.5579   30.8176
-#>  4 │ σ1         3.8862     19.8341     23.9517    23.8161    27.9909   40.7842
-#>  5 │ σ2         1.65066    4.94152     5.77701    5.78757    6.61858   9.80011
-#>  6 │ ρ1         -0.79257   -0.147053   0.0914976  0.111537   0.346284  1.0
-#>  7 │ θ1         0.158198   0.762462    0.939845   0.935398   1.10182   1.72955
-#>  8 │ θ2         -0.259593  -0.0358002  0.0185442  0.0197924  0.07347   0.333435
-#>  9 │ θ3         0.0        0.175387    0.213763   0.207584   0.24721   0.402354
+#> MixedModelBootstrap with 100 samples
+#>      parameter  min        q25         median     mean        q75       max
+#>    ┌────────────────────────────────────────────────────────────────────────────
+#>  1 │ β1         227.464    246.465     250.903    250.985     256.233   264.878
+#>  2 │ β2         6.58801    9.89368     10.8208    10.6993     11.6945   13.8613
+#>  3 │ σ          21.6868    24.6505     25.6221    25.8474     26.7382   30.599
+#>  4 │ σ1         3.8862     19.5019     24.0707    23.3628     27.4161   34.0508
+#>  5 │ σ2         1.95071    4.90943     5.76106    5.87793     6.79344   8.91558
+#>  6 │ ρ1         -0.731594  -0.237908   0.0869573  0.0721882   0.345545  1.0
+#>  7 │ θ1         0.158198   0.742099    0.909455   0.90867     1.10008   1.37666
+#>  8 │ θ2         -0.193011  -0.0589132  0.0187871  0.00940508  0.065209  0.213878
+#>  9 │ θ3         0.0        0.170507    0.211006   0.206231    0.255929  0.357972
 ```
 
 ``` r
 tidy(samp)
-#>     effect    group                  term     estimate    conf.low  conf.high
-#> 1    fixed     <NA>           (Intercept) 251.40510485 238.6573824 265.430084
-#> 2    fixed     <NA>                  Days  10.46728596   7.3121974  13.523381
-#> 5 ran_pars  Subject       sd__(Intercept)  24.74065797  12.8464132  35.011690
-#> 4 ran_pars  Subject cor__(Intercept).Days   0.06555124  -0.4501055   1.000000
-#> 6 ran_pars  Subject              sd__Days   5.92213766   3.3869360   8.310897
-#> 3 ran_pars Residual       sd__Observation  25.59179572  22.6637109  28.465550
+#>     effect    group                  term     estimate   conf.low   conf.high
+#> 1    fixed     <NA>           (Intercept) 251.40510485 240.638031 263.5578907
+#> 2    fixed     <NA>                  Days  10.46728596   7.635654  13.6199271
+#> 5 ran_pars  Subject       sd__(Intercept)  24.74065797  14.054638  34.0507880
+#> 4 ran_pars  Subject cor__(Intercept).Days   0.06555124  -0.697758   0.8805016
+#> 6 ran_pars  Subject              sd__Days   5.92213766   3.643931   8.2409621
+#> 3 ran_pars Residual       sd__Observation  25.59179572  22.497355  29.2889311
 ```
 
 ### Profiling
@@ -286,6 +317,8 @@ tidy(prof)
 
 [↑Back to table of contents](#usage-table-of-contents)
 
+Functions `jl_get()` and `jl_put()` transfers data between R and Julia.
+
 ### Bring Julia objects into R
 
 Example 1: extract PCA of random effects and return as an R list:
@@ -321,7 +354,7 @@ head(thetas)
 matplot(thetas, type = "o", xlab = "iterations")
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="100%" />
 
 ### Julia session
 
@@ -343,7 +376,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_AIvVeE\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_XhLl3q\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.60
 #>   [ff71e718] MixedModels v4.26.0
@@ -445,6 +478,12 @@ REPL-based workflow.
 ## Julia troubleshooting
 
 [↑Back to table of contents](#usage-table-of-contents)
+
+`{jlme}` is powered by
+[`{JuliaConnectoR}`](https://github.com/stefan-m-lenz/JuliaConnectoR).
+Instructions below are adapted from `{JuliaConnectoR}`.
+
+### Locating the executable
 
 The package requires that [Julia (version ≥ 1.8) is
 installed](https://julialang.org/downloads/) and that the Julia
