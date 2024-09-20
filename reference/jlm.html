@@ -47,6 +47,8 @@
 <span>  family <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  contrasts <span class="op">=</span> <span class="fu"><a href="jl-helpers.html">jl_contrasts</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span>,</span>
+<span>  fit <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  optsum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -75,6 +77,15 @@ Inferred from <code>data</code> by default.</p></dd>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to the <code>fit()</code> function called in Julia</p></dd>
+
+
+<dt id="arg-fit">fit<a class="anchor" aria-label="anchor" href="#arg-fit"></a></dt>
+<dd><p>Whether to fit the model. If <code>FALSE</code>, returns the unfit model object.</p></dd>
+
+
+<dt id="arg-optsum">optsum<a class="anchor" aria-label="anchor" href="#arg-optsum"></a></dt>
+<dd><p>A list of values to set for the optimizer. Special value
+<code>"debug"</code> returns the OptSummary object for inspection.</p></dd>
 
 
 <dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
@@ -175,6 +186,29 @@ Inferred from <code>data</code> by default.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -1.10115     0.280681   -3.92    &lt;1e-04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Anger         0.0462741   0.0134906   3.43    0.0006</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Gender: M     0.260057    0.153847    1.69    0.0910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Set optimizer options via `optsum`</span></span></span>
+<span class="r-in"><span><span class="fu">jlmer</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">r2</span> <span class="op">~</span> <span class="va">Anger</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, <span class="va">VerbAgg</span>, family <span class="op">=</span> <span class="st">"binomial"</span>,</span></span>
+<span class="r-in"><span>  optsum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    optimizer <span class="op">=</span> <span class="fu"><a href="jl-helpers.html">jl</a></span><span class="op">(</span><span class="st">":LN_NELDERMEAD"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    maxfeval <span class="op">=</span> <span class="fl">10L</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type GeneralizedLinearMixedModel&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r2 ~ 1 + Anger + Gender + (1 | id)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variance components:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Column   VarianceStd.Dev.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> id (Intercept)  1.0 1.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   Coef.  Std. Error      z  Pr(&gt;|z|)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -0.851285     0.267259  -3.19    0.0014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Anger         0.0353915    0.012845   2.76    0.0059</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gender: M     0.204939     0.14652    1.40    0.1619</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="jlme_setup.html">stop_julia</a></span><span class="op">(</span><span class="op">)</span></span></span>

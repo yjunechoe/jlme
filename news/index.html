@@ -34,7 +34,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="jlme-development-version">jlme (development version)<a class="anchor" aria-label="anchor" href="#jlme-development-version"></a></h2>
-</div>
+<ul><li><p>New argument <code>jlmer(fit = TRUE)</code>. If <code>FALSE</code>, returns the unfit model object.</p></li>
+<li><p>Experimental support for <code>MixedModels.profile()</code> via <code><a href="../reference/profilelikelihood.html">profilelikelihood()</a></code> with a <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> method</p></li>
+<li><p>Experimental implementation of an interface to setting OptSummary values via <code>jlmer(optsum = list(...))</code>.</p></li>
+<li><p>New model helper function <code><a href="../reference/jlme-model-helpers.html">likelihoodratiotest()</a></code> for conducting likelihood-ratio tests on nested models</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="jlme-030">jlme 0.3.0<a class="anchor" aria-label="anchor" href="#jlme-030"></a></h2><p class="text-muted">CRAN release: 2024-09-17</p>
 <ul><li><p>Better detection of Julia executable</p></li>
