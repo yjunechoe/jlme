@@ -42,7 +42,17 @@ jlme_setup()
 
 `{jlme}` uses `{JuliaConnectoR}` to connect to a Julia session. See [JuliaConnectoR package documentation](https://github.com/stefan-m-lenz/JuliaConnectoR) for troubleshooting related to Julia installation and configuration.
 
-## Using `{jlme}`
+## Usage
+
+-  [Fitting models](#fit-models)
+-  [Diagnose models](#diagnose-models)
+-  [Embrace uncertainty](#embrace-uncertainty)
+-  [Julia interoperability](#julia-interoperability)
+-  [Tips](#tips)
+-  [Julia troubleshooting](#julia-troubleshooting)
+-  [Acknowledgments](#acknowledgments)
+
+## Fit models
 
 Once set up, `(g)lm()` and `(g)lmer` complements in Julia are available via `jlm()` and `jlmer()`, respectively.
 
@@ -85,7 +95,9 @@ jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 ```
 
-### Inspect model objects
+## Diagnose models
+
+### Summarize model fit
 
 `{broom}`-style `tidy()` and `glance()` methods for Julia regression models:
 
@@ -98,6 +110,22 @@ tidy(jmod)
 ```{r}
 glance(jmod)
 ```
+
+### Inspect model objects
+
+Check singular fit
+
+```{r}
+issingular(jmod)
+```
+
+List all properties of a MixedModel object (properties are accessible via `$`)
+
+```{r}
+propertynames(jmod)
+```
+
+## Embrace uncertainty
 
 ### Parametric bootstrap
 
@@ -126,19 +154,7 @@ tidy(prof)
 ```
 
 
-### Inspect model objects
-
-Check singular fit
-
-```{r}
-issingular(jmod)
-```
-
-List all properties of a MixedModel object (properties are accessible via `$`)
-
-```{r}
-propertynames(jmod)
-```
+## Julia interoperability
 
 ### Bring Julia objects into R
 
@@ -164,8 +180,7 @@ head(thetas)
 matplot(thetas, type = "o", xlab = "iterations")
 ```
 
-
-### Misc.
+### Julia session
 
 See information about the running Julia environment (e.g., the list of loaded Julia libraries) with `jlme_status()`:
 
@@ -225,7 +240,7 @@ jlm(mpg ~ am, data_julia, contrasts = contrasts_julia)
 If you spend non-negligible time fitting regression models for your work, please just [learn Julia](https://julialang.org/learning/)! It's a great high-level language that feels close to R in syntax and its REPL-based workflow.
 
 
-## Julia installation troubleshooting
+## Julia troubleshooting
 
 The package requires that [Julia (version &ge; 1.8) is installed](https://julialang.org/downloads/) and that the Julia executable is in the system search `PATH` or that the `JULIA_BINDIR` environment variable is set to the `/bin` directory of the Julia installation. The Julia version specified via the `JULIA_BINDIR` variable will take precedence over the one on the system `PATH`. 
 

@@ -37,7 +37,17 @@ jlme_setup()
 documentation](https://github.com/stefan-m-lenz/JuliaConnectoR) for
 troubleshooting related to Julia installation and configuration.
 
-## Using `{jlme}`
+## Usage
+
+- [Fitting models](#fit-models)
+- [Diagnose models](#diagnose-models)
+- [Embrace uncertainty](#embrace-uncertainty)
+- [Julia interoperability](#julia-interoperability)
+- [Tips](#tips)
+- [Julia troubleshooting](#julia-troubleshooting)
+- [Acknowledgments](#acknowledgments)
+
+## Fit models
 
 Once set up, `(g)lm()` and `(g)lmer` complements in Julia are available
 via `jlm()` and `jlmer()`, respectively.
@@ -132,7 +142,9 @@ jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 #> ────────────────────────────────────────────────────
 ```
 
-### Inspect model objects
+## Diagnose models
+
+### Summarize model fit
 
 `{broom}`-style `tidy()` and `glance()` methods for Julia regression
 models:
@@ -161,6 +173,30 @@ glance(jmod)
 #>   nobs df   sigma logLik AIC BIC deviance df.residual
 #> 1  180  6 25.5918     NA  NA  NA 1743.628         174
 ```
+
+### Inspect model objects
+
+Check singular fit
+
+``` r
+issingular(jmod)
+#> [1] FALSE
+```
+
+List all properties of a MixedModel object (properties are accessible
+via `$`)
+
+``` r
+propertynames(jmod)
+#>  [1] "A"         "b"         "beta"      "betas"     "corr"      "dims"     
+#>  [7] "feterm"    "formula"   "L"         "lambda"    "lowerbd"   "objective"
+#> [13] "optsum"    "parmap"    "PCA"       "pvalues"   "rePCA"     "reterms"  
+#> [19] "sigma"     "sigmarhos" "sigmas"    "sqrtwts"   "stderror"  "theta"    
+#> [25] "u"         "vcov"      "X"         "Xymat"     "y"         "β"        
+#> [31] "βs"        "θ"         "λ"         "σ"         "σs"        "σρs"
+```
+
+## Embrace uncertainty
 
 ### Parametric bootstrap
 
@@ -240,27 +276,7 @@ tidy(prof)
 #> 11 ran_pars Residual sd__Observation  25.591796  22.898262  28.858000
 ```
 
-### Inspect model objects
-
-Check singular fit
-
-``` r
-issingular(jmod)
-#> [1] FALSE
-```
-
-List all properties of a MixedModel object (properties are accessible
-via `$`)
-
-``` r
-propertynames(jmod)
-#>  [1] "A"         "b"         "beta"      "betas"     "corr"      "dims"     
-#>  [7] "feterm"    "formula"   "L"         "lambda"    "lowerbd"   "objective"
-#> [13] "optsum"    "parmap"    "PCA"       "pvalues"   "rePCA"     "reterms"  
-#> [19] "sigma"     "sigmarhos" "sigmas"    "sqrtwts"   "stderror"  "theta"    
-#> [25] "u"         "vcov"      "X"         "Xymat"     "y"         "β"        
-#> [31] "βs"        "θ"         "λ"         "σ"         "σs"        "σρs"
-```
+## Julia interoperability
 
 ### Bring Julia objects into R
 
@@ -299,7 +315,7 @@ matplot(thetas, type = "o", xlab = "iterations")
 
 <img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
 
-### Misc.
+### Julia session
 
 See information about the running Julia environment (e.g., the list of
 loaded Julia libraries) with `jlme_status()`:
@@ -319,7 +335,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_NlIy0H\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_FQBms2\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.60
 #>   [ff71e718] MixedModels v4.26.0
@@ -416,7 +432,7 @@ work, please just [learn Julia](https://julialang.org/learning/)! It’s a
 great high-level language that feels close to R in syntax and its
 REPL-based workflow.
 
-## Julia installation troubleshooting
+## Julia troubleshooting
 
 The package requires that [Julia (version ≥ 1.8) is
 installed](https://julialang.org/downloads/) and that the Julia
