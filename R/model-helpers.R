@@ -1,4 +1,4 @@
-#' Helpers for interacting with Julia model objects and functions
+#' Re-exported functions for interacting with Julia model objects
 #'
 #' @name jlme-model-helpers
 #'

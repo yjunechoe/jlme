@@ -5,7 +5,7 @@
 \alias{propertynames}
 \alias{issingular}
 \alias{likelihoodratiotest}
-\title{Helpers for interacting with Julia model objects and functions}
+\title{Re-exported functions for interacting with Julia model objects}
 \usage{
 propertynames(x)
 
@@ -22,7 +22,7 @@ likelihoodratiotest(x, ...)
 An appropriate R or Julia object
 }
 \description{
-Helpers for interacting with Julia model objects and functions
+Re-exported functions for interacting with Julia model objects
 }
 \examples{
 \dontshow{if (check_julia_ok()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
