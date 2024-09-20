@@ -197,6 +197,49 @@ tidy(samp)
 #> 3 ran_pars Residual       sd__Observation  25.59179572  22.6637109  28.465550
 ```
 
+### Profiling
+
+Experimental support for
+[`MixedModels.profile`](https://juliastats.org/MixedModels.jl/stable/api/#MixedModels.profile-Tuple%7BLinearMixedModel%7D)
+via `profilelikelihood()`:
+
+``` r
+prof <- profilelikelihood(jmod)
+prof
+#> <Julia object of type MixedModelProfile{Float64}>
+#> MixedModelProfile -- Table with 11 columns and 161 rows:
+#>       p  ζ          β1       β2       σ        σ1       σ2       ρ1           ⋯
+#>     ┌──────────────────────────────────────────────────────────────────────────
+#>  1  │ σ  -4.36538   251.405  10.4673  20.1929  26.4095  6.16993  -0.0238061   ⋯
+#>  2  │ σ  -3.77934   251.405  10.4673  20.7999  26.2464  6.14557  -0.0156245   ⋯
+#>  3  │ σ  -3.20553   251.405  10.4673  21.4252  26.0716  6.11928  -0.00675932  ⋯
+#>  4  │ σ  -2.64359   251.405  10.4673  22.0692  25.8859  6.0915   0.00286329   ⋯
+#>  5  │ σ  -2.09316   251.405  10.4673  22.7326  25.6871  6.06188  0.0132691    ⋯
+#>  6  │ σ  -1.55392   251.405  10.4673  23.416   25.4744  6.03027  0.0246523    ⋯
+#>  7  │ σ  -1.02552   251.405  10.4673  24.1199  25.2448  5.99673  0.0371101    ⋯
+#>  8  │ σ  -0.507654  251.405  10.4673  24.8449  25.0016  5.9606   0.0505964    ⋯
+#>  9  │ σ  0.0        251.405  10.4673  25.5918  24.7407  5.92214  0.0655512    ⋯
+#>  10 │ σ  0.497702   251.405  10.4673  26.3611  24.4599  5.88109  0.0819128    ⋯
+#>  11 │ σ  0.985782   251.405  10.4673  27.1535  24.1585  5.83716  0.0999603    ⋯
+#>  12 │ σ  1.46451    251.405  10.4673  27.9698  23.8346  5.79033  0.119931     ⋯
+#>  13 │ σ  1.93415    251.405  10.4673  28.8106  23.4862  5.74019  0.142062     ⋯
+#>  14 │ σ  2.39497    251.405  10.4673  29.6766  23.111   5.68632  0.166822     ⋯
+#>  15 │ σ  2.84722    251.405  10.4673  30.5687  22.7061  5.62889  0.194353     ⋯
+#>  16 │ σ  3.29116    251.405  10.4673  31.4877  22.267   5.5671   0.225568     ⋯
+#>  17 │ σ  3.72701    251.405  10.4673  32.4342  21.7928  5.50064  0.260712     ⋯
+#>  ⋮  │ ⋮      ⋮         ⋮        ⋮        ⋮        ⋮        ⋮          ⋮       ⋱
+```
+
+``` r
+tidy(prof)
+#>      effect    group            term   estimate   conf.low  conf.high
+#> 1     fixed     <NA>     (Intercept) 251.405105 239.501474 263.308736
+#> 2     fixed     <NA>            Days  10.467286   7.771047  13.163525
+#> 12 ran_pars  Subject sd__(Intercept)  24.740658  15.032045  39.512036
+#> 21 ran_pars  Subject        sd__Days   5.922138   0.000000   9.151901
+#> 11 ran_pars Residual sd__Observation  25.591796  22.898262  28.858000
+```
+
 ### Inspect model objects
 
 Check singular fit
@@ -238,7 +281,7 @@ jl_get(jmod$rePCA)
 Example 2: extract fitlog and plot
 
 ``` r
-fitlog <- jl("refit!(x; thin=1)", x = jmod, .R = TRUE)$optsum$fitlog
+fitlog <- jl_get(jl("refit!(x; thin=1)", x = jmod)$optsum$fitlog)
 thetas <- t(sapply(fitlog, `[[`, 1))
 head(thetas)
 #>      [,1] [,2] [,3]
@@ -254,7 +297,7 @@ head(thetas)
 matplot(thetas, type = "o", xlab = "iterations")
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
 
 ### Misc.
 
@@ -276,42 +319,12 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_eBFarz\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_NlIy0H\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [98e50ef6] JuliaFormatter v1.0.60
 #>   [ff71e718] MixedModels v4.26.0
 #>   [3eaba693] StatsModels v0.7.4
 #>   [9a3f8284] Random
-```
-
-## Full interop control with `{JuliaConnectoR}`
-
-``` r
-library(JuliaConnectoR)
-```
-
-### Access functions straight from MixedModels.jl
-
-Use Julia(-esque) model-fitting syntax from R:
-
-``` r
-MixedModels <- juliaImport("MixedModels")
-
-# Long-form construction of `jmod`
-jmod2 <- MixedModels$fit(
-  MixedModels$LinearMixedModel,
-  juliaEval("@formula(Reaction ~ Days + (Days | Subject))"),
-  juliaPut(lme4::sleepstudy)
-)
-
-# In complete Julia syntax, using the sleepstudy dataset from MixedModels.jl
-jmod3 <- juliaEval("
-  fit(
-    LinearMixedModel,
-    @formula(reaction ~ days + (days | subj)),
-    MixedModels.dataset(:sleepstudy)
-  )
-")
 ```
 
 ## Tips
@@ -402,6 +415,46 @@ If you spend non-negligible time fitting regression models for your
 work, please just [learn Julia](https://julialang.org/learning/)! It’s a
 great high-level language that feels close to R in syntax and its
 REPL-based workflow.
+
+## Julia installation troubleshooting
+
+The package requires that [Julia (version ≥ 1.8) is
+installed](https://julialang.org/downloads/) and that the Julia
+executable is in the system search `PATH` or that the `JULIA_BINDIR`
+environment variable is set to the `/bin` directory of the Julia
+installation. The Julia version specified via the `JULIA_BINDIR`
+variable will take precedence over the one on the system `PATH`.
+
+After you have installed Julia, execute the command `julia` on the
+command line. Ensure that this launches Julia.
+
+On **Linux** and **Windows**, the `JuliaConnectoR` package should now be
+able to use the Julia installation, as the Julia installation is on the
+`PATH`. There should be no need to set the `JULIA_BINDIR` environment
+variable. But if `JuliaConnectoR` still cannot find Julia, consult the
+instructions below.
+
+On **Mac**, Julia might not be on the `PATH` when using e.g. RStudio. In
+this case, you may need to manually set the `JULIA_BINDIR` variable. To
+get the proper value of the `JULIA_BINDIR` variable, execute
+`Sys.BINDIR` from Julia. Then, set the environment variable in R via
+`Sys.setenv("JULIA_BINDIR" = "/your/path/to/Julia/bin")` (or by editing
+the `.Renviron` file). Afterwards, `JuliaConnectoR` should be able to
+discover the specified Julia installation.
+
+### Note about `juliaup`
+
+If you manage Julia installations via
+[Juliaup](https://github.com/JuliaLang/juliaup), the `JULIA_BINDIR`
+variable must point to the actual installation directory of Julia. This
+is different from the directory that is returned when executing
+`which julia` on the command line (that will be a *link* to the default
+Julia executable created by Juliaup). To get the path to a Julia
+installation managed by Juliaup, run `juliaup api getconfig1` in
+terminal and find the path to the Julia version you would like to use
+with `JuliaConnectoR`. Then, follow the same process as above to set the
+`JULIA_BINDIR` environment variable to the `/bin` directory of the Julia
+executable.
 
 ## Acknowledgments
 
