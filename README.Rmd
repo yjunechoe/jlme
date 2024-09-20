@@ -112,6 +112,20 @@ samp
 tidy(samp)
 ```
 
+### Profiling
+
+Experimental support for [`MixedModels.profile`](https://juliastats.org/MixedModels.jl/stable/api/#MixedModels.profile-Tuple%7BLinearMixedModel%7D) via `profilelikelihood()`:
+
+```{r}
+prof <- profilelikelihood(jmod)
+prof
+```
+
+```{r}
+tidy(prof)
+```
+
+
 ### Inspect model objects
 
 Check singular fit
@@ -141,7 +155,7 @@ jl_get(jmod$rePCA)
 Example 2: extract fitlog and plot
 
 ```{r}
-fitlog <- jl("refit!(x; thin=1)", x = jmod, .R = TRUE)$optsum$fitlog
+fitlog <- jl("refit!(x; thin=1)", x = jmod)$optsum$fitlog
 thetas <- t(sapply(fitlog, `[[`, 1))
 head(thetas)
 ```

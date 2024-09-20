@@ -34,11 +34,12 @@ reference:
   contents:
   - jlme_tidiers
 
-- title: Parameteric bootstrap
+- title: Parameteric bootstrap and profiling
   desc: >
-    Parametric bootstrapping for robust confidence intervals
+    Robust confidence intervals
   contents:
   - parametricbootstrap
+  - profilelikelihood
 
 - title: Helpers
   desc: >

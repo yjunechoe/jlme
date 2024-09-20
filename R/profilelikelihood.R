@@ -63,6 +63,12 @@ tidy.jlmeprof <- function(x, effects = c("var_model", "ran_pars", "fixed"),
     rbind(res_tbl[-row_residual,], res_tbl[row_residual,])
   )
 
+  # Repair
+  lower_upper <- res_tbl[, c("lower", "upper")]
+  res_tbl$conf.low <- do.call(pmin, lower_upper)
+  res_tbl$conf.high <- do.call(pmax, lower_upper)
+  res_tbl[, c("lower", "upper")] <- NULL
+
   resolve_effects(res_tbl, effects)
 
 
