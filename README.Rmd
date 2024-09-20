@@ -173,38 +173,6 @@ See information about the running Julia environment (e.g., the list of loaded Ju
 jlme_status()
 ```
 
-
-## Full interop control with `{JuliaConnectoR}`
-
-```{r}
-library(JuliaConnectoR)
-```
-
-### Access functions straight from MixedModels.jl
-
-Use Julia(-esque) model-fitting syntax from R:
-
-```{r}
-MixedModels <- juliaImport("MixedModels")
-
-# Long-form construction of `jmod`
-jmod2 <- MixedModels$fit(
-  MixedModels$LinearMixedModel,
-  juliaEval("@formula(Reaction ~ Days + (Days | Subject))"),
-  juliaPut(lme4::sleepstudy)
-)
-
-# In complete Julia syntax, using the sleepstudy dataset from MixedModels.jl
-jmod3 <- juliaEval("
-  fit(
-    LinearMixedModel,
-    @formula(reaction ~ days + (days | subj)),
-    MixedModels.dataset(:sleepstudy)
-  )
-")
-```
-
-
 ## Tips
 
 ### Data type conversion
