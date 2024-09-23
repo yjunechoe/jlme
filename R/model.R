@@ -70,8 +70,8 @@ jlm <- function(formula, data, family = "gaussian",
 
 #' @rdname jlm
 #' @param fit Whether to fit the model. If `FALSE`, returns the unfit model object.
-#' @param optsum A list of values to set for the optimizer. Special value
-#'   `"debug"` returns the OptSummary object for inspection.
+#' @param optsum A list of values to set for the optimizer. See `$optsum` of unfit
+#'   model for possible options.
 #' @param progress Whether to print model fitting progress. Defaults to `interactive()`
 #' @export
 jlmer <- function(formula, data, family = NULL,

@@ -33,8 +33,8 @@ Inferred from \code{data} by default.}
 
 \item{fit}{Whether to fit the model. If \code{FALSE}, returns the unfit model object.}
 
-\item{optsum}{A list of values to set for the optimizer. Special value
-\code{"debug"} returns the OptSummary object for inspection.}
+\item{optsum}{A list of values to set for the optimizer. See \verb{$optsum} of unfit
+model for possible options.}
 
 \item{progress}{Whether to print model fitting progress. Defaults to \code{interactive()}}
 }
