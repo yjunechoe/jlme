@@ -155,6 +155,7 @@ Inferred from <code>data</code> by default.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Mixed effects models</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Matrix</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span><span class="va">r2</span> <span class="op">~</span> <span class="va">Anger</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, <span class="va">VerbAgg</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Generalized linear mixed model fit by maximum likelihood (Laplace</span>
@@ -174,7 +175,7 @@ Inferred from <code>data</code> by default.</p></dd>
 <span class="r-in"><span><span class="fu">jlmer</span><span class="op">(</span><span class="va">r2</span> <span class="op">~</span> <span class="va">Anger</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, <span class="va">VerbAgg</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error : Evaluation in Julia failed.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Original Julia error message:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> KeyError: key 0x0000024f5a690e50 not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KeyError: key 0x0000015752597bb0 not found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Stacktrace:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] getindex</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    @ .\dict.jl:498 [inlined]</span>

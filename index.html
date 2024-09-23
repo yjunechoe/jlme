@@ -76,7 +76,7 @@
 <ul>
 <li><a href="#fit-models">Fit models</a></li>
 <li><a href="#diagnose-models">Diagnose models</a></li>
-<li><a href="#embrace-uncertainty">Embrace uncertainty</a></li>
+<li><a href="#assess-uncertainty">Assess uncertainty</a></li>
 <li><a href="#julia-interoperability">Julia interoperability</a></li>
 <li><a href="#tips">Tips</a></li>
 <li><a href="#julia-troubleshooting">Julia troubleshooting</a></li>
@@ -134,7 +134,7 @@
 <div class="section level3">
 <h3 id="mixed-effects-models">Mixed effects models<a class="anchor" aria-label="anchor" href="#mixed-effects-models"></a>
 </h3>
-<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer()</a></code>/<code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer()</a></code> syntax:</p>
+<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code>lmer()</code>/<code>glmer()</code> syntax:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)</span></span>
 <span><span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span>, REML <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -176,10 +176,11 @@
 <h2 id="diagnose-models">Diagnose models<a class="anchor" aria-label="anchor" href="#diagnose-models"></a>
 </h2>
 <p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
+<p>Supports <a href="https://broom.tidymodels.org/" class="external-link">broom</a>-style <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> and <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance()</a></code> methods for Julia regression models.</p>
 <div class="section level3">
 <h3 id="summarize-model-fit">Summarize model fit<a class="anchor" aria-label="anchor" href="#summarize-model-fit"></a>
 </h3>
-<p><a href="https://broom.tidymodels.org/" class="external-link">broom</a>-style <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> and <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance()</a></code> methods for Julia regression models:</p>
+<p>Get information about model components with <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">jmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span>, REML <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">)</span></span>
@@ -197,6 +198,7 @@
 <span><span class="co">#&gt; 3             NA</span></span>
 <span><span class="co">#&gt; 21            NA</span></span>
 <span><span class="co">#&gt; 11            NA</span></span></code></pre></div>
+<p>Get goodness-of-fit measures of a model with <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance()</a></code></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   nobs df   sigma logLik AIC BIC deviance df.residual</span></span>
@@ -218,47 +220,69 @@
 <span><span class="co">#&gt; [19] "sigma"     "sigmarhos" "sigmas"    "sqrtwts"   "stderror"  "theta"    </span></span>
 <span><span class="co">#&gt; [25] "u"         "vcov"      "X"         "Xymat"     "y"         "β"        </span></span>
 <span><span class="co">#&gt; [31] "βs"        "θ"         "λ"         "σ"         "σs"        "σρs"</span></span></code></pre></div>
+<p>Check optimization summary</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">jmod</span><span class="op">$</span><span class="va">optsum</span></span>
+<span><span class="co">#&gt; &lt;Julia object of type OptSummary{Float64}&gt;</span></span>
+<span><span class="co">#&gt; Initial parameter vector: [1.0, 0.0, 1.0]</span></span>
+<span><span class="co">#&gt; Initial objective value:  1773.6803306160236</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Optimizer (from NLopt):   LN_BOBYQA</span></span>
+<span><span class="co">#&gt; Lower bounds:             [0.0, -Inf, 0.0]</span></span>
+<span><span class="co">#&gt; ftol_rel:                 1.0e-12</span></span>
+<span><span class="co">#&gt; ftol_abs:                 1.0e-8</span></span>
+<span><span class="co">#&gt; xtol_rel:                 0.0</span></span>
+<span><span class="co">#&gt; xtol_abs:                 [1.0e-10, 1.0e-10, 1.0e-10]</span></span>
+<span><span class="co">#&gt; initial_step:             [0.75, 1.0, 0.75]</span></span>
+<span><span class="co">#&gt; maxfeval:                 -1</span></span>
+<span><span class="co">#&gt; maxtime:                  -1.0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Function evaluations:     43</span></span>
+<span><span class="co">#&gt; Final parameter vector:   [0.9667417730750263, 0.015169059007472414, 0.23090995314561083]</span></span>
+<span><span class="co">#&gt; Final objective value:    1743.6282719599653</span></span>
+<span><span class="co">#&gt; Return code:              FTOL_REACHED</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="embrace-uncertainty">Embrace uncertainty<a class="anchor" aria-label="anchor" href="#embrace-uncertainty"></a>
+<h2 id="assess-uncertainty">Assess uncertainty<a class="anchor" aria-label="anchor" href="#assess-uncertainty"></a>
 </h2>
 <p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
+<p>Functions <code><a href="reference/parametricbootstrap.html">parametricbootstrap()</a></code> and <code><a href="reference/profilelikelihood.html">profilelikelihood()</a></code> can be used to assess the variability of parameter estimates.</p>
 <div class="section level3">
 <h3 id="parametric-bootstrap">Parametric bootstrap<a class="anchor" aria-label="anchor" href="#parametric-bootstrap"></a>
 </h3>
 <p>Experimental support for <a href="https://juliastats.org/MixedModels.jl/stable/bootstrap/" class="external-link"><code>MixedModels.parametricbootstrap</code></a> via <code><a href="reference/parametricbootstrap.html">parametricbootstrap()</a></code>:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/parametricbootstrap.html">parametricbootstrap</a></span><span class="op">(</span><span class="va">jmod</span>, nsim <span class="op">=</span> <span class="fl">1000L</span>, seed <span class="op">=</span> <span class="fl">42L</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/parametricbootstrap.html">parametricbootstrap</a></span><span class="op">(</span><span class="va">jmod</span>, nsim <span class="op">=</span> <span class="fl">100L</span>, seed <span class="op">=</span> <span class="fl">42L</span><span class="op">)</span></span>
 <span><span class="va">samp</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type MixedModelBootstrap{Float64}&gt;</span></span>
-<span><span class="co">#&gt; MixedModelBootstrap with 1000 samples</span></span>
-<span><span class="co">#&gt;      parameter  min        q25         median     mean       q75       max</span></span>
-<span><span class="co">#&gt;    ┌───────────────────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt;  1 │ β1         227.464    246.884     251.608    251.655    256.229   275.687</span></span>
-<span><span class="co">#&gt;  2 │ β2         4.99683    9.40303     10.4795    10.4522    11.5543   15.2264</span></span>
-<span><span class="co">#&gt;  3 │ σ          21.0629    24.5779     25.5858    25.6024    26.5579   30.8176</span></span>
-<span><span class="co">#&gt;  4 │ σ1         3.8862     19.8341     23.9517    23.8161    27.9909   40.7842</span></span>
-<span><span class="co">#&gt;  5 │ σ2         1.65066    4.94152     5.77701    5.78757    6.61858   9.80011</span></span>
-<span><span class="co">#&gt;  6 │ ρ1         -0.79257   -0.147053   0.0914976  0.111537   0.346284  1.0</span></span>
-<span><span class="co">#&gt;  7 │ θ1         0.158198   0.762462    0.939845   0.935398   1.10182   1.72955</span></span>
-<span><span class="co">#&gt;  8 │ θ2         -0.259593  -0.0358002  0.0185442  0.0197924  0.07347   0.333435</span></span>
-<span><span class="co">#&gt;  9 │ θ3         0.0        0.175387    0.213763   0.207584   0.24721   0.402354</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; MixedModelBootstrap with 100 samples</span></span>
+<span><span class="co">#&gt;      parameter  min        q25         median     mean        q75       max</span></span>
+<span><span class="co">#&gt;    ┌────────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;  1 │ β1         227.464    246.465     250.903    250.985     256.233   264.878</span></span>
+<span><span class="co">#&gt;  2 │ β2         6.58801    9.89368     10.8208    10.6993     11.6945   13.8613</span></span>
+<span><span class="co">#&gt;  3 │ σ          21.6868    24.6505     25.6221    25.8474     26.7382   30.599</span></span>
+<span><span class="co">#&gt;  4 │ σ1         3.8862     19.5019     24.0707    23.3628     27.4161   34.0508</span></span>
+<span><span class="co">#&gt;  5 │ σ2         1.95071    4.90943     5.76106    5.87793     6.79344   8.91558</span></span>
+<span><span class="co">#&gt;  6 │ ρ1         -0.731594  -0.237908   0.0869573  0.0721882   0.345545  1.0</span></span>
+<span><span class="co">#&gt;  7 │ θ1         0.158198   0.742099    0.909455   0.90867     1.10008   1.37666</span></span>
+<span><span class="co">#&gt;  8 │ θ2         -0.193011  -0.0589132  0.0187871  0.00940508  0.065209  0.213878</span></span>
+<span><span class="co">#&gt;  9 │ θ3         0.0        0.170507    0.211006   0.206231    0.255929  0.357972</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     effect    group                  term     estimate    conf.low  conf.high</span></span>
-<span><span class="co">#&gt; 1    fixed     &lt;NA&gt;           (Intercept) 251.40510485 238.6573824 265.430084</span></span>
-<span><span class="co">#&gt; 2    fixed     &lt;NA&gt;                  Days  10.46728596   7.3121974  13.523381</span></span>
-<span><span class="co">#&gt; 5 ran_pars  Subject       sd__(Intercept)  24.74065797  12.8464132  35.011690</span></span>
-<span><span class="co">#&gt; 4 ran_pars  Subject cor__(Intercept).Days   0.06555124  -0.4501055   1.000000</span></span>
-<span><span class="co">#&gt; 6 ran_pars  Subject              sd__Days   5.92213766   3.3869360   8.310897</span></span>
-<span><span class="co">#&gt; 3 ran_pars Residual       sd__Observation  25.59179572  22.6637109  28.465550</span></span></code></pre></div>
+<span><span class="co">#&gt;     effect    group                  term     estimate   conf.low   conf.high</span></span>
+<span><span class="co">#&gt; 1    fixed     &lt;NA&gt;           (Intercept) 251.40510485 240.638031 263.5578907</span></span>
+<span><span class="co">#&gt; 2    fixed     &lt;NA&gt;                  Days  10.46728596   7.635654  13.6199271</span></span>
+<span><span class="co">#&gt; 5 ran_pars  Subject       sd__(Intercept)  24.74065797  14.054638  34.0507880</span></span>
+<span><span class="co">#&gt; 4 ran_pars  Subject cor__(Intercept).Days   0.06555124  -0.697758   0.8805016</span></span>
+<span><span class="co">#&gt; 6 ran_pars  Subject              sd__Days   5.92213766   3.643931   8.2409621</span></span>
+<span><span class="co">#&gt; 3 ran_pars Residual       sd__Observation  25.59179572  22.497355  29.2889311</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="profiling">Profiling<a class="anchor" aria-label="anchor" href="#profiling"></a>
 </h3>
 <p>Experimental support for <a href="https://juliastats.org/MixedModels.jl/stable/api/#MixedModels.profile-Tuple%7BLinearMixedModel%7D" class="external-link"><code>MixedModels.profile</code></a> via <code><a href="reference/profilelikelihood.html">profilelikelihood()</a></code>:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prof</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/profilelikelihood.html">profilelikelihood</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">)</span></span>
 <span><span class="va">prof</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type MixedModelProfile{Float64}&gt;</span></span>
@@ -283,7 +307,7 @@
 <span><span class="co">#&gt;  16 │ σ  3.29116    251.405  10.4673  31.4877  22.267   5.5671   0.225568     ⋯</span></span>
 <span><span class="co">#&gt;  17 │ σ  3.72701    251.405  10.4673  32.4342  21.7928  5.50064  0.260712     ⋯</span></span>
 <span><span class="co">#&gt;  ⋮  │ ⋮      ⋮         ⋮        ⋮        ⋮        ⋮        ⋮          ⋮       ⋱</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">prof</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      effect    group            term   estimate   conf.low  conf.high</span></span>
 <span><span class="co">#&gt; 1     fixed     &lt;NA&gt;     (Intercept) 251.405105 239.501474 263.308736</span></span>
@@ -297,20 +321,21 @@
 <h2 id="julia-interoperability">Julia interoperability<a class="anchor" aria-label="anchor" href="#julia-interoperability"></a>
 </h2>
 <p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
+<p>Functions <code><a href="reference/jl-helpers.html">jl_get()</a></code> and <code><a href="reference/jl-helpers.html">jl_put()</a></code> transfers data between R and Julia.</p>
 <div class="section level3">
 <h3 id="bring-julia-objects-into-r">Bring Julia objects into R<a class="anchor" aria-label="anchor" href="#bring-julia-objects-into-r"></a>
 </h3>
 <p>Example 1: extract PCA of random effects and return as an R list:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">jmod</span><span class="op">$</span><span class="va">rePCA</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type @NamedTuple{Subject::Vector{Float64}}&gt;</span></span>
 <span><span class="co">#&gt; (Subject = [0.5327756193675971, 1.0],)</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_get</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">$</span><span class="va">rePCA</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $Subject</span></span>
 <span><span class="co">#&gt; [1] 0.5327756 1.0000000</span></span></code></pre></div>
 <p>Example 2: extract fitlog and plot</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fitlog</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers.html">jl_get</a></span><span class="op">(</span><span class="fu"><a href="reference/jl-helpers.html">jl</a></span><span class="op">(</span><span class="st">"refit!(x; thin=1)"</span>, x <span class="op">=</span> <span class="va">jmod</span><span class="op">)</span><span class="op">$</span><span class="va">optsum</span><span class="op">$</span><span class="va">fitlog</span><span class="op">)</span></span>
 <span><span class="va">thetas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">fitlog</span>, <span class="va">`[[`</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">thetas</span><span class="op">)</span></span>
@@ -321,15 +346,15 @@
 <span><span class="co">#&gt; [4,] 1.00    0 1.75</span></span>
 <span><span class="co">#&gt; [5,] 0.25    0 1.00</span></span>
 <span><span class="co">#&gt; [6,] 1.00   -1 1.00</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span><span class="va">thetas</span>, type <span class="op">=</span> <span class="st">"o"</span>, xlab <span class="op">=</span> <span class="st">"iterations"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-17-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-18-1.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="julia-session">Julia session<a class="anchor" aria-label="anchor" href="#julia-session"></a>
 </h3>
 <p>See information about the running Julia environment (e.g., the list of loaded Julia libraries) with <code><a href="reference/jlme_setup.html">jlme_status()</a></code>:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jlme_setup.html">jlme_status</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; jlme 0.3.0 </span></span>
 <span><span class="co">#&gt; R version 4.4.1 (2024-06-14 ucrt) </span></span>
@@ -344,7 +369,7 @@
 <span><span class="co">#&gt;   LIBM: libopenlibm</span></span>
 <span><span class="co">#&gt;   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)</span></span>
 <span><span class="co">#&gt; Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)</span></span>
-<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_AIvVeE\Project.toml`</span></span>
+<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_XhLl3q\Project.toml`</span></span>
 <span><span class="co">#&gt;   [38e38edf] GLM v1.9.0</span></span>
 <span><span class="co">#&gt;   [98e50ef6] JuliaFormatter v1.0.60</span></span>
 <span><span class="co">#&gt;   [ff71e718] MixedModels v4.26.0</span></span>
@@ -360,11 +385,11 @@
 <h3 id="data-type-conversion">Data type conversion<a class="anchor" aria-label="anchor" href="#data-type-conversion"></a>
 </h3>
 <p>Be sure to pass integers to functions that expect Integer type, (e.g., the <code>MixedModels.parametricbootstrap()</code> example above):</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_put</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type Float64&gt;</span></span>
 <span><span class="co">#&gt; 1.0</span></span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_put</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type Int64&gt;</span></span>
 <span><span class="co">#&gt; 1</span></span></code></pre></div>
@@ -373,7 +398,7 @@
 <h3 id="performance-linear-algebra-backend">Performance (linear algebra backend)<a class="anchor" aria-label="anchor" href="#performance-linear-algebra-backend"></a>
 </h3>
 <p>Using <a href="https://github.com/JuliaLinearAlgebra/MKL.jl" class="external-link"><code>MKL.jl</code></a> or <a href="https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl" class="external-link"><code>AppleAccelerate.jl</code></a> may improve model fitting performance (but see the system requirements first).</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Not run</span></span>
 <span><span class="fu"><a href="reference/jlme_setup.html">jlme_setup</a></span><span class="op">(</span>add <span class="op">=</span> <span class="st">"MKL"</span>, restart <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/jlme_setup.html">jlme_status</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Should see MKL loaded here</span></span></code></pre></div>
@@ -382,7 +407,7 @@
 <h3 id="performance-data-transfer">Performance (data transfer)<a class="anchor" aria-label="anchor" href="#performance-data-transfer"></a>
 </h3>
 <p>In practice, most of the overhead will come from transferring the data from R to Julia. If you are looking to fit many models to the same data, you should first filter to keep only used columns and then use <code><a href="reference/jl-helpers.html">jl_data()</a></code> to send the data to Julia. The Julia data frame object can then be used to fit Julia models.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_r</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
 <span></span>
 <span><span class="co"># Keep only columns you need + convert with `jl_data()`</span></span>
@@ -400,7 +425,7 @@
 <span><span class="co">#&gt; am            7.24494     1.76442   4.11    &lt;1e-04    3.78674    10.7031</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span></code></pre></div>
 <p>If your data has custom contrasts, you can use <code><a href="reference/jl-helpers.html">jl_contrasts()</a></code> to also convert that to Julia first before passing it to the model.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">contrasts</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/contrast.html" class="external-link">contr.sum</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
@@ -429,10 +454,15 @@
 <h2 id="julia-troubleshooting">Julia troubleshooting<a class="anchor" aria-label="anchor" href="#julia-troubleshooting"></a>
 </h2>
 <p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
+<p><a href="https://yjunechoe.github.io/jlme/">jlme</a> is powered by <a href="https://github.com/stefan-m-lenz/JuliaConnectoR" class="external-link"><code>{JuliaConnectoR}</code></a>. Instructions below are adapted from <code>{JuliaConnectoR}</code>.</p>
+<div class="section level3">
+<h3 id="locating-the-executable">Locating the executable<a class="anchor" aria-label="anchor" href="#locating-the-executable"></a>
+</h3>
 <p>The package requires that <a href="https://julialang.org/downloads/" class="external-link">Julia (version ≥ 1.8) is installed</a> and that the Julia executable is in the system search <code>PATH</code> or that the <code>JULIA_BINDIR</code> environment variable is set to the <code>/bin</code> directory of the Julia installation. The Julia version specified via the <code>JULIA_BINDIR</code> variable will take precedence over the one on the system <code>PATH</code>.</p>
 <p>After you have installed Julia, execute the command <code>julia</code> on the command line. Ensure that this launches Julia.</p>
 <p>On <strong>Linux</strong> and <strong>Windows</strong>, the <code>JuliaConnectoR</code> package should now be able to use the Julia installation, as the Julia installation is on the <code>PATH</code>. There should be no need to set the <code>JULIA_BINDIR</code> environment variable. But if <code>JuliaConnectoR</code> still cannot find Julia, consult the instructions below.</p>
 <p>On <strong>Mac</strong>, Julia might not be on the <code>PATH</code> when using e.g. RStudio. In this case, you may need to manually set the <code>JULIA_BINDIR</code> variable. To get the proper value of the <code>JULIA_BINDIR</code> variable, execute <code>Sys.BINDIR</code> from Julia. Then, set the environment variable in R via <code>Sys.setenv("JULIA_BINDIR" = "/your/path/to/Julia/bin")</code> (or by editing the <code>.Renviron</code> file). Afterwards, <code>JuliaConnectoR</code> should be able to discover the specified Julia installation.</p>
+</div>
 <div class="section level3">
 <h3 id="note-about-juliaup">Note about <code>juliaup</code>
 <a class="anchor" aria-label="anchor" href="#note-about-juliaup"></a>
