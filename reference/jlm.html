@@ -84,8 +84,8 @@ Inferred from <code>data</code> by default.</p></dd>
 
 
 <dt id="arg-optsum">optsum<a class="anchor" aria-label="anchor" href="#arg-optsum"></a></dt>
-<dd><p>A list of values to set for the optimizer. Special value
-<code>"debug"</code> returns the OptSummary object for inspection.</p></dd>
+<dd><p>A list of values to set for the optimizer. See <code>$optsum</code> of unfit
+model for possible options.</p></dd>
 
 
 <dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
@@ -173,28 +173,6 @@ Inferred from <code>data</code> by default.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)        Anger      GenderM  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    -1.10090      0.04626      0.26002  </span>
 <span class="r-in"><span><span class="fu">jlmer</span><span class="op">(</span><span class="va">r2</span> <span class="op">~</span> <span class="va">Anger</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, <span class="va">VerbAgg</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error : Evaluation in Julia failed.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Original Julia error message:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> KeyError: key 0x0000015752597bb0 not found</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Stacktrace:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] getindex</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    @ .\dict.jl:498 [inlined]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] decrefcount!(communicator::Main.RConnector.CommunicatoR{Sockets.TCPSocket}, ref::UInt64)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\sharing.jl:134</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] decrefcounts(communicator::Main.RConnector.CommunicatoR{Sockets.TCPSocket}, refs::Vector{UInt8})</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\sharing.jl:147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] invokelatest(::Any, ::Any, ::Vararg{Any}; kwargs::@Kwargs{})</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Base .\essentials.jl:892</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] invokelatest(::Any, ::Any, ::Vararg{Any})</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Base .\essentials.jl:889</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] evaluate!</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    @ C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\evaluating.jl:67 [inlined]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] evaluate_checked!(call::Main.RConnector.Call, communicator::Main.RConnector.CommunicatoR{Sockets.TCPSocket})</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\evaluating.jl:55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] serve_repl(sock::Sockets.TCPSocket)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\communicating.jl:185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] (::Main.RConnector.var"#3#5")()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\communicating.jl:145</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type GeneralizedLinearMixedModel&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> r2 ~ 1 + Anger + Gender + (1 | id)</span>
