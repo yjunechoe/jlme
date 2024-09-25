@@ -180,7 +180,7 @@ start_julia <- function(..., threads = NULL) {
 init_proj <- function(..., add = add, verbose = FALSE) {
   stopifnot(is.null(add) || is.character(add))
 
-  jlme_deps <- c("JuliaFormatter", "StatsModels", "GLM", "MixedModels")
+  jlme_deps <- c("StatsModels", "GLM", "MixedModels")
   deps <- unique(c(add, jlme_deps))
   jl('
     using Pkg;
@@ -195,7 +195,6 @@ load_libs <- function(..., add) {
   add_before <- intersect(add, c("MKL", "AppleAccelerate"))
   for (pkg in add_before) jl("using %s;", pkg)
   jl("
-    using JuliaFormatter;
     using StatsModels;
     using GLM;
     using MixedModels;

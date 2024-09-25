@@ -27,9 +27,7 @@ parametricbootstrap <- function(x, nsim, seed, ...,
                                 optsum_overrides = list(ftol_rel = 1e-8)) {
 
   stopifnot(is_jlmer(x))
-  if (!"Random" %in% loaded_libs()) {
-    jl('Pkg.add("Random"; io=devnull); using Random;')
-  }
+  jl_require("Random")
   if (!jl("@isdefined _is_logging", .R = TRUE)) {
     # Hack to show progress when called via R
     jl("import MixedModels._is_logging")

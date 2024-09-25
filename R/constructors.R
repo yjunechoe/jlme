@@ -28,7 +28,7 @@ as_julia_contrasts <- function(fct, nm = "COLUMN") {
   ", nm, .hypotheses, .levels, .labels)
 }
 
-construct_contrasts <- function(df, cols = NULL, format = TRUE) {
+construct_contrasts <- function(df, cols = NULL, format = FALSE) {
   if (is.null(cols)) {
     cols <- colnames(Filter(is_fct_custom_contrast, df))
   }

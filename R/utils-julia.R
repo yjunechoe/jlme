@@ -43,5 +43,13 @@ jl_supertypes <- function(x) {
 }
 
 jl_format <- function(x, ...) {
+  jl_require("JuliaFormatter")
   JuliaConnectoR::juliaCall("JuliaFormatter.format_text", x, align_matrix = TRUE, ...)
+}
+
+jl_require <- function(x) {
+  if (!x %in% loaded_libs()) {
+    jl('Pkg.add("%1$s"; io=devnull); using %1$s;', x)
+  }
+  invisible(TRUE)
 }

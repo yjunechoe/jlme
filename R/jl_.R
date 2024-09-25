@@ -141,7 +141,7 @@ jl_formula <- function(formula) {
 #' @export
 jl_contrasts <- function(df, cols = NULL, show_code = FALSE) {
   if (is_jl(df)) return(NULL)
-  dict <- construct_contrasts(df, cols = cols)
+  dict <- construct_contrasts(df, cols = cols, format = show_code)
   if (show_code) {
     cat(dict)
   }
