@@ -119,12 +119,15 @@ jl <- function(expr, ..., .R = FALSE, .passthrough = FALSE) {
 }
 
 #' @rdname jl-helpers
+#' @export
 jl_dict <- function(...) {
   dots <- list(...)
   if (length(dots) == 1L && is.null(names(dots)) && is.list(dots)) {
+    # Splats when only arg is unnamed and is a list
     dots <- dots[[1L]]
   }
   nms <- names(dots)
+  # Turns values into vectors unless `I()`
   dots <- lapply(dots, function(x) {
     if (!inherits(x, "AsIs")) as.list(x) else x
   })
