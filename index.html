@@ -370,7 +370,7 @@
 <span><span class="co">#&gt;   LIBM: libopenlibm</span></span>
 <span><span class="co">#&gt;   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)</span></span>
 <span><span class="co">#&gt; Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)</span></span>
-<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_ZtYVO3\Project.toml`</span></span>
+<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_7U2Img\Project.toml`</span></span>
 <span><span class="co">#&gt;   [38e38edf] GLM v1.9.0</span></span>
 <span><span class="co">#&gt;   [ff71e718] MixedModels v4.26.0</span></span>
 <span><span class="co">#&gt;   [3eaba693] StatsModels v0.7.4</span></span>
@@ -410,7 +410,7 @@
 <span><span class="co">#&gt; ─────────────────────────────────────────────────────────────────</span></span></code></pre></div>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">JuliaConnectoR</span><span class="op">)</span></span>
-<span><span class="co"># First calls to importing libraries will take a minute</span></span>
+<span><span class="co"># First call downloads the library (takes a minute)</span></span>
 <span><span class="va">Effects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaImport.html" class="external-link">juliaImport</a></span><span class="op">(</span><span class="st">"Effects"</span><span class="op">)</span></span>
 <span><span class="co"># Call `Effects.empairs` using R syntax `Effects$empairs()`</span></span>
 <span><span class="va">pairwise</span> <span class="op">&lt;-</span> <span class="va">Effects</span><span class="op">$</span><span class="fu">empairs</span><span class="op">(</span><span class="va">jmod2</span>, dof <span class="op">=</span> <span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">jmod2</span><span class="op">)</span><span class="op">$</span><span class="va">df.residual</span><span class="op">)</span></span>
