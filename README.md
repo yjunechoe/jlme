@@ -383,7 +383,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_l08mTS\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_ZtYVO3\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [ff71e718] MixedModels v4.26.0
 #>   [3eaba693] StatsModels v0.7.4
@@ -405,7 +405,7 @@ way to do that is to use `juliaImport()`, which creates makeshift
 bindings to Julia libraries.
 
 For example, to replicate a workflow using
-[`Effects.empairs()`](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/)
+[`Effects.empairs`](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/)
 for post-hoc pairwise comparisons:
 
 ``` r
@@ -439,7 +439,7 @@ jmod2
 library(JuliaConnectoR)
 # First calls to importing libraries will take a minute
 Effects <- juliaImport("Effects")
-# Call `Effects.empairs()` using R syntax `Effects$empairs()`
+# Call `Effects.empairs` using R syntax `Effects$empairs()`
 pairwise <- Effects$empairs(jmod2, dof = glance(jmod2)$df.residual)
 pairwise
 #> <Julia object of type DataFrames.DataFrame>
@@ -465,10 +465,10 @@ pairwise
 #>                                                                 1 column omitted
 ```
 
-Note that `DataFrame.DataFrame` objects such as the one above can be
+Note that Julia `DataFrame` objects such as the one above can be
 collected into an R data frame using `as.data.frame()`. This lets you,
-for example, apply p-value corrections using R’s `p.adjust()`, though
-the [option to do
+for example, apply p-value corrections using the familiar `p.adjust()`
+function in R, though the [option to do
 that](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/#Multiple-Comparisons-Correction)
 exists in Julia as well.
 
@@ -553,7 +553,7 @@ jlme_status() # Should now see MKL loaded here
 
 In practice, most of the overhead will come from transferring the data
 from R to Julia. If you are looking to fit many models to the same data,
-you should first filter to keep only used columns and then use
+you should first filter to keep only the columns you need and then use
 `jl_data()` to send the data to Julia. The Julia data frame object can
 then be used to fit Julia models.
 
@@ -616,7 +616,7 @@ Instructions below are adapted from `{JuliaConnectoR}`.
 
 ### Locating the executable
 
-The package requires that [Julia (version ≥ 1.8) is
+`{jlme}` requires that [Julia (version ≥ 1.8) is
 installed](https://julialang.org/downloads/) and that the Julia
 executable is in the system search `PATH` or that the `JULIA_BINDIR`
 environment variable is set to the `/bin` directory of the Julia
@@ -662,6 +662,8 @@ executable.
   R package for powering the R interface to Julia.
 
 - The [Julia](https://julialang.org/) packages
-  [GLM.jl](https://github.com/JuliaStats/GLM.jl) and
+  [GLM.jl](https://github.com/JuliaStats/GLM.jl),
+  [StatsModels](https://github.com/JuliaStats/StatsModels.jl), and
   [MixedModels.jl](https://github.com/JuliaStats/MixedModels.jl) for
-  fast implementations of (mixed effects) regression models.
+  interfaces to and implementations of (mixed effects) regression
+  models.
