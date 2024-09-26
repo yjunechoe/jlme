@@ -136,19 +136,20 @@ is_jlmer <- function(x) {
 }
 
 #' @export
-print.jlme <- function(x, type = NULL, ...) {
-  if (is_jlmer(x) && !is.null(type)) {
-    show_jlmer(x, type)
+print.jlme <- function(x, format = NULL, ...) {
+  if (is_jlmer(x) && !is.null(format)) {
+    show_jlmer(x, format)
   } else {
+    stopifnot("`format` is only availble for MixedModels" = is.null(format))
     cat(format(x, ...))
   }
   invisible(x)
 }
 
-show_jlmer <- function(x, type = c("markdown", "latex", "html")) {
-  type <- match.arg(type)
+show_jlmer <- function(x, format = c("markdown", "html", "latex", "xelatex")) {
+  format <- match.arg(format)
   JuliaConnectoR::juliaLet(
-    sprintf('show(MIME("text/%s"), x)', type),
+    sprintf('show(MIME("text/%s"), x)', format),
     x = x
   )
 }
