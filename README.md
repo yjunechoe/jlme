@@ -376,7 +376,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_eBJS7X\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_Nfqh3i\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [ff71e718] MixedModels v4.26.0
 #>   [3eaba693] StatsModels v0.7.4
@@ -386,6 +386,24 @@ jlme_status()
 ## Tips
 
 [↑Back to table of contents](#usage-table-of-contents)
+
+### Displaying MixedModels
+
+MixedModels.jl supports various [display
+formats](https://juliastats.org/MixedModels.jl/stable/mime) for
+mixed-effects models which are available in `{jlme}` via the `format`
+argument of `print()`:
+
+``` r
+# Rendered via {knitr} with chunk option `results="asis"`
+print(jmod, format = "markdown")
+```
+
+|             |     Est. |     SE |     z |       p | σ_Subject |
+|:------------|---------:|-------:|------:|--------:|----------:|
+| (Intercept) | 251.4051 | 6.8246 | 36.84 | \<1e-99 |   24.7407 |
+| Days        |  10.4673 | 1.5458 |  6.77 | \<1e-10 |    5.9221 |
+| Residual    |  25.5918 |        |       |         |           |
 
 ### Data type conversion
 

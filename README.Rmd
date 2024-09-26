@@ -217,6 +217,16 @@ jlme_status()
 
 [↑Back to table of contents](#usage-table-of-contents)
 
+### Displaying MixedModels
+
+MixedModels.jl supports various [display formats](https://juliastats.org/MixedModels.jl/stable/mime) for mixed-effects models which are available in `{jlme}` via the `format` argument of `print()`:
+
+```{r, results="asis"}
+# Rendered via {knitr} with chunk option `results="asis"`
+print(jmod, format = "markdown")
+```
+
+
 ### Data type conversion
 
 Be sure to pass integers to functions that expect Integer type, (e.g., the `MixedModels.parametricbootstrap()` example above):
