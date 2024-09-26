@@ -6,6 +6,7 @@
 \alias{jl_put}
 \alias{jl_get}
 \alias{jl}
+\alias{jl_dict}
 \alias{jl_formula}
 \alias{jl_contrasts}
 \alias{jl_data}
@@ -19,6 +20,8 @@ jl_put(x)
 jl_get(x)
 
 jl(expr, ..., .R = FALSE, .passthrough = FALSE)
+
+jl_dict(...)
 
 jl_formula(formula)
 
@@ -35,7 +38,7 @@ jl_family(family = c("gaussian", "binomial", "poisson"))
 
 \item{expr}{A string of Julia code}
 
-\item{...}{Elements interpolated into \code{expr}.
+\item{...}{Interpolated elements. In the case of \code{jl()}:.
 \itemize{
 \item If all named, elements are introduced as Julia variables in the \code{expr}
 \item If all unnamed, elements are interpolated into \code{expr} via \code{\link[=sprintf]{sprintf()}}
@@ -73,6 +76,10 @@ jl("1 .+ [1,3]")
 # `jl()` takes elements in `...` that you can reference in the expression
 jl("1 .+ a", a = c(1L, 3L)) # Named arguments are introduced as variables
 jl("1 .+ \%s", "[1,2]") # Unnamed arguments are interpolated via `sprintf()`
+
+# `jl_dict()` constructs a Dictionary data type
+jl_dict(age = 20:25, sex = c("M", "F"))
+jl_dict(list(a = 1, b = 2)) # Splats when a single list is supplied
 
 # Use `is_jl()` to test if object is a Julia (`<JuliaProxy>`) object
 is_jl(jl("1"))

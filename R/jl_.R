@@ -15,6 +15,10 @@
 #' jl("1 .+ a", a = c(1L, 3L)) # Named arguments are introduced as variables
 #' jl("1 .+ %s", "[1,2]") # Unnamed arguments are interpolated via `sprintf()`
 #'
+#' # `jl_dict()` constructs a Dictionary data type
+#' jl_dict(age = 20:25, sex = c("M", "F"))
+#' jl_dict(list(a = 1, b = 2)) # Splats when a single list is supplied
+#'
 #' # Use `is_jl()` to test if object is a Julia (`<JuliaProxy>`) object
 #' is_jl(jl("1"))
 #'
@@ -78,7 +82,7 @@ jl_get <- function(x) {
 
 #' @rdname jl-helpers
 #' @param expr A string of Julia code
-#' @param ... Elements interpolated into `expr`.
+#' @param ... Interpolated elements. In the case of `jl()`:.
 #'    - If all named, elements are introduced as Julia variables in the `expr`
 #'    - If all unnamed, elements are interpolated into `expr` via [sprintf()]
 #' @param .R Whether to simplify and return as R object, if possible.
@@ -112,6 +116,20 @@ jl <- function(expr, ..., .R = FALSE, .passthrough = FALSE) {
     out <- jl_get(out)
   }
   out
+}
+
+#' @rdname jl-helpers
+jl_dict <- function(...) {
+  dots <- list(...)
+  if (length(dots) == 1L && is.null(names(dots)) && is.list(dots)) {
+    dots <- dots[[1L]]
+  }
+  nms <- names(dots)
+  dots <- lapply(dots, function(x) {
+    if (!inherits(x, "AsIs")) as.list(x) else x
+  })
+  stopifnot(!is.null(nms) && all(nzchar(nms)))
+  jl("x.namedelements", x = dots)
 }
 
 #' @rdname jl-helpers
