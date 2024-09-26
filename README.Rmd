@@ -22,16 +22,18 @@ knitr::opts_chunk$set(
 [![test-coverage](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
-Julia (mixed-effects) regression modelling from R
+Julia (mixed-effects) regression modelling from R. Powered by the [`{JuliaConnectoR}`](https://github.com/stefan-m-lenz/JuliaConnectoR) R package and Julia libraries [GLM](https://github.com/JuliaStats/GLM.jl), [StatsModels](https://github.com/JuliaStats/StatsModels.jl), and [MixedModels](https://github.com/JuliaStats/MixedModels.jl).
 
 ## Installation
 
-You can install the development version of jlme from [GitHub](https://github.com/) with:
+You can install the development version of `{jlme}` from [GitHub](https://github.com/yjunechoe/jlme) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("yjunechoe/jlme")
+# install.packages("remotes")
+remotes::install_github("yjunechoe/jlme")
 ```
+
+`{jlme}` is experimental: see [NEWS.md](https://github.com/yjunechoe/jlme/blob/main/NEWS.md#jlme-development-version) for active updates.
 
 ## Setup
 
@@ -40,7 +42,7 @@ library(jlme)
 jlme_setup()
 ```
 
-`{jlme}` uses `{JuliaConnectoR}` to connect to a Julia session. See [JuliaConnectoR package documentation](https://github.com/stefan-m-lenz/JuliaConnectoR) for troubleshooting related to Julia installation and configuration.
+`{jlme}` uses `{JuliaConnectoR}` to connect to a Julia session. Jump down to the [Julia troubleshooting](#julia-troubleshooting) section for issues related to Julia installation and configuration.
 
 ## Usage (table of contents)
 
@@ -48,7 +50,7 @@ jlme_setup()
 -  [Diagnose models](#diagnose-models)
 -  [Assess uncertainty](#assess-uncertainty)
 -  [Julia interoperability](#julia-interoperability)
--  [Tips](#tips)
+-  [Tips and tricks](#tips-and-tricks)
 -  [Julia troubleshooting](#julia-troubleshooting)
 -  [Acknowledgments](#acknowledgments)
 
@@ -212,8 +214,46 @@ See information about the running Julia environment (e.g., the list of loaded Ju
 jlme_status()
 ```
 
+On setup, `{jlme}` loads [GLM](https://github.com/JuliaStats/GLM.jl), [StatsModels](https://github.com/JuliaStats/StatsModels.jl), and [MixedModels](https://github.com/JuliaStats/MixedModels.jl), as well as those specified in `jlme_setup(add)`. Other libraries such as `Random` (required for `parametricbootstrap()`) are loaded on an as-needed basis.
 
-## Tips
+### More with `{JuliaConnectoR}`
+
+While `{jlme}` users will typically not need to interact with `{JuliaConnectoR}` directly, it may be useful for extending `{jlme}` features with other packages in the Julia modelling ecosystem. A simple way to do that is to use `juliaImport()`, which creates makeshift bindings to Julia libraries.
+
+For example, to replicate a workflow using [`Effects.empairs()`](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/) for post-hoc pairwise comparisons:
+
+```{r}
+# New model: 2 (M/F) by 3 (curse/scold/shout) factorial
+jmod2 <- jlmer(
+  r2 ~ Gender * btype + (1 | id),
+  data = lme4::VerbAgg,
+  family = "binomial"
+)
+jmod2
+```
+
+```{r}
+library(JuliaConnectoR)
+# First calls to importing libraries will take a minute
+Effects <- juliaImport("Effects")
+# Call `Effects.empairs()` using R syntax `Effects$empairs()`
+pairwise <- Effects$empairs(jmod2, dof = glance(jmod2)$df.residual)
+pairwise
+```
+
+Note that `DataFrame.DataFrame` objects such as the one above can be collected into an R data frame using `as.data.frame()`. This lets you, for example, apply p-value corrections using R's `p.adjust()`, though the [option to do that](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/#Multiple-Comparisons-Correction) exists in Julia as well.
+
+```{r}
+pairwise_df <- as.data.frame(pairwise)
+cbind(
+  pairwise_df[, 1:2],
+  round(pairwise_df[, 3:4], 2),
+  pvalue = format.pval(p.adjust(pairwise_df[, 7], "bonferroni"), 1)
+)
+```
+
+
+## Tips and tricks
 
 [↑Back to table of contents](#usage-table-of-contents)
 
@@ -229,7 +269,7 @@ print(jmod, format = "markdown")
 
 ### Data type conversion
 
-Be sure to pass integers to functions that expect Integer type, (e.g., the `MixedModels.parametricbootstrap()` example above):
+Be sure to pass integers (vs. doubles) to Julia functions that expect Integer type, (e.g., the `parametricbootstrap()` example above):
 
 ```{r}
 jl_put(1)
@@ -243,7 +283,7 @@ Using [`MKL.jl`](https://github.com/JuliaLinearAlgebra/MKL.jl) or [`AppleAcceler
 ```{r, eval = FALSE}
 # Not run
 jlme_setup(add = "MKL", restart = TRUE)
-jlme_status() # Should see MKL loaded here
+jlme_status() # Should now see MKL loaded here
 ```
 
 ### Performance (data transfer)

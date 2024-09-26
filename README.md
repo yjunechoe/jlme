@@ -13,17 +13,25 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![test-coverage](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
-Julia (mixed-effects) regression modelling from R
+Julia (mixed-effects) regression modelling from R. Powered by the
+[`{JuliaConnectoR}`](https://github.com/stefan-m-lenz/JuliaConnectoR) R
+package and Julia libraries [GLM](https://github.com/JuliaStats/GLM.jl),
+[StatsModels](https://github.com/JuliaStats/StatsModels.jl), and
+[MixedModels](https://github.com/JuliaStats/MixedModels.jl).
 
 ## Installation
 
-You can install the development version of jlme from
-[GitHub](https://github.com/) with:
+You can install the development version of `{jlme}` from
+[GitHub](https://github.com/yjunechoe/jlme) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("yjunechoe/jlme")
+# install.packages("remotes")
+remotes::install_github("yjunechoe/jlme")
 ```
+
+`{jlme}` is experimental: see
+[NEWS.md](https://github.com/yjunechoe/jlme/blob/main/NEWS.md#jlme-development-version)
+for active updates.
 
 ## Setup
 
@@ -32,10 +40,9 @@ library(jlme)
 jlme_setup()
 ```
 
-`{jlme}` uses `{JuliaConnectoR}` to connect to a Julia session. See
-[JuliaConnectoR package
-documentation](https://github.com/stefan-m-lenz/JuliaConnectoR) for
-troubleshooting related to Julia installation and configuration.
+`{jlme}` uses `{JuliaConnectoR}` to connect to a Julia session. Jump
+down to the [Julia troubleshooting](#julia-troubleshooting) section for
+issues related to Julia installation and configuration.
 
 ## Usage (table of contents)
 
@@ -43,7 +50,7 @@ troubleshooting related to Julia installation and configuration.
 - [Diagnose models](#diagnose-models)
 - [Assess uncertainty](#assess-uncertainty)
 - [Julia interoperability](#julia-interoperability)
-- [Tips](#tips)
+- [Tips and tricks](#tips-and-tricks)
 - [Julia troubleshooting](#julia-troubleshooting)
 - [Acknowledgments](#acknowledgments)
 
@@ -376,14 +383,121 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_Nfqh3i\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_l08mTS\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [ff71e718] MixedModels v4.26.0
 #>   [3eaba693] StatsModels v0.7.4
 #>   [9a3f8284] Random
 ```
 
-## Tips
+On setup, `{jlme}` loads [GLM](https://github.com/JuliaStats/GLM.jl),
+[StatsModels](https://github.com/JuliaStats/StatsModels.jl), and
+[MixedModels](https://github.com/JuliaStats/MixedModels.jl), as well as
+those specified in `jlme_setup(add)`. Other libraries such as `Random`
+(required for `parametricbootstrap()`) are loaded on an as-needed basis.
+
+### More with `{JuliaConnectoR}`
+
+While `{jlme}` users will typically not need to interact with
+`{JuliaConnectoR}` directly, it may be useful for extending `{jlme}`
+features with other packages in the Julia modelling ecosystem. A simple
+way to do that is to use `juliaImport()`, which creates makeshift
+bindings to Julia libraries.
+
+For example, to replicate a workflow using
+[`Effects.empairs()`](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/)
+for post-hoc pairwise comparisons:
+
+``` r
+# New model: 2 (M/F) by 3 (curse/scold/shout) factorial
+jmod2 <- jlmer(
+  r2 ~ Gender * btype + (1 | id),
+  data = lme4::VerbAgg,
+  family = "binomial"
+)
+jmod2
+#> <Julia object of type GeneralizedLinearMixedModel>
+#> 
+#> r2 ~ 1 + Gender + btype + Gender & btype + (1 | id)
+#> 
+#> Variance components:
+#>       Column   VarianceStd.Dev.
+#> id (Intercept)  1.52160 1.23353
+#> ─────────────────────────────────────────────────────────────────
+#>                               Coef.  Std. Error       z  Pr(>|z|)
+#> ─────────────────────────────────────────────────────────────────
+#> (Intercept)                0.738396   0.0956957    7.72    <1e-13
+#> Gender: M                  0.404282   0.201612     2.01    0.0449
+#> btype: scold              -1.01214    0.0742669  -13.63    <1e-41
+#> btype: shout              -1.77376    0.0782721  -22.66    <1e-99
+#> Gender: M & btype: scold   0.130832   0.156315     0.84    0.4026
+#> Gender: M & btype: shout  -0.533658   0.168832    -3.16    0.0016
+#> ─────────────────────────────────────────────────────────────────
+```
+
+``` r
+library(JuliaConnectoR)
+# First calls to importing libraries will take a minute
+Effects <- juliaImport("Effects")
+# Call `Effects.empairs()` using R syntax `Effects$empairs()`
+pairwise <- Effects$empairs(jmod2, dof = glance(jmod2)$df.residual)
+pairwise
+#> <Julia object of type DataFrames.DataFrame>
+#> 15×7 DataFrame
+#>  Row │ Gender  btype          r2: Y      err       dof    t          Pr(>|t|)  ⋯
+#>      │ String  String         Float64    Float64   Int64  Float64    Float64   ⋯
+#> ─────┼──────────────────────────────────────────────────────────────────────────
+#>    1 │ F > M   curse          -0.404282  0.201612   7577  -2.00524   0.0449725 ⋯
+#>    2 │ F       curse > scold   1.01214   0.13461    7577   7.51901   6.15243e-
+#>    3 │ F > M   curse > scold   0.477022  0.196994   7577   2.4215    0.0154799
+#>    4 │ F       curse > shout   1.77376   0.136284   7577  13.0152    2.57693e-
+#>    5 │ F > M   curse > shout   1.90314   0.202352   7577   9.4051    6.75459e- ⋯
+#>    6 │ M > F   curse > scold   1.41642   0.201127   7577   7.0424    2.05522e-
+#>    7 │ M       curse > scold   0.881304  0.247263   7577   3.56424   0.0003671
+#>    8 │ M > F   curse > shout   2.17805   0.202251   7577  10.769     7.53779e-
+#>    9 │ M       curse > shout   2.30742   0.251552   7577   9.17273   5.84715e- ⋯
+#>   10 │ F > M   scold          -0.535114  0.196498   7577  -2.72326   0.0064789
+#>   11 │ F       scold > shout   0.761627  0.135565   7577   5.61817   1.99834e-
+#>   12 │ F > M   scold > shout   0.891002  0.201868   7577   4.41378   1.02988e-
+#>   13 │ M > F   scold > shout   1.29674   0.197648   7577   6.56086   5.70179e- ⋯
+#>   14 │ M       scold > shout   1.42612   0.247866   7577   5.75357   9.07797e-
+#>   15 │ F > M   shout           0.129376  0.202988   7577   0.637355  0.523913
+#>                                                                 1 column omitted
+```
+
+Note that `DataFrame.DataFrame` objects such as the one above can be
+collected into an R data frame using `as.data.frame()`. This lets you,
+for example, apply p-value corrections using R’s `p.adjust()`, though
+the [option to do
+that](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/#Multiple-Comparisons-Correction)
+exists in Julia as well.
+
+``` r
+pairwise_df <- as.data.frame(pairwise)
+cbind(
+  pairwise_df[, 1:2],
+  round(pairwise_df[, 3:4], 2),
+  pvalue = format.pval(p.adjust(pairwise_df[, 7], "bonferroni"), 1)
+)
+#>    Gender         btype r2..Y  err pvalue
+#> 1   F > M         curse -0.40 0.20  0.675
+#> 2       F curse > scold  1.01 0.13  9e-13
+#> 3   F > M curse > scold  0.48 0.20  0.232
+#> 4       F curse > shout  1.77 0.14 <2e-16
+#> 5   F > M curse > shout  1.90 0.20 <2e-16
+#> 6   M > F curse > scold  1.42 0.20  3e-11
+#> 7       M curse > scold  0.88 0.25  0.006
+#> 8   M > F curse > shout  2.18 0.20 <2e-16
+#> 9       M curse > shout  2.31 0.25 <2e-16
+#> 10  F > M         scold -0.54 0.20  0.097
+#> 11      F scold > shout  0.76 0.14  3e-07
+#> 12  F > M scold > shout  0.89 0.20  2e-04
+#> 13  M > F scold > shout  1.30 0.20  9e-10
+#> 14      M scold > shout  1.43 0.25  1e-07
+#> 15  F > M         shout  0.13 0.20  1.000
+```
+
+## Tips and tricks
 
 [↑Back to table of contents](#usage-table-of-contents)
 
@@ -407,8 +521,8 @@ print(jmod, format = "markdown")
 
 ### Data type conversion
 
-Be sure to pass integers to functions that expect Integer type, (e.g.,
-the `MixedModels.parametricbootstrap()` example above):
+Be sure to pass integers (vs. doubles) to Julia functions that expect
+Integer type, (e.g., the `parametricbootstrap()` example above):
 
 ``` r
 jl_put(1)
@@ -432,7 +546,7 @@ first).
 ``` r
 # Not run
 jlme_setup(add = "MKL", restart = TRUE)
-jlme_status() # Should see MKL loaded here
+jlme_status() # Should now see MKL loaded here
 ```
 
 ### Performance (data transfer)
