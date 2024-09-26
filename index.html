@@ -135,7 +135,7 @@
 <div class="section level3">
 <h3 id="mixed-effects-models">Mixed effects models<a class="anchor" aria-label="anchor" href="#mixed-effects-models"></a>
 </h3>
-<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code>lmer()</code>/<code>glmer()</code> syntax:</p>
+<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer()</a></code>/<code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer()</a></code> syntax:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)</span></span>
 <span><span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span>, REML <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -370,7 +370,7 @@
 <span><span class="co">#&gt;   LIBM: libopenlibm</span></span>
 <span><span class="co">#&gt;   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)</span></span>
 <span><span class="co">#&gt; Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)</span></span>
-<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_l08mTS\Project.toml`</span></span>
+<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_ZtYVO3\Project.toml`</span></span>
 <span><span class="co">#&gt;   [38e38edf] GLM v1.9.0</span></span>
 <span><span class="co">#&gt;   [ff71e718] MixedModels v4.26.0</span></span>
 <span><span class="co">#&gt;   [3eaba693] StatsModels v0.7.4</span></span>
@@ -382,7 +382,7 @@
 <a class="anchor" aria-label="anchor" href="#more-with-juliaconnector"></a>
 </h3>
 <p>While <a href="https://yjunechoe.github.io/jlme/">jlme</a> users will typically not need to interact with <code>{JuliaConnectoR}</code> directly, it may be useful for extending <a href="https://yjunechoe.github.io/jlme/">jlme</a> features with other packages in the Julia modelling ecosystem. A simple way to do that is to use <code><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaImport.html" class="external-link">juliaImport()</a></code>, which creates makeshift bindings to Julia libraries.</p>
-<p>For example, to replicate a workflow using <a href="https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/" class="external-link"><code>Effects.empairs()</code></a> for post-hoc pairwise comparisons:</p>
+<p>For example, to replicate a workflow using <a href="https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/" class="external-link"><code>Effects.empairs</code></a> for post-hoc pairwise comparisons:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># New model: 2 (M/F) by 3 (curse/scold/shout) factorial</span></span>
 <span><span class="va">jmod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span></span>
@@ -412,7 +412,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">JuliaConnectoR</span><span class="op">)</span></span>
 <span><span class="co"># First calls to importing libraries will take a minute</span></span>
 <span><span class="va">Effects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaImport.html" class="external-link">juliaImport</a></span><span class="op">(</span><span class="st">"Effects"</span><span class="op">)</span></span>
-<span><span class="co"># Call `Effects.empairs()` using R syntax `Effects$empairs()`</span></span>
+<span><span class="co"># Call `Effects.empairs` using R syntax `Effects$empairs()`</span></span>
 <span><span class="va">pairwise</span> <span class="op">&lt;-</span> <span class="va">Effects</span><span class="op">$</span><span class="fu">empairs</span><span class="op">(</span><span class="va">jmod2</span>, dof <span class="op">=</span> <span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">jmod2</span><span class="op">)</span><span class="op">$</span><span class="va">df.residual</span><span class="op">)</span></span>
 <span><span class="va">pairwise</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type DataFrames.DataFrame&gt;</span></span>
@@ -436,7 +436,7 @@
 <span><span class="co">#&gt;   14 │ M       scold &gt; shout   1.42612   0.247866   7577   5.75357   9.07797e-</span></span>
 <span><span class="co">#&gt;   15 │ F &gt; M   shout           0.129376  0.202988   7577   0.637355  0.523913</span></span>
 <span><span class="co">#&gt;                                                                 1 column omitted</span></span></code></pre></div>
-<p>Note that <code>DataFrame.DataFrame</code> objects such as the one above can be collected into an R data frame using <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code>. This lets you, for example, apply p-value corrections using R’s <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust()</a></code>, though the <a href="https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/#Multiple-Comparisons-Correction" class="external-link">option to do that</a> exists in Julia as well.</p>
+<p>Note that Julia <code>DataFrame</code> objects such as the one above can be collected into an R data frame using <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code>. This lets you, for example, apply p-value corrections using the familiar <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust()</a></code> function in R, though the <a href="https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/#Multiple-Comparisons-Correction" class="external-link">option to do that</a> exists in Julia as well.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pairwise_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pairwise</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span>
@@ -535,7 +535,7 @@
 <div class="section level3">
 <h3 id="performance-data-transfer">Performance (data transfer)<a class="anchor" aria-label="anchor" href="#performance-data-transfer"></a>
 </h3>
-<p>In practice, most of the overhead will come from transferring the data from R to Julia. If you are looking to fit many models to the same data, you should first filter to keep only used columns and then use <code><a href="reference/jl-helpers.html">jl_data()</a></code> to send the data to Julia. The Julia data frame object can then be used to fit Julia models.</p>
+<p>In practice, most of the overhead will come from transferring the data from R to Julia. If you are looking to fit many models to the same data, you should first filter to keep only the columns you need and then use <code><a href="reference/jl-helpers.html">jl_data()</a></code> to send the data to Julia. The Julia data frame object can then be used to fit Julia models.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_r</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
 <span></span>
@@ -587,7 +587,7 @@
 <div class="section level3">
 <h3 id="locating-the-executable">Locating the executable<a class="anchor" aria-label="anchor" href="#locating-the-executable"></a>
 </h3>
-<p>The package requires that <a href="https://julialang.org/downloads/" class="external-link">Julia (version ≥ 1.8) is installed</a> and that the Julia executable is in the system search <code>PATH</code> or that the <code>JULIA_BINDIR</code> environment variable is set to the <code>/bin</code> directory of the Julia installation. The Julia version specified via the <code>JULIA_BINDIR</code> variable will take precedence over the one on the system <code>PATH</code>.</p>
+<p><a href="https://yjunechoe.github.io/jlme/">jlme</a> requires that <a href="https://julialang.org/downloads/" class="external-link">Julia (version ≥ 1.8) is installed</a> and that the Julia executable is in the system search <code>PATH</code> or that the <code>JULIA_BINDIR</code> environment variable is set to the <code>/bin</code> directory of the Julia installation. The Julia version specified via the <code>JULIA_BINDIR</code> variable will take precedence over the one on the system <code>PATH</code>.</p>
 <p>After you have installed Julia, execute the command <code>julia</code> on the command line. Ensure that this launches Julia.</p>
 <p>On <strong>Linux</strong> and <strong>Windows</strong>, the <code>JuliaConnectoR</code> package should now be able to use the Julia installation, as the Julia installation is on the <code>PATH</code>. There should be no need to set the <code>JULIA_BINDIR</code> environment variable. But if <code>JuliaConnectoR</code> still cannot find Julia, consult the instructions below.</p>
 <p>On <strong>Mac</strong>, Julia might not be on the <code>PATH</code> when using e.g. RStudio. In this case, you may need to manually set the <code>JULIA_BINDIR</code> variable. To get the proper value of the <code>JULIA_BINDIR</code> variable, execute <code>Sys.BINDIR</code> from Julia. Then, set the environment variable in R via <code>Sys.setenv("JULIA_BINDIR" = "/your/path/to/Julia/bin")</code> (or by editing the <code>.Renviron</code> file). Afterwards, <code>JuliaConnectoR</code> should be able to discover the specified Julia installation.</p>
@@ -605,7 +605,7 @@
 <p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
 <ul>
 <li><p>The <a href="https://github.com/stefan-m-lenz/JuliaConnectoR" class="external-link">JuliaConnectoR</a> R package for powering the R interface to Julia.</p></li>
-<li><p>The <a href="https://julialang.org/" class="external-link">Julia</a> packages <a href="https://github.com/JuliaStats/GLM.jl" class="external-link">GLM.jl</a> and <a href="https://github.com/JuliaStats/MixedModels.jl" class="external-link">MixedModels.jl</a> for fast implementations of (mixed effects) regression models.</p></li>
+<li><p>The <a href="https://julialang.org/" class="external-link">Julia</a> packages <a href="https://github.com/JuliaStats/GLM.jl" class="external-link">GLM.jl</a>, <a href="https://github.com/JuliaStats/StatsModels.jl" class="external-link">StatsModels</a>, and <a href="https://github.com/JuliaStats/MixedModels.jl" class="external-link">MixedModels.jl</a> for interfaces to and implementations of (mixed effects) regression models.</p></li>
 </ul>
 </div>
 </div>
