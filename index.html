@@ -135,7 +135,7 @@
 <div class="section level3">
 <h3 id="mixed-effects-models">Mixed effects models<a class="anchor" aria-label="anchor" href="#mixed-effects-models"></a>
 </h3>
-<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code>lmer()</code>/<code>glmer()</code> syntax:</p>
+<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer()</a></code>/<code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer()</a></code> syntax:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)</span></span>
 <span><span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span>, REML <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
