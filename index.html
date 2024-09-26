@@ -369,7 +369,7 @@
 <span><span class="co">#&gt;   LIBM: libopenlibm</span></span>
 <span><span class="co">#&gt;   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)</span></span>
 <span><span class="co">#&gt; Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)</span></span>
-<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_eBJS7X\Project.toml`</span></span>
+<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_Nfqh3i\Project.toml`</span></span>
 <span><span class="co">#&gt;   [38e38edf] GLM v1.9.0</span></span>
 <span><span class="co">#&gt;   [ff71e718] MixedModels v4.26.0</span></span>
 <span><span class="co">#&gt;   [3eaba693] StatsModels v0.7.4</span></span>
@@ -381,14 +381,58 @@
 </h2>
 <p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
 <div class="section level3">
+<h3 id="displaying-mixedmodels">Displaying MixedModels<a class="anchor" aria-label="anchor" href="#displaying-mixedmodels"></a>
+</h3>
+<p>MixedModels.jl supports various <a href="https://juliastats.org/MixedModels.jl/stable/mime" class="external-link">display formats</a> for mixed-effects models which are available in <a href="https://yjunechoe.github.io/jlme/">jlme</a> via the <code>format</code> argument of <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Rendered via {knitr} with chunk option `results="asis"`</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">jmod</span>, format <span class="op">=</span> <span class="st">"markdown"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th align="left"></th>
+<th align="right">Est.</th>
+<th align="right">SE</th>
+<th align="right">z</th>
+<th align="right">p</th>
+<th align="right">σ_Subject</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="left">(Intercept)</td>
+<td align="right">251.4051</td>
+<td align="right">6.8246</td>
+<td align="right">36.84</td>
+<td align="right">&lt;1e-99</td>
+<td align="right">24.7407</td>
+</tr>
+<tr>
+<td align="left">Days</td>
+<td align="right">10.4673</td>
+<td align="right">1.5458</td>
+<td align="right">6.77</td>
+<td align="right">&lt;1e-10</td>
+<td align="right">5.9221</td>
+</tr>
+<tr>
+<td align="left">Residual</td>
+<td align="right">25.5918</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
 <h3 id="data-type-conversion">Data type conversion<a class="anchor" aria-label="anchor" href="#data-type-conversion"></a>
 </h3>
 <p>Be sure to pass integers to functions that expect Integer type, (e.g., the <code>MixedModels.parametricbootstrap()</code> example above):</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_put</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type Float64&gt;</span></span>
 <span><span class="co">#&gt; 1.0</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_put</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type Int64&gt;</span></span>
 <span><span class="co">#&gt; 1</span></span></code></pre></div>
@@ -397,7 +441,7 @@
 <h3 id="performance-linear-algebra-backend">Performance (linear algebra backend)<a class="anchor" aria-label="anchor" href="#performance-linear-algebra-backend"></a>
 </h3>
 <p>Using <a href="https://github.com/JuliaLinearAlgebra/MKL.jl" class="external-link"><code>MKL.jl</code></a> or <a href="https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl" class="external-link"><code>AppleAccelerate.jl</code></a> may improve model fitting performance (but see the system requirements first).</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Not run</span></span>
 <span><span class="fu"><a href="reference/jlme_setup.html">jlme_setup</a></span><span class="op">(</span>add <span class="op">=</span> <span class="st">"MKL"</span>, restart <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/jlme_setup.html">jlme_status</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Should see MKL loaded here</span></span></code></pre></div>
@@ -406,7 +450,7 @@
 <h3 id="performance-data-transfer">Performance (data transfer)<a class="anchor" aria-label="anchor" href="#performance-data-transfer"></a>
 </h3>
 <p>In practice, most of the overhead will come from transferring the data from R to Julia. If you are looking to fit many models to the same data, you should first filter to keep only used columns and then use <code><a href="reference/jl-helpers.html">jl_data()</a></code> to send the data to Julia. The Julia data frame object can then be used to fit Julia models.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_r</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
 <span></span>
 <span><span class="co"># Keep only columns you need + convert with `jl_data()`</span></span>
@@ -424,7 +468,7 @@
 <span><span class="co">#&gt; am            7.24494     1.76442   4.11    &lt;1e-04    3.78674    10.7031</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span></code></pre></div>
 <p>If your data has custom contrasts, you can use <code><a href="reference/jl-helpers.html">jl_contrasts()</a></code> to also convert that to Julia first before passing it to the model.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">contrasts</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/contrast.html" class="external-link">contr.sum</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
