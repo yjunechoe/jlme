@@ -53,14 +53,15 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Julia (mixed-effects) regression modelling from R</p>
+<p>Julia (mixed-effects) regression modelling from R. Powered by the <a href="https://github.com/stefan-m-lenz/JuliaConnectoR" class="external-link"><code>{JuliaConnectoR}</code></a> R package and Julia libraries <a href="https://github.com/JuliaStats/GLM.jl" class="external-link">GLM</a>, <a href="https://github.com/JuliaStats/StatsModels.jl" class="external-link">StatsModels</a>, and <a href="https://github.com/JuliaStats/MixedModels.jl" class="external-link">MixedModels</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of jlme from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the development version of <a href="https://yjunechoe.github.io/jlme/">jlme</a> from <a href="https://github.com/yjunechoe/jlme" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"yjunechoe/jlme"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"yjunechoe/jlme"</span><span class="op">)</span></span></code></pre></div>
+<p><a href="https://yjunechoe.github.io/jlme/">jlme</a> is experimental: see <a href="https://github.com/yjunechoe/jlme/blob/main/NEWS.md#jlme-development-version" class="external-link">NEWS.md</a> for active updates.</p>
 </div>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
@@ -68,7 +69,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yjunechoe.github.io/jlme/">jlme</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/jlme_setup.html">jlme_setup</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><a href="https://yjunechoe.github.io/jlme/">jlme</a> uses <code>{JuliaConnectoR}</code> to connect to a Julia session. See <a href="https://github.com/stefan-m-lenz/JuliaConnectoR" class="external-link">JuliaConnectoR package documentation</a> for troubleshooting related to Julia installation and configuration.</p>
+<p><a href="https://yjunechoe.github.io/jlme/">jlme</a> uses <code>{JuliaConnectoR}</code> to connect to a Julia session. Jump down to the <a href="#julia-troubleshooting">Julia troubleshooting</a> section for issues related to Julia installation and configuration.</p>
 </div>
 <div class="section level2">
 <h2 id="usage-table-of-contents">Usage (table of contents)<a class="anchor" aria-label="anchor" href="#usage-table-of-contents"></a>
@@ -78,7 +79,7 @@
 <li><a href="#diagnose-models">Diagnose models</a></li>
 <li><a href="#assess-uncertainty">Assess uncertainty</a></li>
 <li><a href="#julia-interoperability">Julia interoperability</a></li>
-<li><a href="#tips">Tips</a></li>
+<li><a href="#tips-and-tricks">Tips and tricks</a></li>
 <li><a href="#julia-troubleshooting">Julia troubleshooting</a></li>
 <li><a href="#acknowledgments">Acknowledgments</a></li>
 </ul>
@@ -369,22 +370,107 @@
 <span><span class="co">#&gt;   LIBM: libopenlibm</span></span>
 <span><span class="co">#&gt;   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)</span></span>
 <span><span class="co">#&gt; Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)</span></span>
-<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_Nfqh3i\Project.toml`</span></span>
+<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_l08mTS\Project.toml`</span></span>
 <span><span class="co">#&gt;   [38e38edf] GLM v1.9.0</span></span>
 <span><span class="co">#&gt;   [ff71e718] MixedModels v4.26.0</span></span>
 <span><span class="co">#&gt;   [3eaba693] StatsModels v0.7.4</span></span>
 <span><span class="co">#&gt;   [9a3f8284] Random</span></span></code></pre></div>
+<p>On setup, <a href="https://yjunechoe.github.io/jlme/">jlme</a> loads <a href="https://github.com/JuliaStats/GLM.jl" class="external-link">GLM</a>, <a href="https://github.com/JuliaStats/StatsModels.jl" class="external-link">StatsModels</a>, and <a href="https://github.com/JuliaStats/MixedModels.jl" class="external-link">MixedModels</a>, as well as those specified in <code>jlme_setup(add)</code>. Other libraries such as <code>Random</code> (required for <code><a href="reference/parametricbootstrap.html">parametricbootstrap()</a></code>) are loaded on an as-needed basis.</p>
+</div>
+<div class="section level3">
+<h3 id="more-with-juliaconnector">More with <code>{JuliaConnectoR}</code>
+<a class="anchor" aria-label="anchor" href="#more-with-juliaconnector"></a>
+</h3>
+<p>While <a href="https://yjunechoe.github.io/jlme/">jlme</a> users will typically not need to interact with <code>{JuliaConnectoR}</code> directly, it may be useful for extending <a href="https://yjunechoe.github.io/jlme/">jlme</a> features with other packages in the Julia modelling ecosystem. A simple way to do that is to use <code><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaImport.html" class="external-link">juliaImport()</a></code>, which creates makeshift bindings to Julia libraries.</p>
+<p>For example, to replicate a workflow using <a href="https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/" class="external-link"><code>Effects.empairs()</code></a> for post-hoc pairwise comparisons:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># New model: 2 (M/F) by 3 (curse/scold/shout) factorial</span></span>
+<span><span class="va">jmod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span></span>
+<span>  <span class="va">r2</span> <span class="op">~</span> <span class="va">Gender</span> <span class="op">*</span> <span class="va">btype</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/VerbAgg.html" class="external-link">VerbAgg</a></span>,</span>
+<span>  family <span class="op">=</span> <span class="st">"binomial"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">jmod2</span></span>
+<span><span class="co">#&gt; &lt;Julia object of type GeneralizedLinearMixedModel&gt;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; r2 ~ 1 + Gender + btype + Gender &amp; btype + (1 | id)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variance components:</span></span>
+<span><span class="co">#&gt;       Column   VarianceStd.Dev.</span></span>
+<span><span class="co">#&gt; id (Intercept)  1.52160 1.23353</span></span>
+<span><span class="co">#&gt; ─────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;                               Coef.  Std. Error       z  Pr(&gt;|z|)</span></span>
+<span><span class="co">#&gt; ─────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; (Intercept)                0.738396   0.0956957    7.72    &lt;1e-13</span></span>
+<span><span class="co">#&gt; Gender: M                  0.404282   0.201612     2.01    0.0449</span></span>
+<span><span class="co">#&gt; btype: scold              -1.01214    0.0742669  -13.63    &lt;1e-41</span></span>
+<span><span class="co">#&gt; btype: shout              -1.77376    0.0782721  -22.66    &lt;1e-99</span></span>
+<span><span class="co">#&gt; Gender: M &amp; btype: scold   0.130832   0.156315     0.84    0.4026</span></span>
+<span><span class="co">#&gt; Gender: M &amp; btype: shout  -0.533658   0.168832    -3.16    0.0016</span></span>
+<span><span class="co">#&gt; ─────────────────────────────────────────────────────────────────</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">JuliaConnectoR</span><span class="op">)</span></span>
+<span><span class="co"># First calls to importing libraries will take a minute</span></span>
+<span><span class="va">Effects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaImport.html" class="external-link">juliaImport</a></span><span class="op">(</span><span class="st">"Effects"</span><span class="op">)</span></span>
+<span><span class="co"># Call `Effects.empairs()` using R syntax `Effects$empairs()`</span></span>
+<span><span class="va">pairwise</span> <span class="op">&lt;-</span> <span class="va">Effects</span><span class="op">$</span><span class="fu">empairs</span><span class="op">(</span><span class="va">jmod2</span>, dof <span class="op">=</span> <span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">jmod2</span><span class="op">)</span><span class="op">$</span><span class="va">df.residual</span><span class="op">)</span></span>
+<span><span class="va">pairwise</span></span>
+<span><span class="co">#&gt; &lt;Julia object of type DataFrames.DataFrame&gt;</span></span>
+<span><span class="co">#&gt; 15×7 DataFrame</span></span>
+<span><span class="co">#&gt;  Row │ Gender  btype          r2: Y      err       dof    t          Pr(&gt;|t|)  ⋯</span></span>
+<span><span class="co">#&gt;      │ String  String         Float64    Float64   Int64  Float64    Float64   ⋯</span></span>
+<span><span class="co">#&gt; ─────┼──────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;    1 │ F &gt; M   curse          -0.404282  0.201612   7577  -2.00524   0.0449725 ⋯</span></span>
+<span><span class="co">#&gt;    2 │ F       curse &gt; scold   1.01214   0.13461    7577   7.51901   6.15243e-</span></span>
+<span><span class="co">#&gt;    3 │ F &gt; M   curse &gt; scold   0.477022  0.196994   7577   2.4215    0.0154799</span></span>
+<span><span class="co">#&gt;    4 │ F       curse &gt; shout   1.77376   0.136284   7577  13.0152    2.57693e-</span></span>
+<span><span class="co">#&gt;    5 │ F &gt; M   curse &gt; shout   1.90314   0.202352   7577   9.4051    6.75459e- ⋯</span></span>
+<span><span class="co">#&gt;    6 │ M &gt; F   curse &gt; scold   1.41642   0.201127   7577   7.0424    2.05522e-</span></span>
+<span><span class="co">#&gt;    7 │ M       curse &gt; scold   0.881304  0.247263   7577   3.56424   0.0003671</span></span>
+<span><span class="co">#&gt;    8 │ M &gt; F   curse &gt; shout   2.17805   0.202251   7577  10.769     7.53779e-</span></span>
+<span><span class="co">#&gt;    9 │ M       curse &gt; shout   2.30742   0.251552   7577   9.17273   5.84715e- ⋯</span></span>
+<span><span class="co">#&gt;   10 │ F &gt; M   scold          -0.535114  0.196498   7577  -2.72326   0.0064789</span></span>
+<span><span class="co">#&gt;   11 │ F       scold &gt; shout   0.761627  0.135565   7577   5.61817   1.99834e-</span></span>
+<span><span class="co">#&gt;   12 │ F &gt; M   scold &gt; shout   0.891002  0.201868   7577   4.41378   1.02988e-</span></span>
+<span><span class="co">#&gt;   13 │ M &gt; F   scold &gt; shout   1.29674   0.197648   7577   6.56086   5.70179e- ⋯</span></span>
+<span><span class="co">#&gt;   14 │ M       scold &gt; shout   1.42612   0.247866   7577   5.75357   9.07797e-</span></span>
+<span><span class="co">#&gt;   15 │ F &gt; M   shout           0.129376  0.202988   7577   0.637355  0.523913</span></span>
+<span><span class="co">#&gt;                                                                 1 column omitted</span></span></code></pre></div>
+<p>Note that <code>DataFrame.DataFrame</code> objects such as the one above can be collected into an R data frame using <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code>. This lets you, for example, apply p-value corrections using R’s <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust()</a></code>, though the <a href="https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/#Multiple-Comparisons-Correction" class="external-link">option to do that</a> exists in Julia as well.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pairwise_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pairwise</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span>
+<span>  <span class="va">pairwise_df</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pairwise_df</span><span class="op">[</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  pvalue <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/format.pval.html" class="external-link">format.pval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">pairwise_df</span><span class="op">[</span>, <span class="fl">7</span><span class="op">]</span>, <span class="st">"bonferroni"</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt;    Gender         btype r2..Y  err pvalue</span></span>
+<span><span class="co">#&gt; 1   F &gt; M         curse -0.40 0.20  0.675</span></span>
+<span><span class="co">#&gt; 2       F curse &gt; scold  1.01 0.13  9e-13</span></span>
+<span><span class="co">#&gt; 3   F &gt; M curse &gt; scold  0.48 0.20  0.232</span></span>
+<span><span class="co">#&gt; 4       F curse &gt; shout  1.77 0.14 &lt;2e-16</span></span>
+<span><span class="co">#&gt; 5   F &gt; M curse &gt; shout  1.90 0.20 &lt;2e-16</span></span>
+<span><span class="co">#&gt; 6   M &gt; F curse &gt; scold  1.42 0.20  3e-11</span></span>
+<span><span class="co">#&gt; 7       M curse &gt; scold  0.88 0.25  0.006</span></span>
+<span><span class="co">#&gt; 8   M &gt; F curse &gt; shout  2.18 0.20 &lt;2e-16</span></span>
+<span><span class="co">#&gt; 9       M curse &gt; shout  2.31 0.25 &lt;2e-16</span></span>
+<span><span class="co">#&gt; 10  F &gt; M         scold -0.54 0.20  0.097</span></span>
+<span><span class="co">#&gt; 11      F scold &gt; shout  0.76 0.14  3e-07</span></span>
+<span><span class="co">#&gt; 12  F &gt; M scold &gt; shout  0.89 0.20  2e-04</span></span>
+<span><span class="co">#&gt; 13  M &gt; F scold &gt; shout  1.30 0.20  9e-10</span></span>
+<span><span class="co">#&gt; 14      M scold &gt; shout  1.43 0.25  1e-07</span></span>
+<span><span class="co">#&gt; 15  F &gt; M         shout  0.13 0.20  1.000</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="tips">Tips<a class="anchor" aria-label="anchor" href="#tips"></a>
+<h2 id="tips-and-tricks">Tips and tricks<a class="anchor" aria-label="anchor" href="#tips-and-tricks"></a>
 </h2>
 <p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
 <div class="section level3">
 <h3 id="displaying-mixedmodels">Displaying MixedModels<a class="anchor" aria-label="anchor" href="#displaying-mixedmodels"></a>
 </h3>
 <p>MixedModels.jl supports various <a href="https://juliastats.org/MixedModels.jl/stable/mime" class="external-link">display formats</a> for mixed-effects models which are available in <a href="https://yjunechoe.github.io/jlme/">jlme</a> via the <code>format</code> argument of <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Rendered via {knitr} with chunk option `results="asis"`</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">jmod</span>, format <span class="op">=</span> <span class="st">"markdown"</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -427,12 +513,12 @@
 <div class="section level3">
 <h3 id="data-type-conversion">Data type conversion<a class="anchor" aria-label="anchor" href="#data-type-conversion"></a>
 </h3>
-<p>Be sure to pass integers to functions that expect Integer type, (e.g., the <code>MixedModels.parametricbootstrap()</code> example above):</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<p>Be sure to pass integers (vs. doubles) to Julia functions that expect Integer type, (e.g., the <code><a href="reference/parametricbootstrap.html">parametricbootstrap()</a></code> example above):</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_put</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type Float64&gt;</span></span>
 <span><span class="co">#&gt; 1.0</span></span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_put</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type Int64&gt;</span></span>
 <span><span class="co">#&gt; 1</span></span></code></pre></div>
@@ -441,16 +527,16 @@
 <h3 id="performance-linear-algebra-backend">Performance (linear algebra backend)<a class="anchor" aria-label="anchor" href="#performance-linear-algebra-backend"></a>
 </h3>
 <p>Using <a href="https://github.com/JuliaLinearAlgebra/MKL.jl" class="external-link"><code>MKL.jl</code></a> or <a href="https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl" class="external-link"><code>AppleAccelerate.jl</code></a> may improve model fitting performance (but see the system requirements first).</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Not run</span></span>
 <span><span class="fu"><a href="reference/jlme_setup.html">jlme_setup</a></span><span class="op">(</span>add <span class="op">=</span> <span class="st">"MKL"</span>, restart <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/jlme_setup.html">jlme_status</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Should see MKL loaded here</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/jlme_setup.html">jlme_status</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Should now see MKL loaded here</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="performance-data-transfer">Performance (data transfer)<a class="anchor" aria-label="anchor" href="#performance-data-transfer"></a>
 </h3>
 <p>In practice, most of the overhead will come from transferring the data from R to Julia. If you are looking to fit many models to the same data, you should first filter to keep only used columns and then use <code><a href="reference/jl-helpers.html">jl_data()</a></code> to send the data to Julia. The Julia data frame object can then be used to fit Julia models.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_r</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
 <span></span>
 <span><span class="co"># Keep only columns you need + convert with `jl_data()`</span></span>
@@ -468,7 +554,7 @@
 <span><span class="co">#&gt; am            7.24494     1.76442   4.11    &lt;1e-04    3.78674    10.7031</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span></code></pre></div>
 <p>If your data has custom contrasts, you can use <code><a href="reference/jl-helpers.html">jl_contrasts()</a></code> to also convert that to Julia first before passing it to the model.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">contrasts</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/contrast.html" class="external-link">contr.sum</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
