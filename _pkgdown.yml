@@ -50,6 +50,7 @@ reference:
 - title: Julia interop
   desc: >
     Utilities for interoperability between R and Julia
+  contents:
   - jl-helpers-utils
   - jl-helpers-model
 
