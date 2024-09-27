@@ -98,9 +98,9 @@
 <span><span class="fu"><a href="reference/jlm.html">jlm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type StatsModels.TableRegressionModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mpg ~ 1 + hp </span></span>
+<span><span class="co">#&gt; mpg ~ 1 + hp</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  ────────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                   Coef.  Std. Error      z  Pr(&gt;|z|)   Lower 95%   Upper 95%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; (Intercept)  30.0989      1.63392    18.42    &lt;1e-75  26.8964     33.3013</span></span>
@@ -121,9 +121,9 @@
 <span><span class="fu"><a href="reference/jlm.html">jlm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">am_sum</span> <span class="op">+</span> <span class="va">cyl_helm</span>, <span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type StatsModels.TableRegressionModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mpg ~ 1 + am_sum + cyl_helm </span></span>
+<span><span class="co">#&gt; mpg ~ 1 + am_sum + cyl_helm</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  ───────────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ───────────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                      Coef.  Std. Error      z  Pr(&gt;|z|)  Lower 95%    Upper 95%</span></span>
 <span><span class="co">#&gt; ───────────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; (Intercept)       20.6739     0.572633  36.10    &lt;1e-99   19.5516   21.7963</span></span>
@@ -135,7 +135,7 @@
 <div class="section level3">
 <h3 id="mixed-effects-models">Mixed effects models<a class="anchor" aria-label="anchor" href="#mixed-effects-models"></a>
 </h3>
-<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code>lmer()</code>/<code>glmer()</code> syntax:</p>
+<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer()</a></code>/<code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer()</a></code> syntax:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)</span></span>
 <span><span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span>, REML <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -338,7 +338,7 @@
 <h2 id="julia-interoperability">Julia interoperability<a class="anchor" aria-label="anchor" href="#julia-interoperability"></a>
 </h2>
 <p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
-<p>Functions <code><a href="reference/jl-helpers.html">jl_get()</a></code> and <code><a href="reference/jl-helpers.html">jl_put()</a></code> transfers data between R and Julia.</p>
+<p>Functions <code><a href="reference/jl-helpers-utils.html">jl_get()</a></code> and <code><a href="reference/jl-helpers-utils.html">jl_put()</a></code> transfers data between R and Julia.</p>
 <div class="section level3">
 <h3 id="bring-julia-objects-into-r">Bring Julia objects into R<a class="anchor" aria-label="anchor" href="#bring-julia-objects-into-r"></a>
 </h3>
@@ -348,12 +348,12 @@
 <span><span class="co">#&gt; &lt;Julia object of type @NamedTuple{Subject::Vector{Float64}}&gt;</span></span>
 <span><span class="co">#&gt; (Subject = [0.5406660352881864, 1.0],)</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_get</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">$</span><span class="va">rePCA</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers-utils.html">jl_get</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">$</span><span class="va">rePCA</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $Subject</span></span>
 <span><span class="co">#&gt; [1] 0.540666 1.000000</span></span></code></pre></div>
 <p>Example 2: extract fitlog and plot</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fitlog</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers.html">jl_get</a></span><span class="op">(</span><span class="fu"><a href="reference/jl-helpers.html">jl</a></span><span class="op">(</span><span class="st">"refit!(x; thin=1)"</span>, x <span class="op">=</span> <span class="va">jmod</span><span class="op">)</span><span class="op">$</span><span class="va">optsum</span><span class="op">$</span><span class="va">fitlog</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fitlog</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers-utils.html">jl_get</a></span><span class="op">(</span><span class="fu"><a href="reference/jl-helpers-utils.html">jl</a></span><span class="op">(</span><span class="st">"refit!(x; thin=1)"</span>, x <span class="op">=</span> <span class="va">jmod</span><span class="op">)</span><span class="op">$</span><span class="va">optsum</span><span class="op">$</span><span class="va">fitlog</span><span class="op">)</span></span>
 <span><span class="va">thetas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">fitlog</span>, <span class="va">`[[`</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">thetas</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
@@ -386,7 +386,7 @@
 <span><span class="co">#&gt;   LIBM: libopenlibm</span></span>
 <span><span class="co">#&gt;   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)</span></span>
 <span><span class="co">#&gt; Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)</span></span>
-<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_pYN2Tx\Project.toml`</span></span>
+<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_GU3Fv7\Project.toml`</span></span>
 <span><span class="co">#&gt;   [38e38edf] GLM v1.9.0</span></span>
 <span><span class="co">#&gt;   [ff71e718] MixedModels v4.26.0</span></span>
 <span><span class="co">#&gt;   [3eaba693] StatsModels v0.7.4</span></span>
@@ -541,11 +541,11 @@
 </h3>
 <p>Be sure to pass integers (vs. doubles) to Julia functions that expect Integer type, (e.g., the <code><a href="reference/parametricbootstrap.html">parametricbootstrap()</a></code> example above):</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_put</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers-utils.html">jl_put</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type Float64&gt;</span></span>
 <span><span class="co">#&gt; 1.0</span></span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_put</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers-utils.html">jl_put</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type Int64&gt;</span></span>
 <span><span class="co">#&gt; 1</span></span></code></pre></div>
 </div>
@@ -561,38 +561,38 @@
 <div class="section level3">
 <h3 id="performance-data-transfer">Performance (data transfer)<a class="anchor" aria-label="anchor" href="#performance-data-transfer"></a>
 </h3>
-<p>In practice, most of the overhead will come from transferring the data from R to Julia. If you are looking to fit many models to the same data, you should first filter to keep only the columns you need and then use <code><a href="reference/jl-helpers.html">jl_data()</a></code> to send the data to Julia. The Julia data frame object can then be used to fit Julia models.</p>
+<p>In practice, most of the overhead will come from transferring the data from R to Julia. If you are looking to fit many models to the same data, you should first filter to keep only the columns you need and then use <code><a href="reference/jl-helpers-model.html">jl_data()</a></code> to send the data to Julia. The Julia data frame object can then be used to fit Julia models.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_r</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
 <span></span>
 <span><span class="co"># Keep only columns you need + convert with `jl_data()`</span></span>
-<span><span class="va">data_julia</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers.html">jl_data</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"am"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">data_julia</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers-model.html">jl_data</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"am"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/jlm.html">jlm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">am</span>, <span class="va">data_julia</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type StatsModels.TableRegressionModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mpg ~ 1 + am </span></span>
+<span><span class="co">#&gt; mpg ~ 1 + am</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  ────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                 Coef.  Std. Error      z  Pr(&gt;|z|)  Lower 95%  Upper 95%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; (Intercept)  17.1474      1.1246   15.25    &lt;1e-51   14.9432     19.3515</span></span>
 <span><span class="co">#&gt; am            7.24494     1.76442   4.11    &lt;1e-04    3.78674    10.7031</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span></code></pre></div>
-<p>If your data has custom contrasts, you can use <code><a href="reference/jl-helpers.html">jl_contrasts()</a></code> to also convert that to Julia first before passing it to the model.</p>
+<p>If your data has custom contrasts, you can use <code><a href="reference/jl-helpers-model.html">jl_contrasts()</a></code> to also convert that to Julia first before passing it to the model.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">contrasts</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">$</span><span class="va">am</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/contrast.html" class="external-link">contr.sum</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">data_julia</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers.html">jl_data</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"am"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">contrasts_julia</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers.html">jl_contrasts</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">)</span></span>
+<span><span class="va">data_julia</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers-model.html">jl_data</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"am"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">contrasts_julia</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers-model.html">jl_contrasts</a></span><span class="op">(</span><span class="va">data_r</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/jlm.html">jlm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">am</span>, <span class="va">data_julia</span>, contrasts <span class="op">=</span> <span class="va">contrasts_julia</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type StatsModels.TableRegressionModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mpg ~ 1 + am </span></span>
+<span><span class="co">#&gt; mpg ~ 1 + am</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  ────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                 Coef.  Std. Error      z  Pr(&gt;|z|)  Lower 95%  Upper 95%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; (Intercept)  20.7698     0.882211  23.54    &lt;1e-99   19.0407    22.4989</span></span>
