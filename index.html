@@ -98,9 +98,9 @@
 <span><span class="fu"><a href="reference/jlm.html">jlm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type StatsModels.TableRegressionModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mpg ~ 1 + hp</span></span>
+<span><span class="co">#&gt; mpg ~ 1 + hp </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;  ────────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                   Coef.  Std. Error      z  Pr(&gt;|z|)   Lower 95%   Upper 95%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; (Intercept)  30.0989      1.63392    18.42    &lt;1e-75  26.8964     33.3013</span></span>
@@ -121,9 +121,9 @@
 <span><span class="fu"><a href="reference/jlm.html">jlm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">am_sum</span> <span class="op">+</span> <span class="va">cyl_helm</span>, <span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type StatsModels.TableRegressionModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mpg ~ 1 + am_sum + cyl_helm</span></span>
+<span><span class="co">#&gt; mpg ~ 1 + am_sum + cyl_helm </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ───────────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;  ───────────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                      Coef.  Std. Error      z  Pr(&gt;|z|)  Lower 95%    Upper 95%</span></span>
 <span><span class="co">#&gt; ───────────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; (Intercept)       20.6739     0.572633  36.10    &lt;1e-99   19.5516   21.7963</span></span>
@@ -135,19 +135,24 @@
 <div class="section level3">
 <h3 id="mixed-effects-models">Mixed effects models<a class="anchor" aria-label="anchor" href="#mixed-effects-models"></a>
 </h3>
-<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer()</a></code>/<code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer()</a></code> syntax:</p>
+<p><code><a href="reference/jlm.html">jlmer()</a></code> with <code>lmer()</code>/<code>glmer()</code> syntax:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)</span></span>
+<code class="sourceCode R"><span><span class="co"># lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)</span></span>
 <span><span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span>, REML <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type LinearMixedModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Reaction ~ 1 + Days + (1 + Days | Subject)</span></span>
+<span><span class="co">#&gt; Linear mixed model fit by REML</span></span>
+<span><span class="co">#&gt;  Reaction ~ 1 + Days + (1 + Days | Subject)</span></span>
+<span><span class="co">#&gt;  REML criterion at convergence: 1743.6282719599653</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variance components:</span></span>
 <span><span class="co">#&gt;             Column    Variance Std.Dev.   Corr.</span></span>
 <span><span class="co">#&gt; Subject  (Intercept)  612.10016 24.74066</span></span>
 <span><span class="co">#&gt;          Days          35.07171  5.92214 +0.07</span></span>
 <span><span class="co">#&gt; Residual              654.94001 25.59180</span></span>
+<span><span class="co">#&gt;  Number of obs: 180; levels of grouping factors: 18</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Fixed-effects parameters:</span></span>
 <span><span class="co">#&gt; ──────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                 Coef.  Std. Error      z  Pr(&gt;|z|)</span></span>
 <span><span class="co">#&gt; ──────────────────────────────────────────────────</span></span>
@@ -155,15 +160,25 @@
 <span><span class="co">#&gt; Days          10.4673     1.54579   6.77    &lt;1e-10</span></span>
 <span><span class="co">#&gt; ──────────────────────────────────────────────────</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># lme4::glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")</span></span>
+<code class="sourceCode R"><span><span class="co"># lme4::glmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")</span></span>
 <span><span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">r2</span> <span class="op">~</span> <span class="va">Anger</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/VerbAgg.html" class="external-link">VerbAgg</a></span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type GeneralizedLinearMixedModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; r2 ~ 1 + Anger + Gender + (1 | id)</span></span>
+<span><span class="co">#&gt; Generalized Linear Mixed Model fit by maximum likelihood (nAGQ = 1)</span></span>
+<span><span class="co">#&gt;   r2 ~ 1 + Anger + Gender + (1 | id)</span></span>
+<span><span class="co">#&gt;   Distribution: Bernoulli{Float64}</span></span>
+<span><span class="co">#&gt;   Link: LogitLink()</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    logLik    deviance     AIC       AICc        BIC    </span></span>
+<span><span class="co">#&gt;  -4748.2525  9496.5050  9504.5050  9504.5102  9532.2401</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variance components:</span></span>
 <span><span class="co">#&gt;       Column   VarianceStd.Dev.</span></span>
 <span><span class="co">#&gt; id (Intercept)  1.12074 1.05865</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Number of obs: 7584; levels of grouping factors: 316</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fixed-effects parameters:</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                   Coef.  Std. Error      z  Pr(&gt;|z|)</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────</span></span>
@@ -183,18 +198,19 @@
 </h3>
 <p>Get information about model components with <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">jmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span>, REML <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Note that MixedModels/`jlmer()` defaults to ML (REML=false)</span></span>
+<span><span class="va">jmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jlm.html">jlmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      effect    group                  term     estimate std.error statistic</span></span>
-<span><span class="co">#&gt; 1     fixed     &lt;NA&gt;           (Intercept) 251.40510485  6.824597 36.838090</span></span>
-<span><span class="co">#&gt; 2     fixed     &lt;NA&gt;                  Days  10.46728596  1.545790  6.771481</span></span>
-<span><span class="co">#&gt; 12 ran_pars  Subject       sd__(Intercept)  24.74065797        NA        NA</span></span>
-<span><span class="co">#&gt; 3  ran_pars  Subject cor__(Intercept).Days   0.06555124        NA        NA</span></span>
-<span><span class="co">#&gt; 21 ran_pars  Subject              sd__Days   5.92213766        NA        NA</span></span>
-<span><span class="co">#&gt; 11 ran_pars Residual       sd__Observation  25.59179572        NA        NA</span></span>
+<span><span class="co">#&gt; 1     fixed     &lt;NA&gt;           (Intercept) 251.40510485  6.632258 37.906414</span></span>
+<span><span class="co">#&gt; 2     fixed     &lt;NA&gt;                  Days  10.46728596  1.502236  6.967806</span></span>
+<span><span class="co">#&gt; 12 ran_pars  Subject       sd__(Intercept)  23.78046792        NA        NA</span></span>
+<span><span class="co">#&gt; 3  ran_pars  Subject cor__(Intercept).Days   0.08133207        NA        NA</span></span>
+<span><span class="co">#&gt; 21 ran_pars  Subject              sd__Days   5.71682816        NA        NA</span></span>
+<span><span class="co">#&gt; 11 ran_pars Residual       sd__Observation  25.59182388        NA        NA</span></span>
 <span><span class="co">#&gt;          p.value</span></span>
-<span><span class="co">#&gt; 1  4.537101e-297</span></span>
-<span><span class="co">#&gt; 2   1.274703e-11</span></span>
+<span><span class="co">#&gt; 1  2.017794e-314</span></span>
+<span><span class="co">#&gt; 2   3.219214e-12</span></span>
 <span><span class="co">#&gt; 12            NA</span></span>
 <span><span class="co">#&gt; 3             NA</span></span>
 <span><span class="co">#&gt; 21            NA</span></span>
@@ -202,8 +218,8 @@
 <p>Get goodness-of-fit measures of a model with <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance()</a></code></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   nobs df   sigma logLik AIC BIC deviance df.residual</span></span>
-<span><span class="co">#&gt; 1  180  6 25.5918     NA  NA  NA 1743.628         174</span></span></code></pre></div>
+<span><span class="co">#&gt;   nobs df    sigma    logLik      AIC      BIC deviance df.residual</span></span>
+<span><span class="co">#&gt; 1  180  6 25.59182 -875.9697 1763.939 1783.097 1751.939         174</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="inspect-model-objects">Inspect model objects<a class="anchor" aria-label="anchor" href="#inspect-model-objects"></a>
@@ -226,7 +242,7 @@
 <code class="sourceCode R"><span><span class="va">jmod</span><span class="op">$</span><span class="va">optsum</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type OptSummary{Float64}&gt;</span></span>
 <span><span class="co">#&gt; Initial parameter vector: [1.0, 0.0, 1.0]</span></span>
-<span><span class="co">#&gt; Initial objective value:  1773.6803306160236</span></span>
+<span><span class="co">#&gt; Initial objective value:  1784.642296192471</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Optimizer (from NLopt):   LN_BOBYQA</span></span>
 <span><span class="co">#&gt; Lower bounds:             [0.0, -Inf, 0.0]</span></span>
@@ -238,9 +254,9 @@
 <span><span class="co">#&gt; maxfeval:                 -1</span></span>
 <span><span class="co">#&gt; maxtime:                  -1.0</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Function evaluations:     43</span></span>
-<span><span class="co">#&gt; Final parameter vector:   [0.9667417730750263, 0.015169059007472414, 0.23090995314561083]</span></span>
-<span><span class="co">#&gt; Final objective value:    1743.6282719599653</span></span>
+<span><span class="co">#&gt; Function evaluations:     57</span></span>
+<span><span class="co">#&gt; Final parameter vector:   [0.9292213025841999, 0.018168360086059557, 0.22264488361408383]</span></span>
+<span><span class="co">#&gt; Final objective value:    1751.9393444646894</span></span>
 <span><span class="co">#&gt; Return code:              FTOL_REACHED</span></span></code></pre></div>
 </div>
 </div>
@@ -258,26 +274,26 @@
 <span><span class="va">samp</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type MixedModelBootstrap{Float64}&gt;</span></span>
 <span><span class="co">#&gt; MixedModelBootstrap with 100 samples</span></span>
-<span><span class="co">#&gt;      parameter  min        q25         median     mean        q75       max</span></span>
+<span><span class="co">#&gt;      parameter  min        q25         median     mean       q75        max</span></span>
 <span><span class="co">#&gt;    ┌────────────────────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt;  1 │ β1         227.464    246.465     250.903    250.985     256.233   264.878</span></span>
-<span><span class="co">#&gt;  2 │ β2         6.58801    9.89368     10.8208    10.6993     11.6945   13.8613</span></span>
-<span><span class="co">#&gt;  3 │ σ          21.6868    24.6505     25.6221    25.8474     26.7382   30.599</span></span>
-<span><span class="co">#&gt;  4 │ σ1         3.8862     19.5019     24.0707    23.3628     27.4161   34.0508</span></span>
-<span><span class="co">#&gt;  5 │ σ2         1.95071    4.90943     5.76106    5.87793     6.79344   8.91558</span></span>
-<span><span class="co">#&gt;  6 │ ρ1         -0.731594  -0.237908   0.0869573  0.0721882   0.345545  1.0</span></span>
-<span><span class="co">#&gt;  7 │ θ1         0.158198   0.742099    0.909455   0.90867     1.10008   1.37666</span></span>
-<span><span class="co">#&gt;  8 │ θ2         -0.193011  -0.0589132  0.0187871  0.00940508  0.065209  0.213878</span></span>
-<span><span class="co">#&gt;  9 │ θ3         0.0        0.170507    0.211006   0.206231    0.255929  0.357972</span></span></code></pre></div>
+<span><span class="co">#&gt;  1 │ β1         228.0      246.58      250.863    250.977    256.082    264.406</span></span>
+<span><span class="co">#&gt;  2 │ β2         6.72055    9.91274     10.8382    10.696     11.6725    13.7769</span></span>
+<span><span class="co">#&gt;  3 │ σ          21.6856    24.6536     25.6211    25.838     26.7439    30.5968</span></span>
+<span><span class="co">#&gt;  4 │ σ1         3.57556    17.8908     22.1421    21.5799    25.6259    31.9446</span></span>
+<span><span class="co">#&gt;  5 │ σ2         1.63637    4.53406     5.36349    5.47536    6.38651    8.34052</span></span>
+<span><span class="co">#&gt;  6 │ ρ1         -0.739267  -0.226513   0.120712   0.107686   0.389495   1.0</span></span>
+<span><span class="co">#&gt;  7 │ θ1         0.146373   0.675859    0.845334   0.839596   1.02343    1.29287</span></span>
+<span><span class="co">#&gt;  8 │ θ2         -0.18147   -0.0508505  0.0248657  0.0155747  0.0708033  0.226194</span></span>
+<span><span class="co">#&gt;  9 │ θ3         0.0        0.156785    0.193042   0.188678   0.238505   0.334108</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     effect    group                  term     estimate   conf.low   conf.high</span></span>
-<span><span class="co">#&gt; 1    fixed     &lt;NA&gt;           (Intercept) 251.40510485 240.638031 263.5578907</span></span>
-<span><span class="co">#&gt; 2    fixed     &lt;NA&gt;                  Days  10.46728596   7.635654  13.6199271</span></span>
-<span><span class="co">#&gt; 5 ran_pars  Subject       sd__(Intercept)  24.74065797  14.054638  34.0507880</span></span>
-<span><span class="co">#&gt; 4 ran_pars  Subject cor__(Intercept).Days   0.06555124  -0.697758   0.8805016</span></span>
-<span><span class="co">#&gt; 6 ran_pars  Subject              sd__Days   5.92213766   3.643931   8.2409621</span></span>
-<span><span class="co">#&gt; 3 ran_pars Residual       sd__Observation  25.59179572  22.497355  29.2889311</span></span></code></pre></div>
+<span><span class="co">#&gt;     effect    group                  term     estimate    conf.low  conf.high</span></span>
+<span><span class="co">#&gt; 1    fixed     &lt;NA&gt;           (Intercept) 251.40510485 240.8972974 263.280668</span></span>
+<span><span class="co">#&gt; 2    fixed     &lt;NA&gt;                  Days  10.46728596   7.7302901  13.540729</span></span>
+<span><span class="co">#&gt; 5 ran_pars  Subject       sd__(Intercept)  23.78046792  12.5974975  31.944579</span></span>
+<span><span class="co">#&gt; 4 ran_pars  Subject cor__(Intercept).Days   0.08133207  -0.5948863   1.000000</span></span>
+<span><span class="co">#&gt; 6 ran_pars  Subject              sd__Days   5.71682816   3.6653412   8.073549</span></span>
+<span><span class="co">#&gt; 3 ran_pars Residual       sd__Observation  25.59182388  22.4968576  29.124647</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="profiling">Profiling<a class="anchor" aria-label="anchor" href="#profiling"></a>
@@ -287,35 +303,35 @@
 <code class="sourceCode R"><span><span class="va">prof</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/profilelikelihood.html">profilelikelihood</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">)</span></span>
 <span><span class="va">prof</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type MixedModelProfile{Float64}&gt;</span></span>
-<span><span class="co">#&gt; MixedModelProfile -- Table with 11 columns and 161 rows:</span></span>
+<span><span class="co">#&gt; MixedModelProfile -- Table with 11 columns and 176 rows:</span></span>
 <span><span class="co">#&gt;       p  ζ          β1       β2       σ        σ1       σ2       ρ1           ⋯</span></span>
 <span><span class="co">#&gt;     ┌──────────────────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt;  1  │ σ  -4.36538   251.405  10.4673  20.1929  26.4095  6.16993  -0.0238061   ⋯</span></span>
-<span><span class="co">#&gt;  2  │ σ  -3.77934   251.405  10.4673  20.7999  26.2464  6.14557  -0.0156245   ⋯</span></span>
-<span><span class="co">#&gt;  3  │ σ  -3.20553   251.405  10.4673  21.4252  26.0716  6.11928  -0.00675932  ⋯</span></span>
-<span><span class="co">#&gt;  4  │ σ  -2.64359   251.405  10.4673  22.0692  25.8859  6.0915   0.00286329   ⋯</span></span>
-<span><span class="co">#&gt;  5  │ σ  -2.09316   251.405  10.4673  22.7326  25.6871  6.06188  0.0132691    ⋯</span></span>
-<span><span class="co">#&gt;  6  │ σ  -1.55392   251.405  10.4673  23.416   25.4744  6.03027  0.0246523    ⋯</span></span>
-<span><span class="co">#&gt;  7  │ σ  -1.02552   251.405  10.4673  24.1199  25.2448  5.99673  0.0371101    ⋯</span></span>
-<span><span class="co">#&gt;  8  │ σ  -0.507654  251.405  10.4673  24.8449  25.0016  5.9606   0.0505964    ⋯</span></span>
-<span><span class="co">#&gt;  9  │ σ  0.0        251.405  10.4673  25.5918  24.7407  5.92214  0.0655512    ⋯</span></span>
-<span><span class="co">#&gt;  10 │ σ  0.497702   251.405  10.4673  26.3611  24.4599  5.88109  0.0819128    ⋯</span></span>
-<span><span class="co">#&gt;  11 │ σ  0.985782   251.405  10.4673  27.1535  24.1585  5.83716  0.0999603    ⋯</span></span>
-<span><span class="co">#&gt;  12 │ σ  1.46451    251.405  10.4673  27.9698  23.8346  5.79033  0.119931     ⋯</span></span>
-<span><span class="co">#&gt;  13 │ σ  1.93415    251.405  10.4673  28.8106  23.4862  5.74019  0.142062     ⋯</span></span>
-<span><span class="co">#&gt;  14 │ σ  2.39497    251.405  10.4673  29.6766  23.111   5.68632  0.166822     ⋯</span></span>
-<span><span class="co">#&gt;  15 │ σ  2.84722    251.405  10.4673  30.5687  22.7061  5.62889  0.194353     ⋯</span></span>
-<span><span class="co">#&gt;  16 │ σ  3.29116    251.405  10.4673  31.4877  22.267   5.5671   0.225568     ⋯</span></span>
-<span><span class="co">#&gt;  17 │ σ  3.72701    251.405  10.4673  32.4342  21.7928  5.50064  0.260712     ⋯</span></span>
+<span><span class="co">#&gt;  1  │ σ  -4.365     251.405  10.4673  20.1933  25.5128  5.97319  -0.0159232   ⋯</span></span>
+<span><span class="co">#&gt;  2  │ σ  -3.77902   251.405  10.4673  20.8002  25.3434  5.94786  -0.00711109  ⋯</span></span>
+<span><span class="co">#&gt;  3  │ σ  -3.20526   251.405  10.4673  21.4255  25.1627  5.92133  0.00263598   ⋯</span></span>
+<span><span class="co">#&gt;  4  │ σ  -2.64336   251.405  10.4673  22.0695  24.9702  5.89214  0.0129078    ⋯</span></span>
+<span><span class="co">#&gt;  5  │ σ  -2.09298   251.405  10.4673  22.7328  24.7636  5.86167  0.0241968    ⋯</span></span>
+<span><span class="co">#&gt;  6  │ σ  -1.55378   251.405  10.4673  23.4162  24.5426  5.82871  0.0366992    ⋯</span></span>
+<span><span class="co">#&gt;  7  │ σ  -1.02542   251.405  10.4673  24.12    24.3063  5.79389  0.0501628    ⋯</span></span>
+<span><span class="co">#&gt;  8  │ σ  -0.507597  251.405  10.4673  24.845   24.0525  5.75669  0.0649969    ⋯</span></span>
+<span><span class="co">#&gt;  9  │ σ  0.0        251.405  10.4673  25.5918  23.7805  5.71683  0.0813321    ⋯</span></span>
+<span><span class="co">#&gt;  10 │ σ  0.497684   251.405  10.4673  26.3611  23.4885  5.6743   0.0993046    ⋯</span></span>
+<span><span class="co">#&gt;  11 │ σ  0.985728   251.405  10.4673  27.1534  23.1743  5.62882  0.119204     ⋯</span></span>
+<span><span class="co">#&gt;  12 │ σ  1.46442    251.405  10.4673  27.9696  22.836   5.5802   0.141262     ⋯</span></span>
+<span><span class="co">#&gt;  13 │ σ  1.93402    251.405  10.4673  28.8104  22.4727  5.52809  0.165869     ⋯</span></span>
+<span><span class="co">#&gt;  14 │ σ  2.39481    251.405  10.4673  29.6763  22.0799  5.47226  0.193415     ⋯</span></span>
+<span><span class="co">#&gt;  15 │ σ  2.84704    251.405  10.4673  30.5684  21.6557  5.41243  0.224387     ⋯</span></span>
+<span><span class="co">#&gt;  16 │ σ  3.29094    251.405  10.4673  31.4872  21.196   5.34818  0.259442     ⋯</span></span>
+<span><span class="co">#&gt;  17 │ σ  3.72677    251.405  10.4673  32.4337  20.6956  5.27882  0.299408     ⋯</span></span>
 <span><span class="co">#&gt;  ⋮  │ ⋮      ⋮         ⋮        ⋮        ⋮        ⋮        ⋮          ⋮       ⋱</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">prof</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      effect    group            term   estimate   conf.low  conf.high</span></span>
-<span><span class="co">#&gt; 1     fixed     &lt;NA&gt;     (Intercept) 251.405105 239.501474 263.308736</span></span>
-<span><span class="co">#&gt; 2     fixed     &lt;NA&gt;            Days  10.467286   7.771047  13.163525</span></span>
-<span><span class="co">#&gt; 12 ran_pars  Subject sd__(Intercept)  24.740658  15.032045  39.512036</span></span>
-<span><span class="co">#&gt; 21 ran_pars  Subject        sd__Days   5.922138   0.000000   9.151901</span></span>
-<span><span class="co">#&gt; 11 ran_pars Residual sd__Observation  25.591796  22.898262  28.858000</span></span></code></pre></div>
+<span><span class="co">#&gt; 1     fixed     &lt;NA&gt;     (Intercept) 251.405105 237.680694 265.129516</span></span>
+<span><span class="co">#&gt; 2     fixed     &lt;NA&gt;            Days  10.467286   7.358653  13.575919</span></span>
+<span><span class="co">#&gt; 12 ran_pars  Subject sd__(Intercept)  23.780468  14.381431  37.718099</span></span>
+<span><span class="co">#&gt; 21 ran_pars  Subject        sd__Days   5.716828   0.000000   8.753389</span></span>
+<span><span class="co">#&gt; 11 ran_pars Residual sd__Observation  25.591824  22.898262  28.858001</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -330,11 +346,11 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">jmod</span><span class="op">$</span><span class="va">rePCA</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type @NamedTuple{Subject::Vector{Float64}}&gt;</span></span>
-<span><span class="co">#&gt; (Subject = [0.5327756193675971, 1.0],)</span></span></code></pre></div>
+<span><span class="co">#&gt; (Subject = [0.5406660352881864, 1.0],)</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jl-helpers.html">jl_get</a></span><span class="op">(</span><span class="va">jmod</span><span class="op">$</span><span class="va">rePCA</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $Subject</span></span>
-<span><span class="co">#&gt; [1] 0.5327756 1.0000000</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.540666 1.000000</span></span></code></pre></div>
 <p>Example 2: extract fitlog and plot</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fitlog</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers.html">jl_get</a></span><span class="op">(</span><span class="fu"><a href="reference/jl-helpers.html">jl</a></span><span class="op">(</span><span class="st">"refit!(x; thin=1)"</span>, x <span class="op">=</span> <span class="va">jmod</span><span class="op">)</span><span class="op">$</span><span class="va">optsum</span><span class="op">$</span><span class="va">fitlog</span><span class="op">)</span></span>
@@ -370,7 +386,7 @@
 <span><span class="co">#&gt;   LIBM: libopenlibm</span></span>
 <span><span class="co">#&gt;   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)</span></span>
 <span><span class="co">#&gt; Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)</span></span>
-<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_7U2Img\Project.toml`</span></span>
+<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_pYN2Tx\Project.toml`</span></span>
 <span><span class="co">#&gt;   [38e38edf] GLM v1.9.0</span></span>
 <span><span class="co">#&gt;   [ff71e718] MixedModels v4.26.0</span></span>
 <span><span class="co">#&gt;   [3eaba693] StatsModels v0.7.4</span></span>
@@ -393,11 +409,21 @@
 <span><span class="va">jmod2</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type GeneralizedLinearMixedModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; r2 ~ 1 + Gender + btype + Gender &amp; btype + (1 | id)</span></span>
+<span><span class="co">#&gt; Generalized Linear Mixed Model fit by maximum likelihood (nAGQ = 1)</span></span>
+<span><span class="co">#&gt;   r2 ~ 1 + Gender + btype + Gender &amp; btype + (1 | id)</span></span>
+<span><span class="co">#&gt;   Distribution: Bernoulli{Float64}</span></span>
+<span><span class="co">#&gt;   Link: LogitLink()</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    logLik    deviance     AIC       AICc        BIC    </span></span>
+<span><span class="co">#&gt;  -4341.4933  8682.9867  8696.9867  8697.0014  8745.5232</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variance components:</span></span>
 <span><span class="co">#&gt;       Column   VarianceStd.Dev.</span></span>
 <span><span class="co">#&gt; id (Intercept)  1.52160 1.23353</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Number of obs: 7584; levels of grouping factors: 316</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fixed-effects parameters:</span></span>
 <span><span class="co">#&gt; ─────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                               Coef.  Std. Error       z  Pr(&gt;|z|)</span></span>
 <span><span class="co">#&gt; ─────────────────────────────────────────────────────────────────</span></span>
@@ -486,18 +512,18 @@
 <tr>
 <td align="left">(Intercept)</td>
 <td align="right">251.4051</td>
-<td align="right">6.8246</td>
-<td align="right">36.84</td>
+<td align="right">6.6323</td>
+<td align="right">37.91</td>
 <td align="right">&lt;1e-99</td>
-<td align="right">24.7407</td>
+<td align="right">23.7805</td>
 </tr>
 <tr>
 <td align="left">Days</td>
 <td align="right">10.4673</td>
-<td align="right">1.5458</td>
-<td align="right">6.77</td>
-<td align="right">&lt;1e-10</td>
-<td align="right">5.9221</td>
+<td align="right">1.5022</td>
+<td align="right">6.97</td>
+<td align="right">&lt;1e-11</td>
+<td align="right">5.7168</td>
 </tr>
 <tr>
 <td align="left">Residual</td>
@@ -545,9 +571,9 @@
 <span><span class="fu"><a href="reference/jlm.html">jlm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">am</span>, <span class="va">data_julia</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type StatsModels.TableRegressionModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mpg ~ 1 + am</span></span>
+<span><span class="co">#&gt; mpg ~ 1 + am </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;  ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                 Coef.  Std. Error      z  Pr(&gt;|z|)  Lower 95%  Upper 95%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; (Intercept)  17.1474      1.1246   15.25    &lt;1e-51   14.9432     19.3515</span></span>
@@ -564,9 +590,9 @@
 <span><span class="fu"><a href="reference/jlm.html">jlm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">am</span>, <span class="va">data_julia</span>, contrasts <span class="op">=</span> <span class="va">contrasts_julia</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Julia object of type StatsModels.TableRegressionModel&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mpg ~ 1 + am</span></span>
+<span><span class="co">#&gt; mpg ~ 1 + am </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;  ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;                 Coef.  Std. Error      z  Pr(&gt;|z|)  Lower 95%  Upper 95%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; (Intercept)  20.7698     0.882211  23.54    &lt;1e-99   19.0407    22.4989</span></span>
