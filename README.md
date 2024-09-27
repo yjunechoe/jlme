@@ -70,9 +70,9 @@ via `jlm()` and `jlmer()`, respectively.
 jlm(mpg ~ hp, mtcars)
 #> <Julia object of type StatsModels.TableRegressionModel>
 #> 
-#> mpg ~ 1 + hp
+#> mpg ~ 1 + hp 
 #> 
-#> ────────────────────────────────────────────────────────────────────────────
+#>  ────────────────────────────────────────────────────────────────────────────
 #>                   Coef.  Std. Error      z  Pr(>|z|)   Lower 95%   Upper 95%
 #> ────────────────────────────────────────────────────────────────────────────
 #> (Intercept)  30.0989      1.63392    18.42    <1e-75  26.8964     33.3013
@@ -96,9 +96,9 @@ colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
 jlm(mpg ~ am_sum + cyl_helm, x)
 #> <Julia object of type StatsModels.TableRegressionModel>
 #> 
-#> mpg ~ 1 + am_sum + cyl_helm
+#> mpg ~ 1 + am_sum + cyl_helm 
 #> 
-#> ───────────────────────────────────────────────────────────────────────────────
+#>  ───────────────────────────────────────────────────────────────────────────────
 #>                      Coef.  Std. Error      z  Pr(>|z|)  Lower 95%    Upper 95%
 #> ───────────────────────────────────────────────────────────────────────────────
 #> (Intercept)       20.6739     0.572633  36.10    <1e-99   19.5516   21.7963
@@ -117,13 +117,18 @@ jlm(mpg ~ am_sum + cyl_helm, x)
 jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 #> <Julia object of type LinearMixedModel>
 #> 
-#> Reaction ~ 1 + Days + (1 + Days | Subject)
+#> Linear mixed model fit by REML
+#>  Reaction ~ 1 + Days + (1 + Days | Subject)
+#>  REML criterion at convergence: 1743.6282719599653
 #> 
 #> Variance components:
 #>             Column    Variance Std.Dev.   Corr.
 #> Subject  (Intercept)  612.10016 24.74066
 #>          Days          35.07171  5.92214 +0.07
 #> Residual              654.94001 25.59180
+#>  Number of obs: 180; levels of grouping factors: 18
+#> 
+#>   Fixed-effects parameters:
 #> ──────────────────────────────────────────────────
 #>                 Coef.  Std. Error      z  Pr(>|z|)
 #> ──────────────────────────────────────────────────
@@ -137,11 +142,21 @@ jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 #> <Julia object of type GeneralizedLinearMixedModel>
 #> 
-#> r2 ~ 1 + Anger + Gender + (1 | id)
+#> Generalized Linear Mixed Model fit by maximum likelihood (nAGQ = 1)
+#>   r2 ~ 1 + Anger + Gender + (1 | id)
+#>   Distribution: Bernoulli{Float64}
+#>   Link: LogitLink()
+#> 
+#>    logLik    deviance     AIC       AICc        BIC    
+#>  -4748.2525  9496.5050  9504.5050  9504.5102  9532.2401
 #> 
 #> Variance components:
 #>       Column   VarianceStd.Dev.
 #> id (Intercept)  1.12074 1.05865
+#> 
+#>  Number of obs: 7584; levels of grouping factors: 316
+#> 
+#> Fixed-effects parameters:
 #> ────────────────────────────────────────────────────
 #>                   Coef.  Std. Error      z  Pr(>|z|)
 #> ────────────────────────────────────────────────────
@@ -383,7 +398,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_7U2Img\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_2BbJmj\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [ff71e718] MixedModels v4.26.0
 #>   [3eaba693] StatsModels v0.7.4
@@ -418,11 +433,21 @@ jmod2 <- jlmer(
 jmod2
 #> <Julia object of type GeneralizedLinearMixedModel>
 #> 
-#> r2 ~ 1 + Gender + btype + Gender & btype + (1 | id)
+#> Generalized Linear Mixed Model fit by maximum likelihood (nAGQ = 1)
+#>   r2 ~ 1 + Gender + btype + Gender & btype + (1 | id)
+#>   Distribution: Bernoulli{Float64}
+#>   Link: LogitLink()
+#> 
+#>    logLik    deviance     AIC       AICc        BIC    
+#>  -4341.4933  8682.9867  8696.9867  8697.0014  8745.5232
 #> 
 #> Variance components:
 #>       Column   VarianceStd.Dev.
 #> id (Intercept)  1.52160 1.23353
+#> 
+#>  Number of obs: 7584; levels of grouping factors: 316
+#> 
+#> Fixed-effects parameters:
 #> ─────────────────────────────────────────────────────────────────
 #>                               Coef.  Std. Error       z  Pr(>|z|)
 #> ─────────────────────────────────────────────────────────────────
@@ -566,9 +591,9 @@ data_julia <- jl_data(data_r[, c("mpg", "am")])
 jlm(mpg ~ am, data_julia)
 #> <Julia object of type StatsModels.TableRegressionModel>
 #> 
-#> mpg ~ 1 + am
+#> mpg ~ 1 + am 
 #> 
-#> ────────────────────────────────────────────────────────────────────────
+#>  ────────────────────────────────────────────────────────────────────────
 #>                 Coef.  Std. Error      z  Pr(>|z|)  Lower 95%  Upper 95%
 #> ────────────────────────────────────────────────────────────────────────
 #> (Intercept)  17.1474      1.1246   15.25    <1e-51   14.9432     19.3515
@@ -589,9 +614,9 @@ contrasts_julia <- jl_contrasts(data_r)
 jlm(mpg ~ am, data_julia, contrasts = contrasts_julia)
 #> <Julia object of type StatsModels.TableRegressionModel>
 #> 
-#> mpg ~ 1 + am
+#> mpg ~ 1 + am 
 #> 
-#> ────────────────────────────────────────────────────────────────────────
+#>  ────────────────────────────────────────────────────────────────────────
 #>                 Coef.  Std. Error      z  Pr(>|z|)  Lower 95%  Upper 95%
 #> ────────────────────────────────────────────────────────────────────────
 #> (Intercept)  20.7698     0.882211  23.54    <1e-99   19.0407    22.4989

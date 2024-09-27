@@ -146,7 +146,22 @@ print.jlme <- function(x, format = NULL, ...) {
   invisible(x)
 }
 
-show_jlmer <- function(x, format = c("markdown", "html", "latex", "xelatex")) {
+#' @export
+format.jlme <- function(x, ...) {
+  header <- paste0(
+    "<Julia object of type ",
+    JuliaConnectoR::juliaLet("typeof(x).name.wrapper", x = x),
+    ">\n\n"
+  )
+  if (is_jlmer(x)) {
+    body <- paste(capture.output(show_jlmer(x, "plain")), collapse = "\n")
+  } else {
+    body <- paste(jl("repr(x.mf.f)", x = x, .R = TRUE), "\n\n", show_jlm(x))
+  }
+  paste0(header, body, "\n")
+}
+
+show_jlmer <- function(x, format = c("plain", "markdown", "html", "latex", "xelatex")) {
   format <- match.arg(format)
   JuliaConnectoR::juliaLet(
     sprintf('show(MIME("text/%s"), x)', format),
@@ -154,21 +169,7 @@ show_jlmer <- function(x, format = c("markdown", "html", "latex", "xelatex")) {
   )
 }
 
-#' @export
-format.jlme <- function(x, ...) {
-  header <- paste0("<Julia object of type ", JuliaConnectoR::juliaLet("typeof(x).name.wrapper", x = x), ">")
-  if (is_jlmer(x)) {
-    formula <- JuliaConnectoR::juliaLet("repr(x.formula)", x = x)
-    re <- gsub("\n\n$", "\n", showobj_reformat(JuliaConnectoR::juliaCall("VarCorr", x)))
-    fe <- showobj_reformat(JuliaConnectoR::juliaCall("coeftable", x))
-    body <- paste0(re, fe)
-  } else {
-    formula <- JuliaConnectoR::juliaLet("repr(x.mf.f)", x = x)
-    body <- showobj_reformat(JuliaConnectoR::juliaCall("coeftable", x))
-  }
-  paste0(header, "\n\n", formula, "\n\n", body)
-}
-
-showobj_reformat <- function(x) {
-  paste0(trimws(utils::capture.output(print(x))[-1], whitespace = "[\n]"), collapse = "\n")
+show_jlm <- function(x) {
+  x <- utils::capture.output(print(JuliaConnectoR::juliaCall("coeftable", x)))
+  paste0(trimws(x[-1], whitespace = "[\n]"), collapse = "\n")
 }
