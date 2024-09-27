@@ -41,11 +41,17 @@ reference:
   - parametricbootstrap
   - profilelikelihood
 
-- title: Helpers
+- title: Modelling utilities
   desc: >
     Common utilities for working with Julia (model) objects
   contents:
-  - jlme-model-helpers
+  - jlme-model-reexports
+
+- title: Julia interop
+  desc: >
+    Utilities for interoperability between R and Julia
+  - jl-helpers-utils
+  - jl-helpers-model
 
 news:
   - add_cran_date: TRUE

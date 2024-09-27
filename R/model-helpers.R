@@ -1,6 +1,6 @@
 #' Re-exported functions for interacting with Julia model objects
 #'
-#' @name jlme-model-helpers
+#' @name jlme-model-reexports
 #'
 #' @param x Julia model object
 #' @param ... Additional arguments passed to the Julia function
@@ -29,7 +29,7 @@
 #' }
 NULL
 
-#' @rdname jlme-model-helpers
+#' @rdname jlme-model-reexports
 #' @export
 propertynames <- function(x) {
   stopifnot(is_jl(x))
@@ -37,14 +37,14 @@ propertynames <- function(x) {
   sort(as.character(nm))
 }
 
-#' @rdname jlme-model-helpers
+#' @rdname jlme-model-reexports
 #' @export
 issingular <- function(x) {
   stopifnot(is_jl(x, "MixedModel"))
   JuliaConnectoR::juliaCall("MixedModels.issingular", x)
 }
 
-#' @rdname jlme-model-helpers
+#' @rdname jlme-model-reexports
 #' @export
 likelihoodratiotest <- function(x, ...) {
   stopifnot(is_jl(x))
