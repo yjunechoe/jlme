@@ -70,9 +70,9 @@ via `jlm()` and `jlmer()`, respectively.
 jlm(mpg ~ hp, mtcars)
 #> <Julia object of type StatsModels.TableRegressionModel>
 #> 
-#> mpg ~ 1 + hp 
+#> mpg ~ 1 + hp
 #> 
-#>  ────────────────────────────────────────────────────────────────────────────
+#> ────────────────────────────────────────────────────────────────────────────
 #>                   Coef.  Std. Error      z  Pr(>|z|)   Lower 95%   Upper 95%
 #> ────────────────────────────────────────────────────────────────────────────
 #> (Intercept)  30.0989      1.63392    18.42    <1e-75  26.8964     33.3013
@@ -96,9 +96,9 @@ colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
 jlm(mpg ~ am_sum + cyl_helm, x)
 #> <Julia object of type StatsModels.TableRegressionModel>
 #> 
-#> mpg ~ 1 + am_sum + cyl_helm 
+#> mpg ~ 1 + am_sum + cyl_helm
 #> 
-#>  ───────────────────────────────────────────────────────────────────────────────
+#> ───────────────────────────────────────────────────────────────────────────────
 #>                      Coef.  Std. Error      z  Pr(>|z|)  Lower 95%    Upper 95%
 #> ───────────────────────────────────────────────────────────────────────────────
 #> (Intercept)       20.6739     0.572633  36.10    <1e-99   19.5516   21.7963
@@ -113,7 +113,7 @@ jlm(mpg ~ am_sum + cyl_helm, x)
 `jlmer()` with `lmer()`/`glmer()` syntax:
 
 ``` r
-# lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+# lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 #> <Julia object of type LinearMixedModel>
 #> 
@@ -138,7 +138,7 @@ jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 ```
 
 ``` r
-# lme4::glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+# lme4::glmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 #> <Julia object of type GeneralizedLinearMixedModel>
 #> 
@@ -178,18 +178,19 @@ regression models.
 Get information about model components with `tidy()`
 
 ``` r
-jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
+# Note that MixedModels/`jlmer()` defaults to ML (REML=false)
+jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 tidy(jmod)
 #>      effect    group                  term     estimate std.error statistic
-#> 1     fixed     <NA>           (Intercept) 251.40510485  6.824597 36.838090
-#> 2     fixed     <NA>                  Days  10.46728596  1.545790  6.771481
-#> 12 ran_pars  Subject       sd__(Intercept)  24.74065797        NA        NA
-#> 3  ran_pars  Subject cor__(Intercept).Days   0.06555124        NA        NA
-#> 21 ran_pars  Subject              sd__Days   5.92213766        NA        NA
-#> 11 ran_pars Residual       sd__Observation  25.59179572        NA        NA
+#> 1     fixed     <NA>           (Intercept) 251.40510485  6.632258 37.906414
+#> 2     fixed     <NA>                  Days  10.46728596  1.502236  6.967806
+#> 12 ran_pars  Subject       sd__(Intercept)  23.78046792        NA        NA
+#> 3  ran_pars  Subject cor__(Intercept).Days   0.08133207        NA        NA
+#> 21 ran_pars  Subject              sd__Days   5.71682816        NA        NA
+#> 11 ran_pars Residual       sd__Observation  25.59182388        NA        NA
 #>          p.value
-#> 1  4.537101e-297
-#> 2   1.274703e-11
+#> 1  2.017794e-314
+#> 2   3.219214e-12
 #> 12            NA
 #> 3             NA
 #> 21            NA
@@ -200,8 +201,8 @@ Get goodness-of-fit measures of a model with `glance()`
 
 ``` r
 glance(jmod)
-#>   nobs df   sigma logLik AIC BIC deviance df.residual
-#> 1  180  6 25.5918     NA  NA  NA 1743.628         174
+#>   nobs df    sigma    logLik      AIC      BIC deviance df.residual
+#> 1  180  6 25.59182 -875.9697 1763.939 1783.097 1751.939         174
 ```
 
 ### Inspect model objects
@@ -232,7 +233,7 @@ Check optimization summary
 jmod$optsum
 #> <Julia object of type OptSummary{Float64}>
 #> Initial parameter vector: [1.0, 0.0, 1.0]
-#> Initial objective value:  1773.6803306160236
+#> Initial objective value:  1784.642296192471
 #> 
 #> Optimizer (from NLopt):   LN_BOBYQA
 #> Lower bounds:             [0.0, -Inf, 0.0]
@@ -244,9 +245,9 @@ jmod$optsum
 #> maxfeval:                 -1
 #> maxtime:                  -1.0
 #> 
-#> Function evaluations:     43
-#> Final parameter vector:   [0.9667417730750263, 0.015169059007472414, 0.23090995314561083]
-#> Final objective value:    1743.6282719599653
+#> Function evaluations:     57
+#> Final parameter vector:   [0.9292213025841999, 0.018168360086059557, 0.22264488361408383]
+#> Final objective value:    1751.9393444646894
 #> Return code:              FTOL_REACHED
 ```
 
@@ -268,28 +269,28 @@ samp <- parametricbootstrap(jmod, nsim = 100L, seed = 42L)
 samp
 #> <Julia object of type MixedModelBootstrap{Float64}>
 #> MixedModelBootstrap with 100 samples
-#>      parameter  min        q25         median     mean        q75       max
+#>      parameter  min        q25         median     mean       q75        max
 #>    ┌────────────────────────────────────────────────────────────────────────────
-#>  1 │ β1         227.464    246.465     250.903    250.985     256.233   264.878
-#>  2 │ β2         6.58801    9.89368     10.8208    10.6993     11.6945   13.8613
-#>  3 │ σ          21.6868    24.6505     25.6221    25.8474     26.7382   30.599
-#>  4 │ σ1         3.8862     19.5019     24.0707    23.3628     27.4161   34.0508
-#>  5 │ σ2         1.95071    4.90943     5.76106    5.87793     6.79344   8.91558
-#>  6 │ ρ1         -0.731594  -0.237908   0.0869573  0.0721882   0.345545  1.0
-#>  7 │ θ1         0.158198   0.742099    0.909455   0.90867     1.10008   1.37666
-#>  8 │ θ2         -0.193011  -0.0589132  0.0187871  0.00940508  0.065209  0.213878
-#>  9 │ θ3         0.0        0.170507    0.211006   0.206231    0.255929  0.357972
+#>  1 │ β1         228.0      246.58      250.863    250.977    256.082    264.406
+#>  2 │ β2         6.72055    9.91274     10.8382    10.696     11.6725    13.7769
+#>  3 │ σ          21.6856    24.6536     25.6211    25.838     26.7439    30.5968
+#>  4 │ σ1         3.57556    17.8908     22.1421    21.5799    25.6259    31.9446
+#>  5 │ σ2         1.63637    4.53406     5.36349    5.47536    6.38651    8.34052
+#>  6 │ ρ1         -0.739267  -0.226513   0.120712   0.107686   0.389495   1.0
+#>  7 │ θ1         0.146373   0.675859    0.845334   0.839596   1.02343    1.29287
+#>  8 │ θ2         -0.18147   -0.0508505  0.0248657  0.0155747  0.0708033  0.226194
+#>  9 │ θ3         0.0        0.156785    0.193042   0.188678   0.238505   0.334108
 ```
 
 ``` r
 tidy(samp)
-#>     effect    group                  term     estimate   conf.low   conf.high
-#> 1    fixed     <NA>           (Intercept) 251.40510485 240.638031 263.5578907
-#> 2    fixed     <NA>                  Days  10.46728596   7.635654  13.6199271
-#> 5 ran_pars  Subject       sd__(Intercept)  24.74065797  14.054638  34.0507880
-#> 4 ran_pars  Subject cor__(Intercept).Days   0.06555124  -0.697758   0.8805016
-#> 6 ran_pars  Subject              sd__Days   5.92213766   3.643931   8.2409621
-#> 3 ran_pars Residual       sd__Observation  25.59179572  22.497355  29.2889311
+#>     effect    group                  term     estimate    conf.low  conf.high
+#> 1    fixed     <NA>           (Intercept) 251.40510485 240.8972974 263.280668
+#> 2    fixed     <NA>                  Days  10.46728596   7.7302901  13.540729
+#> 5 ran_pars  Subject       sd__(Intercept)  23.78046792  12.5974975  31.944579
+#> 4 ran_pars  Subject cor__(Intercept).Days   0.08133207  -0.5948863   1.000000
+#> 6 ran_pars  Subject              sd__Days   5.71682816   3.6653412   8.073549
+#> 3 ran_pars Residual       sd__Observation  25.59182388  22.4968576  29.124647
 ```
 
 ### Profiling
@@ -302,37 +303,37 @@ via `profilelikelihood()`:
 prof <- profilelikelihood(jmod)
 prof
 #> <Julia object of type MixedModelProfile{Float64}>
-#> MixedModelProfile -- Table with 11 columns and 161 rows:
+#> MixedModelProfile -- Table with 11 columns and 176 rows:
 #>       p  ζ          β1       β2       σ        σ1       σ2       ρ1           ⋯
 #>     ┌──────────────────────────────────────────────────────────────────────────
-#>  1  │ σ  -4.36538   251.405  10.4673  20.1929  26.4095  6.16993  -0.0238061   ⋯
-#>  2  │ σ  -3.77934   251.405  10.4673  20.7999  26.2464  6.14557  -0.0156245   ⋯
-#>  3  │ σ  -3.20553   251.405  10.4673  21.4252  26.0716  6.11928  -0.00675932  ⋯
-#>  4  │ σ  -2.64359   251.405  10.4673  22.0692  25.8859  6.0915   0.00286329   ⋯
-#>  5  │ σ  -2.09316   251.405  10.4673  22.7326  25.6871  6.06188  0.0132691    ⋯
-#>  6  │ σ  -1.55392   251.405  10.4673  23.416   25.4744  6.03027  0.0246523    ⋯
-#>  7  │ σ  -1.02552   251.405  10.4673  24.1199  25.2448  5.99673  0.0371101    ⋯
-#>  8  │ σ  -0.507654  251.405  10.4673  24.8449  25.0016  5.9606   0.0505964    ⋯
-#>  9  │ σ  0.0        251.405  10.4673  25.5918  24.7407  5.92214  0.0655512    ⋯
-#>  10 │ σ  0.497702   251.405  10.4673  26.3611  24.4599  5.88109  0.0819128    ⋯
-#>  11 │ σ  0.985782   251.405  10.4673  27.1535  24.1585  5.83716  0.0999603    ⋯
-#>  12 │ σ  1.46451    251.405  10.4673  27.9698  23.8346  5.79033  0.119931     ⋯
-#>  13 │ σ  1.93415    251.405  10.4673  28.8106  23.4862  5.74019  0.142062     ⋯
-#>  14 │ σ  2.39497    251.405  10.4673  29.6766  23.111   5.68632  0.166822     ⋯
-#>  15 │ σ  2.84722    251.405  10.4673  30.5687  22.7061  5.62889  0.194353     ⋯
-#>  16 │ σ  3.29116    251.405  10.4673  31.4877  22.267   5.5671   0.225568     ⋯
-#>  17 │ σ  3.72701    251.405  10.4673  32.4342  21.7928  5.50064  0.260712     ⋯
+#>  1  │ σ  -4.365     251.405  10.4673  20.1933  25.5128  5.97319  -0.0159232   ⋯
+#>  2  │ σ  -3.77902   251.405  10.4673  20.8002  25.3434  5.94786  -0.00711109  ⋯
+#>  3  │ σ  -3.20526   251.405  10.4673  21.4255  25.1627  5.92133  0.00263598   ⋯
+#>  4  │ σ  -2.64336   251.405  10.4673  22.0695  24.9702  5.89214  0.0129078    ⋯
+#>  5  │ σ  -2.09298   251.405  10.4673  22.7328  24.7636  5.86167  0.0241968    ⋯
+#>  6  │ σ  -1.55378   251.405  10.4673  23.4162  24.5426  5.82871  0.0366992    ⋯
+#>  7  │ σ  -1.02542   251.405  10.4673  24.12    24.3063  5.79389  0.0501628    ⋯
+#>  8  │ σ  -0.507597  251.405  10.4673  24.845   24.0525  5.75669  0.0649969    ⋯
+#>  9  │ σ  0.0        251.405  10.4673  25.5918  23.7805  5.71683  0.0813321    ⋯
+#>  10 │ σ  0.497684   251.405  10.4673  26.3611  23.4885  5.6743   0.0993046    ⋯
+#>  11 │ σ  0.985728   251.405  10.4673  27.1534  23.1743  5.62882  0.119204     ⋯
+#>  12 │ σ  1.46442    251.405  10.4673  27.9696  22.836   5.5802   0.141262     ⋯
+#>  13 │ σ  1.93402    251.405  10.4673  28.8104  22.4727  5.52809  0.165869     ⋯
+#>  14 │ σ  2.39481    251.405  10.4673  29.6763  22.0799  5.47226  0.193415     ⋯
+#>  15 │ σ  2.84704    251.405  10.4673  30.5684  21.6557  5.41243  0.224387     ⋯
+#>  16 │ σ  3.29094    251.405  10.4673  31.4872  21.196   5.34818  0.259442     ⋯
+#>  17 │ σ  3.72677    251.405  10.4673  32.4337  20.6956  5.27882  0.299408     ⋯
 #>  ⋮  │ ⋮      ⋮         ⋮        ⋮        ⋮        ⋮        ⋮          ⋮       ⋱
 ```
 
 ``` r
 tidy(prof)
 #>      effect    group            term   estimate   conf.low  conf.high
-#> 1     fixed     <NA>     (Intercept) 251.405105 239.501474 263.308736
-#> 2     fixed     <NA>            Days  10.467286   7.771047  13.163525
-#> 12 ran_pars  Subject sd__(Intercept)  24.740658  15.032045  39.512036
-#> 21 ran_pars  Subject        sd__Days   5.922138   0.000000   9.151901
-#> 11 ran_pars Residual sd__Observation  25.591796  22.898262  28.858000
+#> 1     fixed     <NA>     (Intercept) 251.405105 237.680694 265.129516
+#> 2     fixed     <NA>            Days  10.467286   7.358653  13.575919
+#> 12 ran_pars  Subject sd__(Intercept)  23.780468  14.381431  37.718099
+#> 21 ran_pars  Subject        sd__Days   5.716828   0.000000   8.753389
+#> 11 ran_pars Residual sd__Observation  25.591824  22.898262  28.858001
 ```
 
 ## Julia interoperability
@@ -348,13 +349,13 @@ Example 1: extract PCA of random effects and return as an R list:
 ``` r
 jmod$rePCA
 #> <Julia object of type @NamedTuple{Subject::Vector{Float64}}>
-#> (Subject = [0.5327756193675971, 1.0],)
+#> (Subject = [0.5406660352881864, 1.0],)
 ```
 
 ``` r
 jl_get(jmod$rePCA)
 #> $Subject
-#> [1] 0.5327756 1.0000000
+#> [1] 0.540666 1.000000
 ```
 
 Example 2: extract fitlog and plot
@@ -398,7 +399,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_2BbJmj\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_GU3Fv7\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [ff71e718] MixedModels v4.26.0
 #>   [3eaba693] StatsModels v0.7.4
@@ -540,8 +541,8 @@ print(jmod, format = "markdown")
 
 |             |     Est. |     SE |     z |       p | σ_Subject |
 |:------------|---------:|-------:|------:|--------:|----------:|
-| (Intercept) | 251.4051 | 6.8246 | 36.84 | \<1e-99 |   24.7407 |
-| Days        |  10.4673 | 1.5458 |  6.77 | \<1e-10 |    5.9221 |
+| (Intercept) | 251.4051 | 6.6323 | 37.91 | \<1e-99 |   23.7805 |
+| Days        |  10.4673 | 1.5022 |  6.97 | \<1e-11 |    5.7168 |
 | Residual    |  25.5918 |        |       |         |           |
 
 ### Data type conversion
@@ -591,9 +592,9 @@ data_julia <- jl_data(data_r[, c("mpg", "am")])
 jlm(mpg ~ am, data_julia)
 #> <Julia object of type StatsModels.TableRegressionModel>
 #> 
-#> mpg ~ 1 + am 
+#> mpg ~ 1 + am
 #> 
-#>  ────────────────────────────────────────────────────────────────────────
+#> ────────────────────────────────────────────────────────────────────────
 #>                 Coef.  Std. Error      z  Pr(>|z|)  Lower 95%  Upper 95%
 #> ────────────────────────────────────────────────────────────────────────
 #> (Intercept)  17.1474      1.1246   15.25    <1e-51   14.9432     19.3515
@@ -614,9 +615,9 @@ contrasts_julia <- jl_contrasts(data_r)
 jlm(mpg ~ am, data_julia, contrasts = contrasts_julia)
 #> <Julia object of type StatsModels.TableRegressionModel>
 #> 
-#> mpg ~ 1 + am 
+#> mpg ~ 1 + am
 #> 
-#>  ────────────────────────────────────────────────────────────────────────
+#> ────────────────────────────────────────────────────────────────────────
 #>                 Coef.  Std. Error      z  Pr(>|z|)  Lower 95%  Upper 95%
 #> ────────────────────────────────────────────────────────────────────────
 #> (Intercept)  20.7698     0.882211  23.54    <1e-99   19.0407    22.4989

@@ -138,10 +138,10 @@ is_jlmer <- function(x) {
 #' @export
 print.jlme <- function(x, format = NULL, ...) {
   if (is_jlmer(x) && !is.null(format)) {
-    show_jlmer(x, format)
+    cat(format_jlmer(x, format), "\n")
   } else {
     stopifnot("`format` is only availble for MixedModels" = is.null(format))
-    cat(format(x, ...))
+    cat(format(x, ...), "\n")
   }
   invisible(x)
 }
@@ -154,22 +154,31 @@ format.jlme <- function(x, ...) {
     ">\n\n"
   )
   if (is_jlmer(x)) {
-    body <- paste(capture.output(show_jlmer(x, "plain")), collapse = "\n")
+    body <- format_jlmer(x, "plain")
   } else {
-    body <- paste(jl("repr(x.mf.f)", x = x, .R = TRUE), "\n\n", show_jlm(x))
+    body <- format_jlm(x)
   }
-  paste0(header, body, "\n")
+  paste0(header, body)
 }
 
-show_jlmer <- function(x, format = c("plain", "markdown", "html", "latex", "xelatex")) {
+capture_output <- function(x, paste = TRUE) {
+  out <- utils::capture.output(x)
+  if (paste) {
+    out <- paste0(out, collapse = "\n")
+  }
+  out
+}
+
+format_jlmer <- function(x, format = c("plain", "markdown", "html", "latex", "xelatex")) {
   format <- match.arg(format)
-  JuliaConnectoR::juliaLet(
-    sprintf('show(MIME("text/%s"), x)', format),
-    x = x
+  capture_output(
+    JuliaConnectoR::juliaLet(sprintf('show(MIME("text/%s"), x)', format), x = x)
   )
 }
 
-show_jlm <- function(x) {
-  x <- utils::capture.output(print(JuliaConnectoR::juliaCall("coeftable", x)))
-  paste0(trimws(x[-1], whitespace = "[\n]"), collapse = "\n")
+format_jlm <- function(x) {
+  form <- JuliaConnectoR::juliaLet("repr(x.mf.f)", x = x)
+  body <- capture_output(JuliaConnectoR::juliaCall("coeftable", x), FALSE)[-1]
+  body <- paste(body, collapse = "\n")
+  paste0(form, "\n\n", body)
 }

@@ -91,12 +91,12 @@ jlm(mpg ~ am_sum + cyl_helm, x)
 `jlmer()` with `lmer()`/`glmer()` syntax:
 
 ```{r}
-# lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+# lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
 ```
 
 ```{r}
-# lme4::glmer(r2 ~ Anger + Gender + (1 | id), VerbAgg, family = "binomial")
+# lme4::glmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 jlmer(r2 ~ Anger + Gender + (1 | id), lme4::VerbAgg, family = "binomial")
 ```
 
@@ -112,7 +112,8 @@ Supports `{broom}`-style `tidy()` and `glance()` methods for Julia regression mo
 Get information about model components with `tidy()`
 
 ```{r}
-jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy, REML = TRUE)
+# Note that MixedModels/`jlmer()` defaults to ML (REML=false)
+jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 tidy(jmod)
 ```
 
