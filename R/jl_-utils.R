@@ -1,23 +1,17 @@
 #' Helpers for converting model specifications in R to Julia equivalents
 #'
-#' @name jl-helpers
+#' @name jl-helpers-utils
 #' @keywords internal
 #' @return A Julia object of type `<JuliaProxy>`
 #'
 #' @examplesIf check_julia_ok()
 #' \donttest{
-#' jlme_setup(restart = TRUE)
-#'
 #' # (general) Use `jl()` to evaluate arbitrary Julia expressions from string
 #' jl("1 .+ [1,3]")
 #'
 #' # `jl()` takes elements in `...` that you can reference in the expression
 #' jl("1 .+ a", a = c(1L, 3L)) # Named arguments are introduced as variables
 #' jl("1 .+ %s", "[1,2]") # Unnamed arguments are interpolated via `sprintf()`
-#'
-#' # `jl_dict()` constructs a Dictionary data type
-#' jl_dict(age = 20:25, sex = c("M", "F"))
-#' jl_dict(list(a = 1, b = 2)) # Splats when a single list is supplied
 #'
 #' # Use `is_jl()` to test if object is a Julia (`<JuliaProxy>`) object
 #' is_jl(jl("1"))
@@ -26,34 +20,19 @@
 #' jl_put(1L)
 #' identical(jl_get(jl_put(1L)), 1L)
 #'
-#'
-#' # (modelling) set up model data in R
-#' x <- mtcars
-#' x$cyl_helm <- factor(x$cyl)
-#' contrasts(x$cyl_helm) <- contr.helmert(3)
-#' colnames(contrasts(x$cyl_helm)) <- c("4vs6", "4&6vs8")
-#'
-#' # Formula conversion with
-#' julia_formula <- jl_formula(mpg ~ am * cyl_helm)
-#' julia_formula
-#'
-#' # Data frame conversion
-#' julia_data <- jl_data(x)
-#' julia_data
-#'
-#' # Contrasts construction (`show_code = TRUE` pretty prints the Julia code)
-#' julia_contrasts <- jl_contrasts(x, show_code = TRUE)
-#' julia_contrasts
-#'
-#' # Family conversion
-#' julia_family <- jl_family("binomial")
-#' julia_family
+#' # `jl_dict()` opinionatedly constructs a Dictionary data type
+#' ## Basic `list()`-like usage
+#' jl_dict(age = 20:25, sex = c("M", "F"))
+#' ## Splats when a single list is supplied
+#' jl_dict(list(a = 1, b = 2))
+#' ## Wrap scalars in `I()` to prevent vector conversion
+#' jl_dict(a = 1:2, b = 3:4, c = I(5))
 #'
 #' stop_julia()
 #' }
 NULL
 
-#' @rdname jl-helpers
+#' @rdname jl-helpers-utils
 #' @param x An object
 #' @param type Type of Julia object to additional test for
 #' @export
@@ -62,14 +41,14 @@ is_jl <- function(x, type) {
     if (!missing(type)) { type %in% jl_supertypes(x) } else { TRUE }
 }
 
-#' @rdname jl-helpers
+#' @rdname jl-helpers-utils
 #' @export
 jl_put <- function(x) {
   stopifnot(!is_jl(x))
   JuliaConnectoR::juliaPut(x)
 }
 
-#' @rdname jl-helpers
+#' @rdname jl-helpers-utils
 #' @export
 jl_get <- function(x) {
   stopifnot(is_jl(x))
@@ -79,8 +58,7 @@ jl_get <- function(x) {
   x
 }
 
-
-#' @rdname jl-helpers
+#' @rdname jl-helpers-utils
 #' @param expr A string of Julia code
 #' @param ... Interpolated elements. In the case of `jl()`:.
 #'    - If all named, elements are introduced as Julia variables in the `expr`
@@ -118,7 +96,7 @@ jl <- function(expr, ..., .R = FALSE, .passthrough = FALSE) {
   out
 }
 
-#' @rdname jl-helpers
+#' @rdname jl-helpers-utils
 #' @export
 jl_dict <- function(...) {
   dots <- list(...)
@@ -133,74 +111,4 @@ jl_dict <- function(...) {
   })
   stopifnot(!is.null(nms) && all(nzchar(nms)))
   jl("x.namedelements", x = dots)
-}
-
-#' @rdname jl-helpers
-#' @param formula A string or formula object
-#' @export
-jl_formula <- function(formula) {
-  x <- formula
-  if (is_jl(x)) return(x)
-  x <- JuliaFormulae::julia_formula(x)
-  res <- tryCatch(
-    jl("@formula(%s)", deparse1(x)),
-    error = function(e) {
-      sanitize_jl_error(e, sys.call(1))
-    }
-  )
-  if (inherits(res, "condition")) {
-    stop(res)
-  } else {
-    res
-  }
-}
-
-#' @rdname jl-helpers
-#' @param df A data frame
-#' @param cols A subset of columns to make contrast specifiations for
-#' @param show_code Whether to print corresponding Julia code as a side-effect
-#' @export
-jl_contrasts <- function(df, cols = NULL, show_code = FALSE) {
-  if (is_jl(df)) return(NULL)
-  dict <- construct_contrasts(df, cols = cols, format = show_code)
-  if (show_code) {
-    cat(dict)
-  }
-  if (!is.null(dict)) {
-    jl(dict)
-  } else {
-    NULL
-  }
-}
-
-#' @rdname jl-helpers
-#' @export
-jl_data <- function(df) {
-  if (is_jl(df)) return(df)
-  fct_cols <- Filter(is.factor, df)
-  df[, colnames(fct_cols)] <- lapply(fct_cols, as.character)
-  jl_put(df)
-}
-
-#' @rdname jl-helpers
-#' @param family The distributional family as string or `<family>` object
-#' @export
-jl_family <- function(family = c("gaussian", "binomial", "poisson")) {
-  if (is_jl(family)) return(family)
-  if (inherits(family, "family")) {
-    family <- family$family
-  }
-  if (is.character(family)) {
-    family <- match.arg(family)
-    family <- switch(
-      family,
-      "gaussian" = "Normal",
-      "binomial" = "Bernoulli",
-      "poisson"  = "Poisson"
-    )
-    family <- jl("GLM.%s()", family)
-    family
-  } else {
-    stop("Invalid input to the `family` argument.")
-  }
 }
