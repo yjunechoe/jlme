@@ -50,7 +50,7 @@ tidy.jlme <- function(x, effects = c("var_model", "ran_pars", "fixed"), ...) {
       re_df <- rbind(re_df, data.frame(group = "Residual", term = "sd__Observation", estimate = sigma))
     }
     if (effects == "ran_pars") {
-      out <- re_df
+      out <- cbind(effect = "ran_pars", re_df)
     } else {
       out$effect <- "fixed"
       out$group <- NA_character_
