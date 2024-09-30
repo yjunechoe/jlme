@@ -362,23 +362,12 @@ jl_get(jmod$rePCA)
 Example 2: extract fitlog and plot
 
 ``` r
-fitlog <- jl_get(jl("refit!(x; thin=1)", x = jmod)$optsum$fitlog)
+fitlog <- jl_get(jl("refit!(deepcopy(x); thin=1)", x = jmod)$optsum$fitlog)
 thetas <- t(sapply(fitlog, `[[`, 1))
-head(thetas)
-#>      [,1] [,2] [,3]
-#> [1,] 1.00    0 1.00
-#> [2,] 1.75    0 1.00
-#> [3,] 1.00    1 1.00
-#> [4,] 1.00    0 1.75
-#> [5,] 0.25    0 1.00
-#> [6,] 1.00   -1 1.00
-```
-
-``` r
 matplot(thetas, type = "o", xlab = "iterations")
 ```
 
-<img src="man/figures/README-fitlog-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
 
 ### Julia session
 
@@ -400,7 +389,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_bvBys3\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_ddW8gS\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [ff71e718] MixedModels v4.26.0
 #>   [3eaba693] StatsModels v0.7.4
@@ -415,13 +404,13 @@ those specified in `jlme_setup(add)`. Other libraries such as `Random`
 
 ### More with `{JuliaConnectoR}`
 
-While `{jlme}` users will typically not need to interact with
-`{JuliaConnectoR}` directly, it may be useful for extending `{jlme}`
-features with other packages in the Julia modelling ecosystem. A simple
-way to do that is to use `juliaImport()`, which creates makeshift
-bindings to Julia libraries.
+While users will typically not need to interact with `{JuliaConnectoR}`
+directly, it may be useful for extending `{jlme}` features with other
+packages in the Julia modelling ecosystem. A simple way to do that is to
+use `juliaImport()`, which creates makeshift bindings to any Julia
+library.
 
-For example, to replicate a workflow using
+Here’s an example replicating a workflow using
 [`Effects.empairs`](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/)
 for post-hoc pairwise comparisons:
 
@@ -549,7 +538,7 @@ print(jmod, format = "markdown")
 ### Data type conversion
 
 Be sure to pass integers (vs. doubles) to Julia functions that expect
-Integer type, (e.g., the `parametricbootstrap()` example above):
+Integer type:
 
 ``` r
 jl_put(1)
@@ -563,12 +552,27 @@ jl_put(1L)
 #> 1
 ```
 
+The `Dict` (dictionary) data type is common and relevant for modelling
+workflows in Julia. `{jlme}` offers `jl_dict()` as an opinionated
+constructor for that usecase:
+
+``` r
+# Note use of `I()` to protect length-1 values as scalar
+jl_dict(a = 1:2, b = "three", c = I(4.5))
+#> <Julia object of type Dict{Symbol, Any}>
+#> Dict{Symbol, Any} with 3 entries:
+#>   :a => [1, 2]
+#>   :b => ["three"]
+#>   :c => 4.5
+```
+
 ### Performance (linear algebra backend)
 
 Using [`MKL.jl`](https://github.com/JuliaLinearAlgebra/MKL.jl) or
 [`AppleAccelerate.jl`](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl)
 may improve model fitting performance (but see the system requirements
-first).
+first). This should be supplied to the `add` argument to `jlme_setup()`,
+to ensure that they are loaded first, prior to other packages.
 
 ``` r
 # Not run
@@ -578,11 +582,11 @@ jlme_status() # Should now see MKL loaded here
 
 ### Performance (data transfer)
 
-In practice, most of the overhead will come from transferring the data
-from R to Julia. If you are looking to fit many models to the same data,
-you should first filter to keep only the columns you need and then use
-`jl_data()` to send the data to Julia. The Julia data frame object can
-then be used to fit Julia models.
+If the data is large, a sizable overhead will come from transferring the
+data from R to Julia. If you are also looking to fit many models to the
+same data, you should first filter to keep only the columns you need and
+then use `jl_data()` to send the data to Julia. The Julia object can
+then be used in place of an R data frame.
 
 ``` r
 data_r <- mtcars

@@ -198,13 +198,9 @@ jl_get(jmod$rePCA)
 
 Example 2: extract fitlog and plot
 
-```{r}
-fitlog <- jl_get(jl("refit!(x; thin=1)", x = jmod)$optsum$fitlog)
-thetas <- t(sapply(fitlog, `[[`, 1))
-head(thetas)
-```
-
 ```{r fitlog}
+fitlog <- jl_get(jl("refit!(deepcopy(x); thin=1)", x = jmod)$optsum$fitlog)
+thetas <- t(sapply(fitlog, `[[`, 1))
 matplot(thetas, type = "o", xlab = "iterations")
 ```
 
@@ -220,9 +216,9 @@ On setup, `{jlme}` loads [GLM](https://github.com/JuliaStats/GLM.jl), [StatsMode
 
 ### More with `{JuliaConnectoR}`
 
-While `{jlme}` users will typically not need to interact with `{JuliaConnectoR}` directly, it may be useful for extending `{jlme}` features with other packages in the Julia modelling ecosystem. A simple way to do that is to use `juliaImport()`, which creates makeshift bindings to Julia libraries.
+While users will typically not need to interact with `{JuliaConnectoR}` directly, it may be useful for extending `{jlme}` features with other packages in the Julia modelling ecosystem. A simple way to do that is to use `juliaImport()`, which creates makeshift bindings to any Julia library.
 
-For example, to replicate a workflow using [`Effects.empairs`](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/) for post-hoc pairwise comparisons:
+Here's an example replicating a workflow using [`Effects.empairs`](https://beacon-biosignals.github.io/Effects.jl/dev/emmeans/) for post-hoc pairwise comparisons:
 
 ```{r}
 # New model: 2 (M/F) by 3 (curse/scold/shout) factorial
@@ -268,19 +264,25 @@ MixedModels.jl supports various [display formats](https://juliastats.org/MixedMo
 print(jmod, format = "markdown")
 ```
 
-
 ### Data type conversion
 
-Be sure to pass integers (vs. doubles) to Julia functions that expect Integer type, (e.g., the `parametricbootstrap()` example above):
+Be sure to pass integers (vs. doubles) to Julia functions that expect Integer type:
 
 ```{r}
 jl_put(1)
 jl_put(1L)
 ```
 
+The `Dict` (dictionary) data type is common and relevant for modelling workflows in Julia. `{jlme}` offers `jl_dict()` as an opinionated constructor for that usecase:
+
+```{r}
+# Note use of `I()` to protect length-1 values as scalar
+jl_dict(a = 1:2, b = "three", c = I(4.5))
+```
+
 ### Performance (linear algebra backend)
 
-Using [`MKL.jl`](https://github.com/JuliaLinearAlgebra/MKL.jl) or [`AppleAccelerate.jl`](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl) may improve model fitting performance (but see the system requirements first).
+Using [`MKL.jl`](https://github.com/JuliaLinearAlgebra/MKL.jl) or [`AppleAccelerate.jl`](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl) may improve model fitting performance (but see the system requirements first). This should be supplied to the `add` argument to `jlme_setup()`, to ensure that they are loaded first, prior to other packages.
 
 ```{r, eval = FALSE}
 # Not run
@@ -290,7 +292,7 @@ jlme_status() # Should now see MKL loaded here
 
 ### Performance (data transfer)
 
-In practice, most of the overhead will come from transferring the data from R to Julia. If you are looking to fit many models to the same data, you should first filter to keep only the columns you need and then use `jl_data()` to send the data to Julia. The Julia data frame object can then be used to fit Julia models.
+If the data is large, a sizable overhead will come from transferring the data from R to Julia. If you are also looking to fit many models to the same data, you should first filter to keep only the columns you need and then use `jl_data()` to send the data to Julia. The Julia object can then be used in place of an R data frame.
 
 ```{r}
 data_r <- mtcars
