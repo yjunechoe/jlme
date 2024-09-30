@@ -18,8 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
+          - {os: ubuntu-latest, r: 'devel', julia: '1.10', http-user-agent: 'release'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -35,6 +34,16 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+
+      - name: Cache R packages and Julia packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.R_LIBS_USER }}/*
+            !${{ env.R_LIBS_USER }}/pak
+            ~/.julia/artifacts/
+            ~/.julia/packages/
+          key: ${{ matrix.config.r }}-${{ matrix.config.julia }}-${{ hashFiles('DESCRIPTION') }}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
