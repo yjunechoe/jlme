@@ -60,6 +60,9 @@ tidy.jlme <- function(x, effects = c("var_model", "ran_pars", "fixed"), ...) {
     }
     zerocorr <- (out$effect == "ran_pars") & (out$estimate == 0) & grepl("cor__", out$term)
     out <- out[!zerocorr, ]
+    if (effects == "ran_pars") {
+      out$effect <- NULL
+    }
   }
   out$term <- gsub(" & ", ":", out$term)
   out$term <- gsub(": ", "", out$term)
