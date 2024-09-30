@@ -46,6 +46,24 @@ test_that("reproduces `lm()` and `lmer()` outputs", {
   rmod4 <- glm(fm4, mtcars, family = "binomial")
   expect_similar_models(jmod4, rmod4)
 
+  # print/format works
+  expect_output({
+    # Fixed
+    print(jmod1)
+    # Mixed
+    print(jmod2)
+    print(jmod2, format = "markdown")
+  })
+
+  # optsum set
+  unfit <- jlmer(
+    Reaction ~ Days + (1 | Subject),
+    lme4::sleepstudy,
+    fit = FALSE,
+    optsum = list(maxfeval = 10L)
+  )
+  expect_equal(unfit$optsum$maxfeval, 10)
+
 })
 
 test_that("preserves contrasts", {

@@ -2,22 +2,21 @@ jl_io <- function(verbose) {
   if (verbose) "" else "io=devnull"
 }
 
-jl_pkg_installed <- function(x, ..., verbose = interactive()) {
-  jl('!isnothing(Pkg.status("%1$s"; %2$s))', x, jl_io(verbose), .R = TRUE)
+jl_pkg_installed <- function(x) {
+  x %in% loaded_libs()
 }
 
 jl_pkg_add <- function(x, ..., verbose = interactive()) {
-  if (!jl_pkg_installed(x, verbose = verbose)) {
+  if (!jl_pkg_installed(x)) {
     jl('Pkg.add("%2$s"; %1$s); using %2$s', jl_io(verbose), x)
   }
 }
 
-check_jl_installed <- function(x, add = TRUE, ..., verbose = interactive()) {
-  if (add) {
-    jl_pkg_add(x, verbose = verbose)
-  } else {
-    stopifnot(jl_pkg_installed(x, verbose = verbose))
+jl_try_pkg_install <- function(x, ..., verbose = interactive()) {
+  if (!jl_pkg_installed(x)) {
+    try(jl_pkg_add(x, verbose = verbose))
   }
+  jl_pkg_installed(x)
 }
 
 sanitize_jl_error <- function(e, .call) {
@@ -48,8 +47,7 @@ jl_format <- function(x, ...) {
 }
 
 jl_require <- function(x) {
-  if (!x %in% loaded_libs()) {
-    jl('Pkg.add("%1$s"; io=devnull); using %1$s;', x)
-  }
-  invisible(TRUE)
+  installed <- jl_try_pkg_install(x)
+  if (!installed) stop("Unable to add package: ", x)
+  invisible(installed)
 }
