@@ -66,6 +66,3 @@ figures:
   fig.height: ~
   fig.retina: 2
   bg: "white"
-
-development:
-  mode: auto

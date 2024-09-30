@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml)
+[![codecov](https://codecov.io/gh/yjunechoe/jlme/graph/badge.svg?token=d2bLJunNd5)](https://codecov.io/gh/yjunechoe/jlme)
 <!-- badges: end -->
 
 Julia (mixed-effects) regression modelling from R. Powered by the [`{JuliaConnectoR}`](https://github.com/stefan-m-lenz/JuliaConnectoR) R package and Julia libraries [GLM](https://github.com/JuliaStats/GLM.jl), [StatsModels](https://github.com/JuliaStats/StatsModels.jl), and [MixedModels](https://github.com/JuliaStats/MixedModels.jl).
@@ -33,7 +34,7 @@ You can install the development version of `{jlme}` from [GitHub](https://github
 remotes::install_github("yjunechoe/jlme")
 ```
 
-`{jlme}` is experimental: see [NEWS.md](https://github.com/yjunechoe/jlme/blob/main/NEWS.md#jlme-development-version) for active updates.
+`{jlme}` is experimental and under active development: see [NEWS.md](https://github.com/yjunechoe/jlme/blob/main/NEWS.md#jlme-development-version) for the latest updates.
 
 ## Setup
 
@@ -203,7 +204,7 @@ thetas <- t(sapply(fitlog, `[[`, 1))
 head(thetas)
 ```
 
-```{r}
+```{r fitlog}
 matplot(thetas, type = "o", xlab = "iterations")
 ```
 
