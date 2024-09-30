@@ -1,10 +1,22 @@
 skip_conditionally()
 
+print(
+  jlme_status()
+)
+
 print(Sys.which("julia"))
 
 print(system.time({
   jlme_setup(restart = TRUE, verbose = TRUE)
 }))
+
+print(
+  jlme_status()
+)
+
+print(
+  jlme_setup(restart = FALSE)
+)
 
 test_that("reproduces `lm()` and `lmer()` outputs", {
 
@@ -85,6 +97,94 @@ test_that("formula conversions work", {
   } else {
     message("Skipping formula conversion tests - JuliaFormulae not installed.")
   }
+
+})
+
+test_that("all-julia inputs work", {
+
+  fm <- mpg ~ hp
+  df <- mtcars
+  mod1 <- jlm(fm, df)
+
+  fm_jl <- jl_formula(fm)
+  df_jl <- jl_data(df)
+  mod2 <- jlm(fm_jl, df_jl)
+
+  expect_similar_models(mod1, mod2)
+
+})
+
+test_that("misc jl safety and flexibility behaviors", {
+
+  # Captures julia parsing error of invalid formula
+  expect_error(jl_formula("a ~ b.c"))
+
+  # Pretty-print contrasts
+  df <- mtcars
+  df$am <- as.factor(df$am)
+  contrasts(df$am) <- contr.sum(2)
+  expect_output(
+    # Expect output to console
+    jl_contrasts(df, show_code = TRUE)
+  )
+
+  # Family argument spec
+  expect_error({
+    jl_family(mean)
+  })
+  expect_no_error({
+    family_specs <- list(
+      jl_family("binomial"),
+      jl_family(binomial),
+      jl_family(binomial())
+    )
+  })
+  expect_identical(
+    sapply(family_specs, jl_get),
+    rep(jl_get(jl_family("binomial")), 3)
+  )
+
+})
+
+test_that("re-exports work", {
+  x <- jlmer(r2 ~ Anger + (1 | id), lme4::VerbAgg, family = "binomial")
+  expect_type(propertynames(x), "character")
+  expect_type(issingular(x), "logical")
+  x_reduced <- jlmer(r2 ~ 1 + (1 | id), lme4::VerbAgg, family = "binomial")
+  expect_true(is_jl(likelihoodratiotest(x, x_reduced)))
+})
+
+test_that("CI functions work", {
+
+  jmod <- jlmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
+  tidied <- tidy(jmod)
+  expect_no_error({
+    tidy(jmod, effects = "var_model")
+    tidy(jmod, effects = "fixed")
+    tidy(jmod, effects = "ran_pars")
+  })
+
+  prof <- profilelikelihood(jmod)
+  tidied_prof <- tidy(prof)
+  expect_true(is_jl(prof))
+  expect_s3_class(tidied_prof, "data.frame")
+  expect_contains(tidied$term, tidied_prof$term)
+  expect_no_error({
+    tidy(prof, effects = "var_model")
+    tidy(prof, effects = "fixed")
+    tidy(prof, effects = "ran_pars")
+  })
+
+  samp <- parametricbootstrap(jmod, 10L, 1L)
+  tidied_samp <- tidy(samp)
+  expect_true(is_jl(samp))
+  expect_s3_class(tidied_samp, "data.frame")
+  expect_contains(tidied$term, tidied_samp$term)
+  expect_no_error({
+    tidy(samp, effects = "var_model")
+    tidy(samp, effects = "fixed")
+    tidy(samp, effects = "ran_pars")
+  })
 
 })
 
