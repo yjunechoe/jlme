@@ -47,8 +47,7 @@ loaded_libs <- function() {
 #' @rdname jlme_setup
 #' @export
 check_julia_ok <- function() {
-  nzchar(Sys.which("julia")) &&
-    JuliaConnectoR::juliaSetupOk() &&
+  JuliaConnectoR::juliaSetupOk() &&
     julia_version_compatible()
 }
 
