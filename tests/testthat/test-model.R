@@ -1,5 +1,6 @@
 skip_conditionally()
 
+stop_julia()
 print(
   jlme_status()
 )
@@ -135,7 +136,9 @@ test_that("all-julia inputs work", {
 test_that("misc jl safety and flexibility behaviors", {
 
   # Captures julia parsing error of invalid formula
+  ## Invalid parse caught at JuliaFormulae
   expect_error(jl_formula("a ~ b.c"))
+  expect_error(jl_formula("a ~ b&2"))
 
   # Pretty-print contrasts
   df <- mtcars

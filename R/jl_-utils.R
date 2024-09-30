@@ -71,7 +71,7 @@ jl <- function(expr, ..., .R = FALSE, .passthrough = FALSE) {
   if (is_jl(expr) && .passthrough) return(expr)
   dots <- list(...)
   stopifnot(is.character(expr) && length(expr) == 1L)
-  if (is.null(dots)) {
+  if (length(dots) == 0) {
     # eval if no dots
     out <- JuliaConnectoR::juliaEval(expr)
   } else {

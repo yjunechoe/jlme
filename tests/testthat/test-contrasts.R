@@ -1,3 +1,5 @@
+stop_julia()
+
 test_that("custom contrast detection works", {
 
   x <- data.frame(v = c("a", "b", "c"))

@@ -1,6 +1,7 @@
 #' @keywords internal
 .jlme <- new.env(parent = emptyenv())
 is_setup <- function() {
+  # nocov start
   if (length(.jlme) == 0 && exists(".__DEVTOOLS__", asNamespace("jlme"))) {
     # If setup already ran, flag it as set up
     if (!is.null(get("pkgLocal", asNamespace("JuliaConnectoR"))$con)) {
@@ -8,6 +9,7 @@ is_setup <- function() {
       return(TRUE)
     }
   }
+  # nocov end
   isTRUE(.jlme$is_setup)
 }
 ensure_setup <- function() {
@@ -16,12 +18,8 @@ ensure_setup <- function() {
   }
 }
 
-julia_cli <- function(..., code = NULL) {
+julia_cli <- function(...) {
   x <- do.call(paste, list(...))
-  if (!is.null(code)) {
-    code <- do.call(paste, c(sep = "; ", as.list(code)))
-    x <- paste0(x, " '", code, "'")
-  }
   julia_cmd <- asNamespace("JuliaConnectoR")$getJuliaExecutablePath()
   utils::tail(system2(julia_cmd, x, stdout = TRUE), 1L)
 }
@@ -34,10 +32,6 @@ julia_version <- function() {
 }
 parse_julia_version <- function(version) {
   gsub("^julia.version .*(\\d+\\.\\d+\\.\\d+).*$", "\\1", version)
-}
-
-julia_detect_cores <- function() {
-  as.integer(julia_cli('-q -e "println(Sys.CPU_THREADS);"'))
 }
 
 loaded_libs <- function() {

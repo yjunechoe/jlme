@@ -9,8 +9,4 @@
 library(testthat)
 library(jlme)
 
-stop_julia()
-
 test_check("jlme")
-
-stop_julia()
