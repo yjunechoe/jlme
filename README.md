@@ -367,7 +367,7 @@ thetas <- t(sapply(fitlog, `[[`, 1))
 matplot(thetas, type = "o", xlab = "iterations")
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
+<img src="man/figures/README-fitlog-1.png" width="100%" />
 
 ### Julia session
 
