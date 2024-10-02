@@ -389,9 +389,9 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_ddW8gS\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_kLdW0y\Project.toml`
 #>   [38e38edf] GLM v1.9.0
-#>   [ff71e718] MixedModels v4.26.0
+#>   [ff71e718] MixedModels v4.26.1
 #>   [3eaba693] StatsModels v0.7.4
 #>   [9a3f8284] Random
 ```

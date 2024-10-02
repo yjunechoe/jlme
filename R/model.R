@@ -51,17 +51,16 @@ jlm <- function(formula, data, family = "gaussian",
 
   args_list <- c(
     list(
-      "StatsModels.fit",
       jl("GLM.GeneralizedLinearModel"),
       jl_formula(formula),
-      jl_data(data)
+      jl_data(data),
+      jl_family(family)
     ),
-    if (!is.null(family)) list(jl_family(family)),
     if (!is.null(contrasts)) list(contrasts = contrasts),
     list(...)
   )
 
-  mod <- do.call(JuliaConnectoR::juliaCall, args_list)
+  mod <- do.call(JuliaConnectoR::juliaFun("StatsModels.fit"), args_list)
 
   class(mod) <- c("jlme", class(mod))
   mod
@@ -85,27 +84,28 @@ jlmer <- function(formula, data, family = NULL,
 
   model_fun <- sprintf(
     "MixedModels.%sLinearMixedModel",
-    if (!is.null(family)) "Generalized" else ""
+    if (is.null(family)) "" else "Generalized"
   )
 
   args_list <- c(
     list(
-      model_fun,
       jl_formula(formula),
       jl_data(data)
     ),
-    if (!is.null(family)) list(jl_family(family)),
+    if (!is.null(family)) list(jl_family(family)), 
     if (!is.null(contrasts)) list(contrasts = contrasts)
   )
 
-  model <- do.call(JuliaConnectoR::juliaCall, args_list)
+  model <- do.call(JuliaConnectoR::juliaFun(model_fun), args_list)
 
-  stopifnot(
-    "Unused in `optsum`" = all(names(optsum) %in% propertynames(model$optsum))
-  )
-  optsum_keys <- lapply(names(optsum), as.symbol)
-  for (i in seq_along(optsum)) {
-    JuliaConnectoR::juliaCall("setfield!", model$optsum, optsum_keys[[i]], optsum[[i]])
+  if (length(optsum) > 0) {
+    stopifnot(
+      "Unused in `optsum`" = all(names(optsum) %in% propertynames(model$optsum))
+    )
+    optsum_keys <- lapply(names(optsum), as.symbol)
+    for (i in seq_along(optsum)) {
+      JuliaConnectoR::juliaCall("setfield!", model$optsum, optsum_keys[[i]], optsum[[i]])
+    }
   }
 
   if (!fit) {
