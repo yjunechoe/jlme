@@ -25,22 +25,6 @@ sanitize_jl_error <- function(e, .call) {
   e
 }
 
-jl_supertypes <- function(x) {
-  supertypes <- JuliaConnectoR::juliaLet("
-    let
-        T = typeof(x)
-        supertypes = []
-        while T != Any
-            T = supertype(T)
-            push!(supertypes, T)
-        end
-        supertypes
-    end
-  ", x = x)
-  vec <- unlist(jl_get(supertypes))
-  gsub("\\{.*\\}$", "", vec)
-}
-
 jl_format <- function(x, ...) {
   jl_require("JuliaFormatter")
   JuliaConnectoR::juliaCall("JuliaFormatter.format_text", x, align_matrix = TRUE, ...)
