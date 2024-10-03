@@ -105,8 +105,28 @@
 <span class="r-in"><span><span class="co"># Data frame conversion</span></span></span>
 <span class="r-in"><span><span class="va">julia_data</span> <span class="op">&lt;-</span> <span class="fu">jl_data</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">julia_data</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type Main.RConnector.RDataFrame&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Main.RConnector.RDataFrame with 32 rows, 12 columns, and an unknown schema.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type Table{@NamedTuple{mpg::Float64, cyl::Float64, disp::Float64, hp::Float64, drat::Float64, wt::Float64, qsec::Float64, vs::Float64, am::Float64, gear::Float64, carb::Float64, cyl_helm::String}, 1, @NamedTuple{mpg::Vector{Float64}, cyl::Vector{Float64}, disp::Vector{Float64}, hp::Vector{Float64}, drat::Vector{Float64}, wt::Vector{Float64}, qsec::Vector{Float64}, vs::Vector{Float64}, am::Vector{Float64}, gear::Vector{Float64}, carb::Vector{Float64}, cyl_helm::Vector{String}}}&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Table with 12 columns and 32 rows:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       mpg   cyl  disp   hp     drat  wt     qsec   vs   am   gear  carb  ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ┌─────────────────────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1  │ 21.0  6.0  160.0  110.0  3.9   2.62   16.46  0.0  1.0  4.0   4.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2  │ 21.0  6.0  160.0  110.0  3.9   2.875  17.02  0.0  1.0  4.0   4.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3  │ 22.8  4.0  108.0  93.0   3.85  2.32   18.61  1.0  1.0  4.0   1.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4  │ 21.4  6.0  258.0  110.0  3.08  3.215  19.44  1.0  0.0  3.0   1.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5  │ 18.7  8.0  360.0  175.0  3.15  3.44   17.02  0.0  0.0  3.0   2.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6  │ 18.1  6.0  225.0  105.0  2.76  3.46   20.22  1.0  0.0  3.0   1.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7  │ 14.3  8.0  360.0  245.0  3.21  3.57   15.84  0.0  0.0  3.0   4.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8  │ 24.4  4.0  146.7  62.0   3.69  3.19   20.0   1.0  0.0  4.0   2.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9  │ 22.8  4.0  140.8  95.0   3.92  3.15   22.9   1.0  0.0  4.0   2.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  10 │ 19.2  6.0  167.6  123.0  3.92  3.44   18.3   1.0  0.0  4.0   4.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  11 │ 17.8  6.0  167.6  123.0  3.92  3.44   18.9   1.0  0.0  4.0   4.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  12 │ 16.4  8.0  275.8  180.0  3.07  4.07   17.4   0.0  0.0  3.0   3.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  13 │ 17.3  8.0  275.8  180.0  3.07  3.73   17.6   0.0  0.0  3.0   3.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  14 │ 15.2  8.0  275.8  180.0  3.07  3.78   18.0   0.0  0.0  3.0   3.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  15 │ 10.4  8.0  472.0  205.0  2.93  5.25   17.98  0.0  0.0  3.0   4.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  16 │ 10.4  8.0  460.0  215.0  3.0   5.424  17.82  0.0  0.0  3.0   4.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  17 │ 14.7  8.0  440.0  230.0  3.23  5.345  17.42  0.0  0.0  3.0   4.0   ⋯</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ⋮  │  ⋮     ⋮     ⋮      ⋮     ⋮      ⋮      ⋮     ⋮    ⋮    ⋮     ⋮    ⋱</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Contrasts construction (`show_code = TRUE` pretty prints the Julia code)</span></span></span>
 <span class="r-in"><span><span class="va">julia_contrasts</span> <span class="op">&lt;-</span> <span class="fu">jl_contrasts</span><span class="op">(</span><span class="va">x</span>, show_code <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
