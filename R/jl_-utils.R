@@ -38,7 +38,13 @@ NULL
 #' @export
 is_jl <- function(x, type) {
   inherits(x, "JuliaProxy") &&
-    if (!missing(type)) { type %in% jl_supertypes(x) } else { TRUE }
+    if (!missing(type)) {
+      stopifnot(is.character(type) && (length(type) == 1L))
+      jl_string <- sprintf("typeof(x) <: %s", type)
+      isTRUE(jl(jl_string, x = x, .R = TRUE))
+    } else {
+      TRUE
+    }
 }
 
 #' @rdname jl-helpers-utils
