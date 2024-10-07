@@ -131,10 +131,12 @@ jlme_setup <- function(...,
 }
 
 .jlme_setup <- function(..., add, threads, verbose = FALSE) {
+  start <- Sys.time()
   start_julia(..., threads = threads)
   init_proj(add = add, verbose = verbose)
   load_libs(add = add)
-  message("Successfully set up Julia connection.")
+  timing <- as.integer(difftime(Sys.time(), start, units = "secs"))
+  message(sprintf("Successfully set up Julia connection. (%is)", timing))
   invisible(TRUE)
 }
 
