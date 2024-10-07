@@ -18,9 +18,13 @@ ensure_setup <- function() {
   }
 }
 
+find_julia <- function() {
+  asNamespace("JuliaConnectoR")$getJuliaExecutablePath()
+}
+
 julia_cli <- function(...) {
   x <- do.call(paste, list(...))
-  julia_cmd <- asNamespace("JuliaConnectoR")$getJuliaExecutablePath()
+  julia_cmd <- find_julia()
   utils::tail(system2(julia_cmd, x, stdout = TRUE), 1L)
 }
 
@@ -64,7 +68,7 @@ jlme_status <- function() {
     cat(JuliaConnectoR::juliaCall("Pkg.status"))
   } else {
     julia_cmd <- tryCatch(
-      asNamespace("JuliaConnectoR")$getJuliaExecutablePath(),
+      find_julia(),
       error = function(e) message("! ", e$message)
     )
     if (is.character(julia_cmd)) {
@@ -117,7 +121,7 @@ jlme_setup <- function(...,
     return(invisible(TRUE))
   }
 
-  .jlme$julia_cmd <- asNamespace("JuliaConnectoR")$getJuliaExecutablePath()
+  .jlme$julia_cmd <- find_julia()
 
   params <- list(..., add = add, threads = threads, verbose = verbose)
   if (verbose) {
