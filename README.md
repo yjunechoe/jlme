@@ -11,7 +11,7 @@ status](https://www.r-pkg.org/badges/version/jlme)](https://CRAN.R-project.org/p
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml)
-[![codecov](https://codecov.io/gh/yjunechoe/jlme/graph/badge.svg?token=d2bLJunNd5)](https://codecov.io/gh/yjunechoe/jlme)
+[![codecov](https://codecov.io/gh/yjunechoe/jlme/graph/badge.svg?token=d2bLJunNd5)](https://app.codecov.io/gh/yjunechoe/jlme/)
 <!-- badges: end -->
 
 Julia (mixed-effects) regression modelling from R. Powered by the
@@ -389,7 +389,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_kLdW0y\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_VfZiPn\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [ff71e718] MixedModels v4.26.1
 #>   [3eaba693] StatsModels v0.7.4
@@ -520,7 +520,7 @@ cbind(
 ### Displaying MixedModels
 
 MixedModels.jl supports various [display
-formats](https://juliastats.org/MixedModels.jl/stable/mime) for
+formats](https://juliastats.org/MixedModels.jl/stable/mime/) for
 mixed-effects models which are available in `{jlme}` via the `format`
 argument of `print()`:
 
