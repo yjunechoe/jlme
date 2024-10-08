@@ -23,9 +23,7 @@ test_that("formula construction works", {
 
   strsquish <- function(x) gsub("\\s", "", x)
 
-  expect_equal(
-    strsquish(construct_contrasts(x, "v", format = FALSE)),
-    strsquish('
+  expect_identical(strsquish(construct_contrasts(x, "v", format = FALSE)), strsquish('
       Dict(
         :v => HypothesisCoding(
           [ -1/2  1/2   0;
@@ -34,7 +32,6 @@ test_that("formula construction works", {
           labels=["helm1", "helm2"]
         )
       )
-    ')
-  )
+    '))
 
 })

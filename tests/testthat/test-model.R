@@ -63,7 +63,7 @@ test_that("reproduces `lm()` and `lmer()` outputs", {
     fit = FALSE,
     optsum = list(maxfeval = 10L)
   )
-  expect_equal(unfit$optsum$maxfeval, 10)
+  expect_identical(unfit$optsum$maxfeval, 10L)
 
 })
 
