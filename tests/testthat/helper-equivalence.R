@@ -19,5 +19,5 @@ expect_similar_models <- function(x, y, ignore_names = FALSE) {
   }
   x_res <- mod_deframe(x, ignore_names)
   y_res <- mod_deframe(y, ignore_names)
-  expect_equal(x_res, y_res)
+  expect_identical(x_res, y_res)
 }

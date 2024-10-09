@@ -53,7 +53,7 @@ tidy.jlmeprof <- function(x, effects = c("var_model", "ran_pars", "fixed"),
   par_keep <- c(
     which(tidied$effect == "fixed"),
     which(tidied$group == "Residual"),
-    utils::head(which(grepl(x = tidied$term, "sd__")), -1)
+    utils::head(grep(x = tidied$term, "sd__"), -1)
   )
   tidied_keep <- tidied[par_keep, c("effect", "group", "term")]
 

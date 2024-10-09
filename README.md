@@ -41,9 +41,16 @@ library(jlme)
 jlme_setup()
 ```
 
-`{jlme}` uses `{JuliaConnectoR}` to connect to a Julia session. Jump
-down to the [Julia troubleshooting](#julia-troubleshooting) section for
-issues related to Julia installation and configuration.
+Using `{jlme}` requires a prior installation of the **Julia programming
+language**, which can be downloaded from either the [official
+website](https://julialang.org/) or using the command line utility
+[juliaup](https://github.com/JuliaLang/juliaup).
+
+If you are encountering issues with setting up Julia, please make sure
+that you’re have the latest version (\>=1.1.4) of the
+[`{JuliaConnectoR}`](https://github.com/stefan-m-lenz/JuliaConnectoR)
+package installed and see `` ?JuliaConnectoR::`Julia-Setup` `` for
+troubleshooting.
 
 ## Usage (table of contents)
 
@@ -52,7 +59,6 @@ issues related to Julia installation and configuration.
 - [Assess uncertainty](#assess-uncertainty)
 - [Julia interoperability](#julia-interoperability)
 - [Tips and tricks](#tips-and-tricks)
-- [Julia troubleshooting](#julia-troubleshooting)
 - [Acknowledgments](#acknowledgments)
 
 ## Fit models
@@ -376,7 +382,7 @@ loaded Julia libraries) with `jlme_status()`:
 
 ``` r
 jlme_status()
-#> jlme 0.3.0 
+#> jlme 0.4.0 
 #> R version 4.4.1 (2024-06-14 ucrt) 
 #> Julia Version 1.10.5
 #> Commit 6f3fdf7b36 (2024-08-27 14:19 UTC)
@@ -389,7 +395,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_VfZiPn\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_QJShm4\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [ff71e718] MixedModels v4.26.1
 #>   [3eaba693] StatsModels v0.7.4
@@ -566,6 +572,9 @@ jl_dict(a = 1:2, b = "three", c = I(4.5))
 #>   :c => 4.5
 ```
 
+See `` ?JuliaConnectoR::`JuliaConnectoR-package` `` for a comprehensive
+list of data type conversion rules.
+
 ### Performance (linear algebra backend)
 
 Using [`MKL.jl`](https://github.com/JuliaLinearAlgebra/MKL.jl) or
@@ -636,54 +645,6 @@ If you spend non-negligible time fitting regression models for your
 work, please just [learn Julia](https://julialang.org/learning/)! It’s a
 great high-level language that feels close to R in syntax and its
 REPL-based workflow.
-
-## Julia troubleshooting
-
-[↑Back to table of contents](#usage-table-of-contents)
-
-`{jlme}` is powered by
-[`{JuliaConnectoR}`](https://github.com/stefan-m-lenz/JuliaConnectoR).
-Instructions below are adapted from `{JuliaConnectoR}`.
-
-### Locating the executable
-
-`{jlme}` requires that [Julia (version ≥ 1.8) is
-installed](https://julialang.org/downloads/) and that the Julia
-executable is in the system search `PATH` or that the `JULIA_BINDIR`
-environment variable is set to the `/bin` directory of the Julia
-installation. The Julia version specified via the `JULIA_BINDIR`
-variable will take precedence over the one on the system `PATH`.
-
-After you have installed Julia, execute the command `julia` on the
-command line. Ensure that this launches Julia.
-
-On **Linux** and **Windows**, the `JuliaConnectoR` package should now be
-able to use the Julia installation, as the Julia installation is on the
-`PATH`. There should be no need to set the `JULIA_BINDIR` environment
-variable. But if `JuliaConnectoR` still cannot find Julia, consult the
-instructions below.
-
-On **Mac**, Julia might not be on the `PATH` when using e.g. RStudio. In
-this case, you may need to manually set the `JULIA_BINDIR` variable. To
-get the proper value of the `JULIA_BINDIR` variable, execute
-`Sys.BINDIR` from Julia. Then, set the environment variable in R via
-`Sys.setenv("JULIA_BINDIR" = "/your/path/to/Julia/bin")` (or by editing
-the `.Renviron` file). Afterwards, `JuliaConnectoR` should be able to
-discover the specified Julia installation.
-
-### Note about `juliaup`
-
-If you manage Julia installations via
-[Juliaup](https://github.com/JuliaLang/juliaup), the `JULIA_BINDIR`
-variable must point to the actual installation directory of Julia. This
-is different from the directory that is returned when executing
-`which julia` on the command line (that will be a *link* to the default
-Julia executable created by Juliaup). To get the path to a Julia
-installation managed by Juliaup, run `juliaup api getconfig1` in
-terminal and find the path to the Julia version you would like to use
-with `JuliaConnectoR`. Then, follow the same process as above to set the
-`JULIA_BINDIR` environment variable to the `/bin` directory of the Julia
-executable.
 
 ## Acknowledgments
 
