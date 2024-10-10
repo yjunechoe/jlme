@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="index.html">jlme</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,8 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yjunechoe.github.io/jlme/">jlme</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/jlme_setup.html">jlme_setup</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><a href="https://yjunechoe.github.io/jlme/">jlme</a> uses <code>{JuliaConnectoR}</code> to connect to a Julia session. Jump down to the <a href="#julia-troubleshooting">Julia troubleshooting</a> section for issues related to Julia installation and configuration.</p>
+<p>Using <a href="https://yjunechoe.github.io/jlme/">jlme</a> requires a prior installation of the <strong>Julia programming language</strong>, which can be downloaded from either the <a href="https://julialang.org/" class="external-link">official website</a> or using the command line utility <a href="https://github.com/JuliaLang/juliaup" class="external-link">juliaup</a>.</p>
+<p>If you are encountering issues with setting up Julia, please make sure that you’re have the latest version (&gt;=1.1.4) of the <a href="https://github.com/stefan-m-lenz/JuliaConnectoR" class="external-link"><code>{JuliaConnectoR}</code></a> package installed and see <code>?JuliaConnectoR::`Julia-Setup`</code> for troubleshooting.</p>
 </div>
 <div class="section level2">
 <h2 id="usage-table-of-contents">Usage (table of contents)<a class="anchor" aria-label="anchor" href="#usage-table-of-contents"></a>
@@ -80,7 +81,6 @@
 <li><a href="#assess-uncertainty">Assess uncertainty</a></li>
 <li><a href="#julia-interoperability">Julia interoperability</a></li>
 <li><a href="#tips-and-tricks">Tips and tricks</a></li>
-<li><a href="#julia-troubleshooting">Julia troubleshooting</a></li>
 <li><a href="#acknowledgments">Acknowledgments</a></li>
 </ul>
 </div>
@@ -364,7 +364,7 @@
 <p>See information about the running Julia environment (e.g., the list of loaded Julia libraries) with <code><a href="reference/jlme_setup.html">jlme_status()</a></code>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/jlme_setup.html">jlme_status</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; jlme 0.3.0 </span></span>
+<span><span class="co">#&gt; jlme 0.4.0 </span></span>
 <span><span class="co">#&gt; R version 4.4.1 (2024-06-14 ucrt) </span></span>
 <span><span class="co">#&gt; Julia Version 1.10.5</span></span>
 <span><span class="co">#&gt; Commit 6f3fdf7b36 (2024-08-27 14:19 UTC)</span></span>
@@ -377,7 +377,7 @@
 <span><span class="co">#&gt;   LIBM: libopenlibm</span></span>
 <span><span class="co">#&gt;   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)</span></span>
 <span><span class="co">#&gt; Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)</span></span>
-<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_kLdW0y\Project.toml`</span></span>
+<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_QJShm4\Project.toml`</span></span>
 <span><span class="co">#&gt;   [38e38edf] GLM v1.9.0</span></span>
 <span><span class="co">#&gt;   [ff71e718] MixedModels v4.26.1</span></span>
 <span><span class="co">#&gt;   [3eaba693] StatsModels v0.7.4</span></span>
@@ -486,7 +486,7 @@
 <div class="section level3">
 <h3 id="displaying-mixedmodels">Displaying MixedModels<a class="anchor" aria-label="anchor" href="#displaying-mixedmodels"></a>
 </h3>
-<p>MixedModels.jl supports various <a href="https://juliastats.org/MixedModels.jl/stable/mime" class="external-link">display formats</a> for mixed-effects models which are available in <a href="https://yjunechoe.github.io/jlme/">jlme</a> via the <code>format</code> argument of <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>:</p>
+<p>MixedModels.jl supports various <a href="https://juliastats.org/MixedModels.jl/stable/mime/" class="external-link">display formats</a> for mixed-effects models which are available in <a href="https://yjunechoe.github.io/jlme/">jlme</a> via the <code>format</code> argument of <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Rendered via {knitr} with chunk option `results="asis"`</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">jmod</span>, format <span class="op">=</span> <span class="st">"markdown"</span><span class="op">)</span></span></code></pre></div>
@@ -548,6 +548,7 @@
 <span><span class="co">#&gt;   :a =&gt; [1, 2]</span></span>
 <span><span class="co">#&gt;   :b =&gt; ["three"]</span></span>
 <span><span class="co">#&gt;   :c =&gt; 4.5</span></span></code></pre></div>
+<p>See <code><a href="https://rdrr.io/pkg/JuliaConnectoR/man/JuliaConnectoR-package.html" class="external-link">?JuliaConnectoR::`JuliaConnectoR-package`</a></code> for a comprehensive list of data type conversion rules.</p>
 </div>
 <div class="section level3">
 <h3 id="performance-linear-algebra-backend">Performance (linear algebra backend)<a class="anchor" aria-label="anchor" href="#performance-linear-algebra-backend"></a>
@@ -606,26 +607,6 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="julia-troubleshooting">Julia troubleshooting<a class="anchor" aria-label="anchor" href="#julia-troubleshooting"></a>
-</h2>
-<p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
-<p><a href="https://yjunechoe.github.io/jlme/">jlme</a> is powered by <a href="https://github.com/stefan-m-lenz/JuliaConnectoR" class="external-link"><code>{JuliaConnectoR}</code></a>. Instructions below are adapted from <code>{JuliaConnectoR}</code>.</p>
-<div class="section level3">
-<h3 id="locating-the-executable">Locating the executable<a class="anchor" aria-label="anchor" href="#locating-the-executable"></a>
-</h3>
-<p><a href="https://yjunechoe.github.io/jlme/">jlme</a> requires that <a href="https://julialang.org/downloads/" class="external-link">Julia (version ≥ 1.8) is installed</a> and that the Julia executable is in the system search <code>PATH</code> or that the <code>JULIA_BINDIR</code> environment variable is set to the <code>/bin</code> directory of the Julia installation. The Julia version specified via the <code>JULIA_BINDIR</code> variable will take precedence over the one on the system <code>PATH</code>.</p>
-<p>After you have installed Julia, execute the command <code>julia</code> on the command line. Ensure that this launches Julia.</p>
-<p>On <strong>Linux</strong> and <strong>Windows</strong>, the <code>JuliaConnectoR</code> package should now be able to use the Julia installation, as the Julia installation is on the <code>PATH</code>. There should be no need to set the <code>JULIA_BINDIR</code> environment variable. But if <code>JuliaConnectoR</code> still cannot find Julia, consult the instructions below.</p>
-<p>On <strong>Mac</strong>, Julia might not be on the <code>PATH</code> when using e.g. RStudio. In this case, you may need to manually set the <code>JULIA_BINDIR</code> variable. To get the proper value of the <code>JULIA_BINDIR</code> variable, execute <code>Sys.BINDIR</code> from Julia. Then, set the environment variable in R via <code>Sys.setenv("JULIA_BINDIR" = "/your/path/to/Julia/bin")</code> (or by editing the <code>.Renviron</code> file). Afterwards, <code>JuliaConnectoR</code> should be able to discover the specified Julia installation.</p>
-</div>
-<div class="section level3">
-<h3 id="note-about-juliaup">Note about <code>juliaup</code>
-<a class="anchor" aria-label="anchor" href="#note-about-juliaup"></a>
-</h3>
-<p>If you manage Julia installations via <a href="https://github.com/JuliaLang/juliaup" class="external-link">Juliaup</a>, the <code>JULIA_BINDIR</code> variable must point to the actual installation directory of Julia. This is different from the directory that is returned when executing <code>which julia</code> on the command line (that will be a <em>link</em> to the default Julia executable created by Juliaup). To get the path to a Julia installation managed by Juliaup, run <code>juliaup api getconfig1</code> in terminal and find the path to the Julia version you would like to use with <code>JuliaConnectoR</code>. Then, follow the same process as above to set the <code>JULIA_BINDIR</code> environment variable to the <code>/bin</code> directory of the Julia executable.</p>
-</div>
-</div>
-<div class="section level2">
 <h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
 </h2>
 <p><a href="#usage-table-of-contents">↑Back to table of contents</a></p>
@@ -675,7 +656,7 @@
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/yjunechoe/jlme/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml" class="external-link"><img src="https://github.com/yjunechoe/jlme/actions/workflows/test-coverage.yaml/badge.svg" alt="test-coverage"></a></li>
-<li><a href="https://codecov.io/gh/yjunechoe/jlme" class="external-link"><img src="https://codecov.io/gh/yjunechoe/jlme/graph/badge.svg?token=d2bLJunNd5" alt="codecov"></a></li>
+<li><a href="https://app.codecov.io/gh/yjunechoe/jlme/" class="external-link"><img src="https://codecov.io/gh/yjunechoe/jlme/graph/badge.svg?token=d2bLJunNd5" alt="codecov"></a></li>
 </ul>
 </div>
 
