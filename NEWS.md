@@ -1,3 +1,5 @@
+# jlme (development version)
+
 # jlme 0.4.0
 
 * New argument `jlmer(fit = TRUE)`. If `FALSE`, returns the unfit model object.
