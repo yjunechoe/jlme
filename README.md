@@ -395,7 +395,7 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_QJShm4\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_cEz0uJ\Project.toml`
 #>   [38e38edf] GLM v1.9.0
 #>   [ff71e718] MixedModels v4.26.1
 #>   [3eaba693] StatsModels v0.7.4
@@ -659,3 +659,13 @@ REPL-based workflow.
   [MixedModels.jl](https://github.com/JuliaStats/MixedModels.jl) for
   interfaces to and implementations of (mixed effects) regression
   models.
+
+- Other R interfaces to MixedModels. It has come to my attention after
+  working on this for a while and publishing it to CRAN that there were
+  prior efforts by [Mika Braginsky](https://github.com/mikabr) in
+  [`{jglmm}`](https://github.com/mikabr/jglmm) and by [Philip
+  Alday](https://github.com/palday) in
+  [`{jlme}`](https://github.com/palday/jlme). These packages/scripts
+  predate `{JuliaConnectoR}` (which I find to be leaner and more robust)
+  and are instead built on top of
+  [`{JuliaCall}`](https://github.com/Non-Contradiction/JuliaCall).
