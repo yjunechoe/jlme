@@ -66,9 +66,14 @@ jl_contrasts <- function(df, cols = NULL, show_code = FALSE) {
     cat(dict)
   }
   if (!is.null(dict)) {
-    jl(dict)
+    out <- jl(dict)
   } else {
-    NULL
+    out <- NULL
+  }
+  if (show_code) {
+    invisible(out)
+  } else {
+    out
   }
 }
 
