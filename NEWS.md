@@ -1,5 +1,9 @@
 # jlme (development version)
 
+# jlme 0.4.1
+
+* Bump `{JuliaConnectoR}` dependency to improve discovery of Julia executable.
+
 # jlme 0.4.0
 
 * New argument `jlmer(fit = TRUE)`. If `FALSE`, returns the unfit model object.
