@@ -382,7 +382,7 @@ loaded Julia libraries) with `jlme_status()`:
 
 ``` r
 jlme_status()
-#> jlme 0.4.0 
+#> jlme 0.4.1 
 #> R version 4.4.1 (2024-06-14 ucrt) 
 #> Julia Version 1.10.5
 #> Commit 6f3fdf7b36 (2024-08-27 14:19 UTC)
@@ -395,9 +395,9 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_cEz0uJ\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_NI67vu\Project.toml`
 #>   [38e38edf] GLM v1.9.0
-#>   [ff71e718] MixedModels v4.26.1
+#>   [ff71e718] MixedModels v4.27.0
 #>   [3eaba693] StatsModels v0.7.4
 #>   [9a3f8284] Random
 ```
@@ -668,4 +668,4 @@ REPL-based workflow.
   [`{jlme}`](https://github.com/palday/jlme). These packages/scripts
   predate `{JuliaConnectoR}` (which I find to be leaner and more robust)
   and are instead built on top of
-  [`{JuliaCall}`](https://github.com/Non-Contradiction/JuliaCall).
+  [`{JuliaCall}`](https://github.com/JuliaInterop/JuliaCall).

@@ -331,7 +331,7 @@ If you spend non-negligible time fitting regression models for your work, please
 
 - The [Julia](https://julialang.org/) packages [GLM.jl](https://github.com/JuliaStats/GLM.jl), [StatsModels](https://github.com/JuliaStats/StatsModels.jl), and [MixedModels.jl](https://github.com/JuliaStats/MixedModels.jl) for interfaces to and implementations of (mixed effects) regression models.
 
-- Other R interfaces to MixedModels. It has come to my attention after working on this for a while and publishing it to CRAN that there were prior efforts by [Mika Braginsky](https://github.com/mikabr) in [`{jglmm}`](https://github.com/mikabr/jglmm) and by [Philip Alday](https://github.com/palday) in [`{jlme}`](https://github.com/palday/jlme). These packages/scripts predate `{JuliaConnectoR}` (which I find to be leaner and more robust) and are instead built on top of [`{JuliaCall}`](https://github.com/Non-Contradiction/JuliaCall).
+- Other R interfaces to MixedModels. It has come to my attention after working on this for a while and publishing it to CRAN that there were prior efforts by [Mika Braginsky](https://github.com/mikabr) in [`{jglmm}`](https://github.com/mikabr/jglmm) and by [Philip Alday](https://github.com/palday) in [`{jlme}`](https://github.com/palday/jlme). These packages/scripts predate `{JuliaConnectoR}` (which I find to be leaner and more robust) and are instead built on top of [`{JuliaCall}`](https://github.com/JuliaInterop/JuliaCall).
 
 ```{r, echo = FALSE}
 stop_julia()
