@@ -233,7 +233,8 @@ jmod2
 
 ```{r}
 library(JuliaConnectoR)
-# First call downloads the library (takes a minute)
+# Install `Effects.jl` (takes a minute)
+juliaEval('using Pkg; Pkg.add("Effects")')
 Effects <- juliaImport("Effects")
 # Call `Effects.empairs` using R syntax `Effects$empairs()`
 pairwise <- Effects$empairs(jmod2, dof = glance(jmod2)$df.residual)
