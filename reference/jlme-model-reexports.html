@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jlme</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="jlme_setup.html">jlme_setup</a></span><span class="op">(</span>restart <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Julia (v1.10.5) ...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Successfully set up Julia connection. (13s)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Successfully set up Julia connection. (11s)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="jlm.html">jlmer</a></span><span class="op">(</span><span class="va">r2</span> <span class="op">~</span> <span class="va">Anger</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/VerbAgg.html" class="external-link">VerbAgg</a></span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -89,6 +89,28 @@
 <span class="r-in"><span>  <span class="va">x</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="jlm.html">jlmer</a></span><span class="op">(</span><span class="va">r2</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/VerbAgg.html" class="external-link">VerbAgg</a></span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error : Evaluation in Julia failed.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Original Julia error message:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KeyError: key 0x00000149fa1a9ab0 not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Stacktrace:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] getindex</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    @ .\dict.jl:498 [inlined]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] decrefcount!(communicator::Main.RConnector.CommunicatoR{Sockets.TCPSocket}, ref::UInt64)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\sharing.jl:134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] decrefcounts(communicator::Main.RConnector.CommunicatoR{Sockets.TCPSocket}, refs::Vector{UInt8})</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\sharing.jl:147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] invokelatest(::Any, ::Any, ::Vararg{Any}; kwargs::@Kwargs{})</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Base .\essentials.jl:892</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] invokelatest(::Any, ::Any, ::Vararg{Any})</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Base .\essentials.jl:889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] evaluate!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    @ C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\evaluating.jl:67 [inlined]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] evaluate_checked!(call::Main.RConnector.Call, communicator::Main.RConnector.CommunicatoR{Sockets.TCPSocket})</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\evaluating.jl:55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] serve_repl(sock::Sockets.TCPSocket)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\communicating.jl:185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] (::Main.RConnector.var"#3#5")()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    @ Main.RConnector C:\Users\jchoe\AppData\Local\R\win-library\4.4\JuliaConnectoR\Julia\communicating.jl:145</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Julia object of type MixedModels.LikelihoodRatioTest&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Model Formulae</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: r2 ~ 1 + (1 | id)</span>
