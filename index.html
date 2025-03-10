@@ -55,6 +55,11 @@
 
 <p>Julia (mixed-effects) regression modelling from R. Powered by the <a href="https://github.com/stefan-m-lenz/JuliaConnectoR" class="external-link"><code>{JuliaConnectoR}</code></a> R package and Julia libraries <a href="https://github.com/JuliaStats/GLM.jl" class="external-link">GLM</a>, <a href="https://github.com/JuliaStats/StatsModels.jl" class="external-link">StatsModels</a>, and <a href="https://github.com/JuliaStats/MixedModels.jl" class="external-link">MixedModels</a>.</p>
 <div class="section level2">
+<h2 id="zero-setup-test-drive">Zero-setup test drive<a class="anchor" aria-label="anchor" href="#zero-setup-test-drive"></a>
+</h2>
+<p>As of March 2025, <strong>Google Colab</strong> supports Julia. This means <a href="https://yjunechoe.github.io/jlme/">jlme</a> <em>just works</em> out of the box. Try it out in a <a href="https://colab.research.google.com/drive/1ZKF7SrsMYugzY4g5Bd3tLuAk9VPOcP0P?usp=sharing" class="external-link">demo notebook</a>.</p>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the development version of <a href="https://yjunechoe.github.io/jlme/">jlme</a> from <a href="https://github.com/yjunechoe/jlme" class="external-link">GitHub</a> with:</p>
@@ -244,7 +249,8 @@
 <span><span class="co">#&gt; Initial parameter vector: [1.0, 0.0, 1.0]</span></span>
 <span><span class="co">#&gt; Initial objective value:  1784.642296192471</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Optimizer (from NLopt):   LN_BOBYQA</span></span>
+<span><span class="co">#&gt; Backend:                  nlopt</span></span>
+<span><span class="co">#&gt; Optimizer:                LN_BOBYQA</span></span>
 <span><span class="co">#&gt; Lower bounds:             [0.0, -Inf, 0.0]</span></span>
 <span><span class="co">#&gt; ftol_rel:                 1.0e-12</span></span>
 <span><span class="co">#&gt; ftol_abs:                 1.0e-8</span></span>
@@ -255,6 +261,8 @@
 <span><span class="co">#&gt; maxtime:                  -1.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Function evaluations:     57</span></span>
+<span><span class="co">#&gt; xtol_zero_abs:            0.001</span></span>
+<span><span class="co">#&gt; ftol_zero_abs:            1.0e-5</span></span>
 <span><span class="co">#&gt; Final parameter vector:   [0.9292213025841999, 0.018168360086059557, 0.22264488361408383]</span></span>
 <span><span class="co">#&gt; Final objective value:    1751.9393444646894</span></span>
 <span><span class="co">#&gt; Return code:              FTOL_REACHED</span></span></code></pre></div>
@@ -356,7 +364,6 @@
 <code class="sourceCode R"><span><span class="va">fitlog</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/jl-helpers-utils.html">jl_get</a></span><span class="op">(</span><span class="fu"><a href="reference/jl-helpers-utils.html">jl</a></span><span class="op">(</span><span class="st">"refit!(deepcopy(x); thin=1)"</span>, x <span class="op">=</span> <span class="va">jmod</span><span class="op">)</span><span class="op">$</span><span class="va">optsum</span><span class="op">$</span><span class="va">fitlog</span><span class="op">)</span></span>
 <span><span class="va">thetas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">fitlog</span>, <span class="va">`[[`</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span><span class="va">thetas</span>, type <span class="op">=</span> <span class="st">"o"</span>, xlab <span class="op">=</span> <span class="st">"iterations"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-fitlog-1.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="julia-session">Julia session<a class="anchor" aria-label="anchor" href="#julia-session"></a>
@@ -377,9 +384,9 @@
 <span><span class="co">#&gt;   LIBM: libopenlibm</span></span>
 <span><span class="co">#&gt;   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)</span></span>
 <span><span class="co">#&gt; Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)</span></span>
-<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_RNFh7Y\Project.toml`</span></span>
+<span><span class="co">#&gt; Status `C:\Users\jchoe\AppData\Local\Temp\jl_8KkAra\Project.toml`</span></span>
 <span><span class="co">#&gt;   [38e38edf] GLM v1.9.0</span></span>
-<span><span class="co">#&gt;   [ff71e718] MixedModels v4.27.0</span></span>
+<span><span class="co">#&gt;   [ff71e718] MixedModels v4.31.0</span></span>
 <span><span class="co">#&gt;   [3eaba693] StatsModels v0.7.4</span></span>
 <span><span class="co">#&gt;   [9a3f8284] Random</span></span></code></pre></div>
 <p>On setup, <a href="https://yjunechoe.github.io/jlme/">jlme</a> loads <a href="https://github.com/JuliaStats/GLM.jl" class="external-link">GLM</a>, <a href="https://github.com/JuliaStats/StatsModels.jl" class="external-link">StatsModels</a>, and <a href="https://github.com/JuliaStats/MixedModels.jl" class="external-link">MixedModels</a>, as well as those specified in <code>jlme_setup(add)</code>. Other libraries such as <code>Random</code> (required for <code><a href="reference/parametricbootstrap.html">parametricbootstrap()</a></code>) are loaded on an as-needed basis.</p>
