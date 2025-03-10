@@ -20,6 +20,12 @@ package and Julia libraries [GLM](https://github.com/JuliaStats/GLM.jl),
 [StatsModels](https://github.com/JuliaStats/StatsModels.jl), and
 [MixedModels](https://github.com/JuliaStats/MixedModels.jl).
 
+## Zero-setup test drive
+
+As of March 2025, **Google Colab** supports Julia. This means `{jlme}`
+*just works* out of the box. Try it out in a [demo
+notebook](https://colab.research.google.com/drive/1ZKF7SrsMYugzY4g5Bd3tLuAk9VPOcP0P?usp=sharing).
+
 ## Installation
 
 You can install the development version of `{jlme}` from
@@ -242,7 +248,8 @@ jmod$optsum
 #> Initial parameter vector: [1.0, 0.0, 1.0]
 #> Initial objective value:  1784.642296192471
 #> 
-#> Optimizer (from NLopt):   LN_BOBYQA
+#> Backend:                  nlopt
+#> Optimizer:                LN_BOBYQA
 #> Lower bounds:             [0.0, -Inf, 0.0]
 #> ftol_rel:                 1.0e-12
 #> ftol_abs:                 1.0e-8
@@ -253,6 +260,8 @@ jmod$optsum
 #> maxtime:                  -1.0
 #> 
 #> Function evaluations:     57
+#> xtol_zero_abs:            0.001
+#> ftol_zero_abs:            1.0e-5
 #> Final parameter vector:   [0.9292213025841999, 0.018168360086059557, 0.22264488361408383]
 #> Final objective value:    1751.9393444646894
 #> Return code:              FTOL_REACHED
@@ -373,8 +382,6 @@ thetas <- t(sapply(fitlog, `[[`, 1))
 matplot(thetas, type = "o", xlab = "iterations")
 ```
 
-<img src="man/figures/README-fitlog-1.png" width="100%" />
-
 ### Julia session
 
 See information about the running Julia environment (e.g., the list of
@@ -395,9 +402,9 @@ jlme_status()
 #>   LIBM: libopenlibm
 #>   LLVM: libLLVM-15.0.7 (ORCJIT, tigerlake)
 #> Threads: 1 default, 0 interactive, 1 GC (on 8 virtual cores)
-#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_RNFh7Y\Project.toml`
+#> Status `C:\Users\jchoe\AppData\Local\Temp\jl_8KkAra\Project.toml`
 #>   [38e38edf] GLM v1.9.0
-#>   [ff71e718] MixedModels v4.27.0
+#>   [ff71e718] MixedModels v4.31.0
 #>   [3eaba693] StatsModels v0.7.4
 #>   [9a3f8284] Random
 ```

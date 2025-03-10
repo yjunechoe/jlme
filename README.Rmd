@@ -25,6 +25,10 @@ knitr::opts_chunk$set(
 
 Julia (mixed-effects) regression modelling from R. Powered by the [`{JuliaConnectoR}`](https://github.com/stefan-m-lenz/JuliaConnectoR) R package and Julia libraries [GLM](https://github.com/JuliaStats/GLM.jl), [StatsModels](https://github.com/JuliaStats/StatsModels.jl), and [MixedModels](https://github.com/JuliaStats/MixedModels.jl).
 
+## Zero-setup test drive
+
+As of March 2025, **Google Colab** supports Julia. This means `{jlme}` *just works* out of the box. Try it out in a [demo notebook](https://colab.research.google.com/drive/1ZKF7SrsMYugzY4g5Bd3tLuAk9VPOcP0P?usp=sharing).
+
 ## Installation
 
 You can install the development version of `{jlme}` from [GitHub](https://github.com/yjunechoe/jlme) with:
