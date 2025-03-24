@@ -1,5 +1,7 @@
 # jlme 0.4.2
 
+* Strip extra classes from R dataframes before converting to Julia
+
 # jlme 0.4.1
 
 * Bump `{JuliaConnectoR}` dependency to improve discovery of Julia executable.
