@@ -1,4 +1,4 @@
-# jlme (development version)
+# jlme 0.4.2
 
 # jlme 0.4.1
 
