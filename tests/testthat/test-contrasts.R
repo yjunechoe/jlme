@@ -1,4 +1,4 @@
-stop_julia()
+skip_conditionally()
 
 test_that("custom contrast detection works", {
 
@@ -35,3 +35,5 @@ test_that("formula construction works", {
     '))
 
 })
+
+stop_julia()
