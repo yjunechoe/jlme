@@ -181,13 +181,21 @@ init_proj <- function(..., add = add, verbose = FALSE) {
 
   jlme_deps <- c("StatsModels", "GLM", "MixedModels")
   deps <- unique(c(add, jlme_deps))
+
+  jlme_projdir <- normalizePath(file.path(tempdir(), "jlme"), "/", mustWork = FALSE)
+  if (!dir.exists(jlme_projdir)) {
+    dir.create(jlme_projdir)
+  }
   jl('
     using Pkg;
-    Pkg.activate(; temp=true, %1$s)
-    Pkg.add(%2$s; %1$s)
-  ', jl_io(verbose), vec_to_literal(deps))
+    Pkg.activate("%1$s"; %3$s)
+    Pkg.add(%2$s; %3$s)
+  ', jlme_projdir, vec_to_literal(deps), jl_io(verbose))
+
   .jlme$projdir <- dirname(jl("Base.active_project()", .R = TRUE))
+
   invisible(TRUE)
+
 }
 
 load_libs <- function(..., add) {
