@@ -1,3 +1,5 @@
+stop_julia()
+
 test_that("Setup functions", {
 
   expect_type(
@@ -12,3 +14,5 @@ test_that("Setup functions", {
   })
 
 })
+
+stop_julia()

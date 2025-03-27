@@ -19,6 +19,5 @@ expect_similar_models <- function(x, y, ignore_names = FALSE) {
   }
   x_res <- mod_deframe(x, ignore_names)
   y_res <- mod_deframe(y, ignore_names)
-  # On CRAN, BLAS libraries return different numbers -- check loosely
-  expect_identical(length(x_res), length(y_res))
+  expect_identical(x_res, y_res)
 }
