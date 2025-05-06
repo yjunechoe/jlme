@@ -40,7 +40,6 @@ NULL
 jl_formula <- function(formula) {
   x <- formula
   if (is_jl(x)) return(x)
-  x <- strip_attrs(x)
   x <- JuliaFormulae::julia_formula(x)
   res <- tryCatch(
     jl("@formula(%s)", deparse1(x)),
