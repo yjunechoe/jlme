@@ -61,6 +61,7 @@ jl_formula <- function(formula) {
 #' @export
 jl_contrasts <- function(df, cols = NULL, show_code = FALSE) {
   if (is_jl(df)) return(NULL)
+  df <- strip_attrs(df)
   dict <- construct_contrasts(df, cols = cols, format = show_code)
   if (show_code) {
     cat(dict)
@@ -81,8 +82,11 @@ jl_contrasts <- function(df, cols = NULL, show_code = FALSE) {
 #' @export
 jl_data <- function(df) {
   if (is_jl(df)) return(df)
+  df <- strip_attrs(df)
   fct_cols <- Filter(is.factor, df)
-  df[, colnames(fct_cols)] <- lapply(fct_cols, as.character)
+  if (length(fct_cols) != 0) {
+    df[, colnames(fct_cols)] <- lapply(fct_cols, as.character)
+  }
   df <- as.data.frame(unclass(df))
   JuliaConnectoR::juliaCall("Table", jl_put(df))
 }
@@ -92,6 +96,7 @@ jl_data <- function(df) {
 #' @export
 jl_family <- function(family = c("gaussian", "binomial", "poisson")) {
   if (is_jl(family)) return(family)
+  family <- strip_attrs(family)
   if (is.function(family)) {
     family <- family()
   }
@@ -111,4 +116,9 @@ jl_family <- function(family = c("gaussian", "binomial", "poisson")) {
   } else {
     stop("Invalid input to the `family` argument.")
   }
+}
+
+strip_attrs <- function(x) {
+  attributes(x) <- NULL
+  x
 }
