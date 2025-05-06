@@ -85,7 +85,9 @@ jl_data <- function(df) {
   if (is_jl(df)) return(df)
   df <- strip_attrs(df)
   fct_cols <- Filter(is.factor, df)
-  df[, colnames(fct_cols)] <- lapply(fct_cols, as.character)
+  if (length(fct_cols) != 0) {
+    df[, colnames(fct_cols)] <- lapply(fct_cols, as.character)
+  }
   df <- as.data.frame(unclass(df))
   JuliaConnectoR::juliaCall("Table", jl_put(df))
 }
